@@ -7,6 +7,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.eibrahim.dizon.R
 import com.eibrahim.dizon.main.viewModel.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView

@@ -58,9 +58,64 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="10dp"
                     android:contentDescription="TODO"
-                    android:src="@drawable/icon_outline_notification" />
+                    android:src="@drawable/user" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/chatbot_layout"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="10dp"
+                app:cardCornerRadius="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/search_layout"
+                app:layout_constraintTop_toBottomOf="@id/notificationLayout">
+
+                <ImageView
+                    android:id="@+id/itemchatbotImage"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/icon_chatbot_v1" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/search_layout"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="15dp"
+                app:layout_constraintEnd_toStartOf="@id/chatbot_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/notificationLayout">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/itemCategoryImage"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="10dp"
+                        android:src="@drawable/icon_selector_search" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@android:color/transparent"
+                        android:hint="@string/search" />
+
+                </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -69,14 +124,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
                 android:text="Categories"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/notificationLayout" />
+                app:layout_constraintTop_toBottomOf="@id/search_layout" />
 
             <TextView
                 android:id="@+id/textViewCategoriesSeeMore"
@@ -88,9 +143,9 @@
                 android:textColor="@color/blue"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/textViewCategories"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/textViewCategories"
-                app:layout_constraintBottom_toBottomOf="@id/textViewCategories"/>
+                app:layout_constraintTop_toTopOf="@id/textViewCategories" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerviewCategories"
@@ -104,45 +159,16 @@
                 app:layout_constraintTop_toBottomOf="@id/textViewCategories"
                 tools:listitem="@layout/item_rv_categories" />
 
-            <TextView
-                android:id="@+id/textViewFeaturePlan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:text="Featured plan"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recyclerviewCategories" />
-
-
-            <TextView
-                android:id="@+id/textViewFeaturePlanSeeMore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:text="See all"
-                android:textColor="@color/blue"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recyclerviewCategories" />
-
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerviewFeaturePlan"
+                android:id="@+id/recyclerviewProps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="20dp"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/textViewFeaturePlan"
+                app:layout_constraintTop_toBottomOf="@id/recyclerviewCategories"
                 tools:listitem="@layout/item_rv_featured_plans" />
 
             <TextView
@@ -160,7 +186,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recyclerviewFeaturePlan" />
+                app:layout_constraintTop_toBottomOf="@id/recyclerviewProps" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
