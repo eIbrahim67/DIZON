@@ -3,4 +3,15 @@
     <string name="search">Search</string>
     <string name="home">Home</string>
     <string name="chats">Chats</string>
+    <?xml version="1.0" encoding="utf-8"?>
+
+        <string name="app_logo_description">Application Logo</string>
+        <string name="welcome_message"> Log In</string>
+        <string name="email_hint">Email</string>
+        <string name="password_hint">Password</string>
+        <string name="forgot_password">Forgot Password?</string>
+        <string name="sign_in">Log In</string>
+        <string name="sign_up_text">Don\'t have an account? Sign Up</string>
+    <string name="Login_With_Google">Login With Google</string>
+
 </resources>
