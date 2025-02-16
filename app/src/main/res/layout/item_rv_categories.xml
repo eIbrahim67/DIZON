@@ -24,7 +24,6 @@
             android:contentDescription="Category Image"
             android:scaleType="centerCrop" />
 
-
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
