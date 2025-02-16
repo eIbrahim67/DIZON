@@ -33,28 +33,9 @@ DigitalEstateHub is an AI-powered mobile application designed to simplify proper
 
 ### 1️⃣ Clone the Repository  
 ```sh
-git clone https://github.com/your-repo/mobile-app.git
-cd mobile-app
+git clone https://github.com/eIbrahim67/DIZON.git
 
-
-### 2️⃣ Open in Development Environment  
-- **For Android**: Open in **Android Studio**  
-- **For iOS**: Open in **Xcode**  
-
-### 3️⃣ Install Dependencies & Build  
-Run the following commands in your terminal:  
-```sh
-# For Android (Kotlin)
-./gradlew build
-
-# For iOS (Swift)
-pod install
 ```
-
-### 4️⃣ Run the App  
-- **Android**: Run the app on an emulator or physical device using Android Studio.  
-- **iOS**: Open the `.xcworkspace` file in Xcode and run on a simulator or device.  
-
 ---
 
 ## 📖 Usage  
@@ -91,4 +72,9 @@ For any issues or inquiries, reach out via:
 **Ibrahim Mohamed EL-TOUKHY**:  
 📧 **Email:** [ibrahim.mohamed.ibrahim.t@gmail.com](mailto:ibrahim.mohamed.ibrahim.t@gmail.com)  
 👨‍💻 **GitHub:** [eIbrahim67](https://github.com/eIbrahim67)  
-🌐 **LinkedIn:** [Ibrahim Mohamed Ibrahim](https://www.linkedin.com/in/eibrahim67)  
+🌐 **LinkedIn:** [Ibrahim Mohamed](https://www.linkedin.com/in/eibrahim67)  
+
+**Moamen Abdelrhman:**:  
+📧 **Email:** [moameny84@gmail.com](mailto:moameny84@gmail.com)  
+👨‍💻 **GitHub:** [MoamenAbdelrhman](https://github.com/MoamenAbdelrhman)  
+🌐 **LinkedIn:** [MoamenAbdelrhman](https://www.linkedin.com/in/moamen-abdelrhman-65ba801ba)  
