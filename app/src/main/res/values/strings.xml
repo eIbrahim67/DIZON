@@ -3,4 +3,19 @@
     <string name="search">Search</string>
     <string name="home">Home</string>
     <string name="chats">Chats</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="create_your_account">Create your account</string>
+    <string name="name">Name</string>
+    <string name="ex_name">ex: jon smith</string>
+    <string name="email">Email</string>
+    <string name="ex_email">ex: example@email.com</string>
+    <string name="phone">Phone Number</string>
+    <string name="city">City</string>
+    <string name="ex_city">ex: Cairo</string>
+    <string name="birth_of_date">Birth of date</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="i_understood_the">I understood the</string>
+    <string name="terms_and_policy">terms and policy.</string>
+    <string name="sign_up_with_google">Sign up with Google</string>
 </resources>
