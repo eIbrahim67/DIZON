@@ -1,8 +1,8 @@
-# 📱 DigitalEstateHub Mobile App  
+# 📱 DIZON Mobile App  
 
 ## 🏡 Smart Property Management, Trading, and Document Digitization  
 
-DigitalEstateHub is an AI-powered mobile application designed to simplify property management, buying, selling, and document digitization. It integrates AI models for **price prediction, document scanning (OCR), and voice-to-text conversion** to enhance user experience.
+DIZON is an AI-powered mobile application designed to simplify property management, buying, selling, and document digitization. It integrates AI models for **price prediction, document scanning (OCR), and voice-to-text conversion** to enhance user experience.
 
 ---
 
