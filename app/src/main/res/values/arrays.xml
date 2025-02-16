@@ -1,0 +1,9 @@
+<resources>
+    <string-array name="country_codes">
+        <item>🇪🇬 +20 Egypt</item>
+        <item>🇸🇦 +966 Saudi Arabia</item>
+        <item>🇦🇪 +971 UAE</item>
+        <item>🇺🇸 +1 USA</item>
+        <item>🇬🇧 +44 UK</item>
+    </string-array>
+</resources>
