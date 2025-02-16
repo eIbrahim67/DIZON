@@ -1,5 +1,5 @@
 # 📱 DIZON Mobile App  
-![DIZON](https://github.com/eIbrahim67/DIZON/blob/master/images/Dizon.png)
+![DIZON](https://github.com/eIbrahim67/DIZON/blob/master/images/DIZON.png)
 ## 🏡 Smart Property Management, Trading, and Document Digitization  
 
 DIZON is an AI-powered mobile application designed to simplify property management, buying, selling, and document digitization. It integrates AI models for **price prediction, document scanning (OCR), and voice-to-text conversion** to enhance user experience.
