@@ -74,7 +74,7 @@ For any issues or inquiries, reach out via:
 👨‍💻 **GitHub:** [eIbrahim67](https://github.com/eIbrahim67)  
 🌐 **LinkedIn:** [Ibrahim Mohamed](https://www.linkedin.com/in/eibrahim67)  
 
-**Moamen Abdelrhman:**:  
+**Moamen Abdelrhman**:  
 📧 **Email:** [moameny84@gmail.com](mailto:moameny84@gmail.com)  
 👨‍💻 **GitHub:** [MoamenAbdelrhman](https://github.com/MoamenAbdelrhman)  
 🌐 **LinkedIn:** [MoamenAbdelrhman](https://www.linkedin.com/in/moamen-abdelrhman-65ba801ba)  
