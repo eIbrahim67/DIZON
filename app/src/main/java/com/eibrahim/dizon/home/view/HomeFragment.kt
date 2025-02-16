@@ -190,29 +190,29 @@ class HomeFragment : Fragment() {
                 id = 1,
                 name = "Apartments",
                 description = "Find modern apartments for rent or sale.",
-                iconUrl = url
+                iconUrl = "https://images.ctfassets.net/pg6xj64qk0kh/2uUvn1x29JUfeHVuzakyhJ/9b540ac51547aa6954433e6e19db76fb/camden-atlantic-apartments-plantation-fl-pool-at-dusk-view.JPG"
             ),
             Category(
                 id = 2,
                 name = "Houses",
                 description = "Explore beautiful houses with spacious interiors.",
-                iconUrl = url
+                iconUrl = url2
             ),
             Category(
                 id = 3,
                 name = "Commercial",
                 description = "Discover commercial properties for business needs.",
-                iconUrl = url
+                iconUrl = url2
             ),
             Category(
                 id = 4,
                 name = "Luxury",
                 description = "Browse luxury properties with premium amenities.",
-                iconUrl = url
+                iconUrl = "https://topluxuryproperty.com//uploadfile/gallery/damac-islands-0_3_638615954946025321_820465_.jpg"
             )
         )
     }
 
-    val url = "https://firebasestorage.googleapis.com/v0/b/gympro-eibrahim.appspot.com/o/home.jpeg?alt=media&token=318c84d0-9d91-4576-bffc-ee4312196e60"
-
+    val url = "https://firebasestorage.googleapis.com/v0/b/gympro-eibrahim.appspot.com/o/Morehead-Low-Country-1.avif?alt=media&token=c00e6c97-7aff-4357-8fc0-cad4ca407c2a"
+    val url2 = "https://firebasestorage.googleapis.com/v0/b/gympro-eibrahim.appspot.com/o/custom-home-builder-toronto.jpg?alt=media&token=47a2627b-c7cb-43ca-9f6f-d4579faf7619"
 }

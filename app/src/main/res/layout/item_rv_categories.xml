@@ -1,42 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.chip.Chip
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/chipCategory"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    app:cardCornerRadius="500dp"
-    app:strokeColor="@color/gray_v1"
-    app:strokeWidth="2dp">
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/itemCategoryImageLayout"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        app:cardCornerRadius="500dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/itemCategoryImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="Category Image"
-            android:scaleType="centerCrop" />
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <TextView
-        android:id="@+id/itemCategoryTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:gravity="center"
-        android:textColor="@color/gray_v3"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemCategoryImageLayout" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    android:layout_margin="4dp"
+    android:text="Category"
+    app:chipCornerRadius="16dp"
+    app:chipStrokeWidth="1dp"
+    app:chipStrokeColor="@color/black"
+    app:chipBackgroundColor="@color/white"
+    app:closeIconVisible="false" />

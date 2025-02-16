@@ -4,26 +4,22 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.eibrahim.dizon.R
 import com.eibrahim.dizon.core.remote.Category
+import com.google.android.material.chip.Chip
 
 class AdapterRVCategories(
-    private val goToSearch: ((id: String) -> Unit)? = null
-) :
-    RecyclerView.Adapter<AdapterRVCategories.CategoryViewHolder>() {
+    private val goToSearch: ((categoryName: String) -> Unit)? = null
+) : RecyclerView.Adapter<AdapterRVCategories.CategoryViewHolder>() {
 
     private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_rv_categories, parent, false)
-        parent.context
         return CategoryViewHolder(view)
     }
 
@@ -33,38 +29,27 @@ class AdapterRVCategories(
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
+        val category = differ.currentList[position]
+        holder.chipCategory.text = category.name
 
-        differ.currentList[position].iconUrl?.let { url ->
-            Glide
-                .with(context)
-                .load(url)
-                .centerCrop()
-                //.placeholder(R.drawable.placeholder_image_svg)
-                .into(holder.categoryImage)
-            //itemView.setOnClickListener { goToSearch?.let { it(category.strCategory) } }
+        // Optional: Set a click listener on the chip to trigger search or filtering.
+        holder.chipCategory.setOnClickListener {
+            goToSearch?.invoke(category.name)
         }
-
-        differ.currentList[position].name.let { title ->
-            holder.categoryTitle.text = title
-        }
-
     }
 
-    private val differ: AsyncListDiffer<Category> =
-        AsyncListDiffer(this, DIFF_CALLBACK)
+    private val differ = AsyncListDiffer(this, DIFF_CALLBACK)
 
-
-    fun submitList(articleList: List<Category>) {
-        differ.submitList(articleList)
+    fun submitList(categoryList: List<Category>) {
+        differ.submitList(categoryList)
     }
 
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Category>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Category>() {
             override fun areItemsTheSame(
                 oldItem: Category,
                 newItem: Category
-            ): Boolean =
-                oldItem === newItem // this is data class
+            ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
                 oldItem: Category,
@@ -76,8 +61,6 @@ class AdapterRVCategories(
     override fun getItemCount(): Int = differ.currentList.size
 
     class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val categoryImage: ImageView = itemView.findViewById(R.id.itemCategoryImage)
-        val categoryTitle: TextView = itemView.findViewById(R.id.itemCategoryTitle)
-
+        val chipCategory: Chip = itemView.findViewById(R.id.chipCategory)
     }
 }
