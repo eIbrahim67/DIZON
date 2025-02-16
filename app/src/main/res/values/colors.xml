@@ -24,5 +24,5 @@
     <color name="gray_v3">#616161</color>
     <color name="gray_v4">#80B3B3B3</color>
     <color name="gray_v5">#EBEBEB</color>
-
+    <color name="primary_color">#1F41BB</color>
 </resources>
