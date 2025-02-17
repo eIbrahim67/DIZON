@@ -130,7 +130,7 @@
             </LinearLayout>
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/materialCardView"
-                android:layout_width="match_parent"
+                android:layout_width="295dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="80dp"
@@ -163,13 +163,12 @@
                 android:id="@+id/tv_resend_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="22dp"
                 android:text="@string/resend"
                 android:textColor="@color/primary_color"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/materialCardView"
                 app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
