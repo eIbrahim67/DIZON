@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".register.view.RegisterFragment">
+    tools:context=".register.view.RegisterFragment"
+    android:background="@color/white">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -410,6 +411,7 @@
                     android:backgroundTint="@color/primary_color"
                     app:cornerRadius="10dp"
                     android:text="@string/sign_up_btn"
+                    android:textSize="20dp"
                     android:textColor="@android:color/white"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
@@ -471,13 +473,14 @@
                     android:layout_height="60dp"
                     app:cornerRadius="10dp"
                     android:text="@string/sign_up_with_google"
+                    android:textSize="20dp"
                     android:textColor="@color/black"
                     app:icon="@drawable/google_logo"
                     app:iconTint="@null"
                     app:iconSize="26dp"
                     app:iconPadding="8dp"
                     app:iconGravity="textStart"
-                    android:backgroundTint="@android:color/transparent"
+                    android:backgroundTint="@android:color/white"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
                     android:insetLeft="0dp"
