@@ -63,6 +63,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="20dp"
                 app:cardCornerRadius="10dp"
+                app:strokeWidth="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView6">
@@ -70,11 +71,11 @@
                 <EditText
                     android:id="@+id/nameEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="60dp"
                     android:background="@color/edit_text_color"
                     android:hint="@string/ex_name"
                     android:inputType="text"
-                    android:padding="8dp" />
+                    android:padding="8dp"/>
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -98,6 +99,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="8dp"
                 app:cardCornerRadius="10dp"
+                app:strokeWidth="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView7">
@@ -105,7 +107,7 @@
                 <EditText
                     android:id="@+id/emailEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="60dp"
                     android:ems="10"
                     android:inputType="textEmailAddress"
                     android:background="@color/edit_text_color"
@@ -133,6 +135,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="8dp"
                 app:cardCornerRadius="10dp"
+                app:strokeWidth="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView8"
@@ -169,7 +172,7 @@
                     <EditText
                         android:id="@+id/numberEditText"
                         android:layout_width="0dp"
-                        android:layout_height="50dp"
+                        android:layout_height="60dp"
                         android:layout_weight="1"
                         android:background="@color/edit_text_color"
                         android:ems="10"
@@ -200,6 +203,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="8dp"
                 app:cardCornerRadius="10dp"
+                app:strokeWidth="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView9"
@@ -228,7 +232,7 @@
                     <EditText
                         android:id="@+id/cityEditText"
                         android:layout_width="0dp"
-                        android:layout_height="50dp"
+                        android:layout_height="60dp"
                         android:layout_weight="1"
                         android:background="@color/edit_text_color"
                         android:ems="10"
@@ -259,6 +263,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="20dp"
                 app:cardCornerRadius="10dp"
+                app:strokeWidth="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView10">
@@ -266,7 +271,7 @@
                 <EditText
                     android:id="@+id/dateEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="60dp"
                     android:background="@color/edit_text_color"
                     android:hint="10/01/2002"
                     android:inputType="date"
@@ -295,6 +300,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="20dp"
                 app:cardCornerRadius="10dp"
+                app:strokeWidth="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView11">
@@ -302,7 +308,7 @@
                 <EditText
                     android:id="@+id/passwordEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="60dp"
                     android:background="@color/edit_text_color"
                     android:hint="********"
                     android:inputType="textPassword"
@@ -331,6 +337,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="20dp"
                 app:cardCornerRadius="10dp"
+                app:strokeWidth="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView12">
@@ -338,7 +345,7 @@
                 <EditText
                     android:id="@+id/confirmPassword"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="60dp"
                     android:background="@color/edit_text_color"
                     android:hint="*********"
                     android:inputType="textPassword"
@@ -399,10 +406,10 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/signUpbtn"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="60dp"
                     android:backgroundTint="@color/primary_color"
                     app:cornerRadius="10dp"
-                    android:text="@string/sign_up"
+                    android:text="@string/sign_up_btn"
                     android:textColor="@android:color/white"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
@@ -452,7 +459,8 @@
                 app:cardCornerRadius="10dp"
                 app:cardElevation="8dp"
                 app:strokeColor="@color/primary_color"
-                app:strokeWidth="1dp"
+                app:strokeWidth="2dp"
+                android:elevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout">
@@ -469,9 +477,7 @@
                     app:iconSize="26dp"
                     app:iconPadding="8dp"
                     app:iconGravity="textStart"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="@android:color/darker_gray"
-                    android:backgroundTint="@color/backgroundApp"
+                    android:backgroundTint="@android:color/transparent"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
                     android:insetLeft="0dp"
