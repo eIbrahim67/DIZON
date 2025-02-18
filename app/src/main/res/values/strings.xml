@@ -42,4 +42,11 @@
     <string name="email_hint_in_forget_password">Email / Mobile Number</string>
     <string name="continue_button">Continue</string>
 
+    <!-- ... reset password strings  ... -->
+    <string name="password_icon_description">Password Icon</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="new_password_hint">New Password</string>
+    <string name="confirm_new_password_hint">Confirm New Password</string>
+    <string name="submit">Submit</string>
+
 </resources>
