@@ -3,4 +3,50 @@
     <string name="search">Search</string>
     <string name="home">Home</string>
     <string name="chats">Chats</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="create_your_account">Create your account</string>
+    <string name="name">Name</string>
+    <string name="ex_name">ex: jon smith</string>
+    <string name="email">Email</string>
+    <string name="ex_email">ex: example@email.com</string>
+    <string name="phone">Phone Number</string>
+    <string name="city">City</string>
+    <string name="ex_city">ex: Cairo</string>
+    <string name="birth_of_date">Birth of date</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="i_understood_the">I understood the</string>
+    <string name="terms_and_policy">terms and policy.</string>
+    <string name="sign_up_with_google">Sign up with Google</string>
+
+    <!--login fragment-->
+    <string name="app_logo_description">App Logo</string>
+    <string name="welcome_message"> Login here </string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="sign_in">Log In</string>
+    <string name="sign_up_button">Don\'t have an account? Sign Up</string>
+    <string name="Login_With_Google">Login with Google</string>
+    <string name="sign_up_btn">SIGN UP</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="verify_phone">please verify your \n phone number</string>
+    <string name="sent_an_sms">we ‘ve sent an SMS to 01007559638 , please \nenter the code below</string>
+    <string name="enter_code">ُEnter Code</string>
+    <string name="create_account">Create Account</string>
+    <string name="resend">resend?</string>
+
+    <!-- Forget Password Screen Texts -->
+    <string name="forget_password_title">Forget Password</string>
+    <string name="email_hint_in_forget_password">Email / Mobile Number</string>
+    <string name="continue_button">Continue</string>
+
+    <!-- ... reset password strings  ... -->
+    <string name="password_icon_description">Password Icon</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="new_password_hint">New Password</string>
+    <string name="confirm_new_password_hint">Confirm New Password</string>
+    <string name="submit">Submit</string>
+
 </resources>
