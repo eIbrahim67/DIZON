@@ -37,5 +37,9 @@
     <string name="create_account">Create Account</string>
     <string name="resend">resend?</string>
 
+    <!-- Forget Password Screen Texts -->
+    <string name="forget_password_title">Forget Password</string>
+    <string name="email_hint_in_forget_password">Email / Mobile Number</string>
+    <string name="continue_button">Continue</string>
 
 </resources>
