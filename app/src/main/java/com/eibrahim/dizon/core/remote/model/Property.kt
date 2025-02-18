@@ -1,6 +1,4 @@
-package com.eibrahim.dizon.core.remote
-
-import java.net.URL
+package com.eibrahim.dizon.core.remote.model
 
 data class Property(
     val id: Int,                      // Unique identifier for the property

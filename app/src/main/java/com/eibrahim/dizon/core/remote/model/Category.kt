@@ -1,4 +1,4 @@
-package com.eibrahim.dizon.core.remote
+package com.eibrahim.dizon.core.remote.model
 
 data class Category(
     val id: Int,

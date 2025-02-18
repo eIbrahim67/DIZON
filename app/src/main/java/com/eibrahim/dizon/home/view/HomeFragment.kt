@@ -11,8 +11,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.eibrahim.dizon.R
-import com.eibrahim.dizon.core.remote.Property
-import com.eibrahim.dizon.core.remote.Category
+import com.eibrahim.dizon.core.remote.model.Property
+import com.eibrahim.dizon.core.remote.model.Category
 import com.eibrahim.dizon.core.response.Response
 import com.eibrahim.dizon.core.utils.UtilsFunctions
 import com.eibrahim.dizon.home.view.adapters.AdapterRVCategories
