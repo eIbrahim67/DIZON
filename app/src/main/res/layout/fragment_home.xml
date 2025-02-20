@@ -76,7 +76,7 @@
                 app:layout_constraintTop_toBottomOf="@id/notificationLayout">
 
                 <ImageView
-                    android:id="@+id/itemchatbotImage"
+                    android:id="@+id/itemChatbotImage"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:layout_gravity="center"

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.eibrahim.dizon.R
-import com.eibrahim.dizon.core.remote.model.Category
+import com.eibrahim.dizon.core.remote.Category
 import com.google.android.material.chip.Chip
 
 class AdapterRVCategories(

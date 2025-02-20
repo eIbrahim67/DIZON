@@ -7,12 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.eibrahim.dizon.R
-import com.eibrahim.dizon.core.remote.model.Property
-import com.eibrahim.dizon.core.remote.model.Category
+import com.eibrahim.dizon.core.remote.Property
+import com.eibrahim.dizon.core.remote.Category
 import com.eibrahim.dizon.core.response.Response
 import com.eibrahim.dizon.core.utils.UtilsFunctions
 import com.eibrahim.dizon.home.view.adapters.AdapterRVCategories
@@ -20,6 +24,7 @@ import com.eibrahim.dizon.home.view.adapters.AdapterRVProps
 import com.eibrahim.dizon.home.viewModel.HomeViewModel
 import com.eibrahim.dizon.main.viewModel.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.card.MaterialCardView
 
 class HomeFragment : Fragment() {
 
@@ -28,15 +33,19 @@ class HomeFragment : Fragment() {
     private lateinit var currentDate: TextView
     private lateinit var textViewHello: TextView
     private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var chatbotLayout: MaterialCardView
 
     private val utils = UtilsFunctions
-
+    private var navController: NavController? = null
     private val adapterRVProps = AdapterRVProps { id -> goToProp(id) }
     private val adapterRVCategories = AdapterRVCategories { categoryId ->
         Log.d("HomeFragment", "Category clicked with id: $categoryId")
         // Optionally navigate to a search or filter page based on categoryId
     }
-
+    private val navOptions = NavOptions.Builder()
+        .setEnterAnim(R.anim.slide_in_right)
+        .setPopExitAnim(R.anim.slide_out_right)
+        .build()
     private val viewModel: HomeViewModel by viewModels()
     private val sharedViewModel: MainViewModel by activityViewModels()
 
@@ -50,6 +59,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initUi(view)
         updateUi()
+        listenerUi()
         initObservers()
     }
 
@@ -58,9 +68,15 @@ class HomeFragment : Fragment() {
         recyclerviewProps = view.findViewById(R.id.recyclerviewProps)
         textViewHello = view.findViewById(R.id.textViewHello)
         currentDate = view.findViewById(R.id.currentDate)
+        chatbotLayout = view.findViewById(R.id.chatbot_layout)
 
         bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
         bottomNavigationView.visibility = View.VISIBLE
+
+        navController = requireActivity().supportFragmentManager
+            .findFragmentById(R.id.main_nav_host_fragment)
+            ?.findNavController()
+
     }
 
     private fun updateUi() {
@@ -73,10 +89,20 @@ class HomeFragment : Fragment() {
         adapterRVCategories.submitList(getDummyCategories())
     }
 
+
+    private fun listenerUi() {
+        chatbotLayout.setOnClickListener {
+            navController?.navigate(
+                R.id.ChatbotFragment,
+                null,
+                navOptions
+            )
+        }
+    }
+
     private fun initObservers() {
         viewModel.getCurrentDate()
         viewModel.currentDate.observe(viewLifecycleOwner) { date ->
-
 
             when (date) {
                 is Response.Loading -> {}
@@ -94,7 +120,6 @@ class HomeFragment : Fragment() {
 
         viewModel.getHelloSate()
         viewModel.helloSate.observe(viewLifecycleOwner) { date ->
-
 
             when (date) {
                 is Response.Loading -> {}
@@ -213,6 +238,8 @@ class HomeFragment : Fragment() {
         )
     }
 
-    val url = "https://firebasestorage.googleapis.com/v0/b/gympro-eibrahim.appspot.com/o/Morehead-Low-Country-1.avif?alt=media&token=c00e6c97-7aff-4357-8fc0-cad4ca407c2a"
-    val url2 = "https://firebasestorage.googleapis.com/v0/b/gympro-eibrahim.appspot.com/o/custom-home-builder-toronto.jpg?alt=media&token=47a2627b-c7cb-43ca-9f6f-d4579faf7619"
+    val url =
+        "https://firebasestorage.googleapis.com/v0/b/gympro-eibrahim.appspot.com/o/Morehead-Low-Country-1.avif?alt=media&token=c00e6c97-7aff-4357-8fc0-cad4ca407c2a"
+    val url2 =
+        "https://firebasestorage.googleapis.com/v0/b/gympro-eibrahim.appspot.com/o/custom-home-builder-toronto.jpg?alt=media&token=47a2627b-c7cb-43ca-9f6f-d4579faf7619"
 }
