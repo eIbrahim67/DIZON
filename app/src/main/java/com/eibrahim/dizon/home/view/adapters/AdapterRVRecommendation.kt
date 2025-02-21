@@ -13,15 +13,15 @@ import com.bumptech.glide.Glide
 import com.eibrahim.dizon.R
 import com.eibrahim.dizon.core.remote.Property
 
-class AdapterRVProps(
+class AdapterRVRecommendation(
     private val goToProp: ((id: Int) -> Unit)
-) : RecyclerView.Adapter<AdapterRVProps.CategoryViewHolder>() {
+) : RecyclerView.Adapter<AdapterRVRecommendation.CategoryViewHolder>() {
 
     private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_rv_featured_plans, parent, false)
+            .inflate(R.layout.item_rv_recommendation, parent, false)
         return CategoryViewHolder(view)
     }
 
@@ -71,9 +71,9 @@ class AdapterRVProps(
     override fun getItemCount(): Int = differ.currentList.size
 
     class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val itemImageProp: ImageView = itemView.findViewById(R.id.itemImageProp)
-        val itemTitleProp: TextView = itemView.findViewById(R.id.itemTitleProp)
-        val itemLocationProp: TextView = itemView.findViewById(R.id.itemLocationProp)
-        val itemPriceProp: TextView = itemView.findViewById(R.id.itemPriceProp)
+        val itemImageProp: ImageView = itemView.findViewById(R.id.itemImageRecommendation)
+        val itemTitleProp: TextView = itemView.findViewById(R.id.itemTitleRecommendation)
+        val itemLocationProp: TextView = itemView.findViewById(R.id.itemLocationRecommendation)
+        val itemPriceProp: TextView = itemView.findViewById(R.id.itemPriceRecommendation)
     }
 }

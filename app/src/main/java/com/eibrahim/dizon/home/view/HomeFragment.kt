@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
@@ -20,7 +19,8 @@ import com.eibrahim.dizon.core.remote.Category
 import com.eibrahim.dizon.core.response.Response
 import com.eibrahim.dizon.core.utils.UtilsFunctions
 import com.eibrahim.dizon.home.view.adapters.AdapterRVCategories
-import com.eibrahim.dizon.home.view.adapters.AdapterRVProps
+import com.eibrahim.dizon.home.view.adapters.AdapterRVNearby
+import com.eibrahim.dizon.home.view.adapters.AdapterRVRecommendation
 import com.eibrahim.dizon.home.viewModel.HomeViewModel
 import com.eibrahim.dizon.main.viewModel.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -29,7 +29,8 @@ import com.google.android.material.card.MaterialCardView
 class HomeFragment : Fragment() {
 
     private lateinit var recyclerviewCategories: RecyclerView
-    private lateinit var recyclerviewProps: RecyclerView
+    private lateinit var recyclerviewNearby: RecyclerView
+    private lateinit var recyclerviewRecommendation: RecyclerView
     private lateinit var currentDate: TextView
     private lateinit var textViewHello: TextView
     private lateinit var bottomNavigationView: BottomNavigationView
@@ -37,7 +38,8 @@ class HomeFragment : Fragment() {
 
     private val utils = UtilsFunctions
     private var navController: NavController? = null
-    private val adapterRVProps = AdapterRVProps { id -> goToProp(id) }
+    private val adapterRVNearby = AdapterRVNearby { id -> goToProp(id) }
+    private val adapterRVRecommendation = AdapterRVRecommendation { id -> goToProp(id) }
     private val adapterRVCategories = AdapterRVCategories { categoryId ->
         Log.d("HomeFragment", "Category clicked with id: $categoryId")
         // Optionally navigate to a search or filter page based on categoryId
@@ -65,7 +67,9 @@ class HomeFragment : Fragment() {
 
     private fun initUi(view: View) {
         recyclerviewCategories = view.findViewById(R.id.recyclerviewCategories)
-        recyclerviewProps = view.findViewById(R.id.recyclerviewProps)
+        recyclerviewNearby = view.findViewById(R.id.recyclerviewNearby)
+        recyclerviewRecommendation = view.findViewById(R.id.recyclerviewRecommendation)
+
         textViewHello = view.findViewById(R.id.textViewHello)
         currentDate = view.findViewById(R.id.currentDate)
         chatbotLayout = view.findViewById(R.id.chatbot_layout)
@@ -82,10 +86,12 @@ class HomeFragment : Fragment() {
     private fun updateUi() {
         // Set adapters for RecyclerViews
         recyclerviewCategories.adapter = adapterRVCategories
-        recyclerviewProps.adapter = adapterRVProps
+        recyclerviewNearby.adapter = adapterRVNearby
+        recyclerviewRecommendation.adapter = adapterRVRecommendation
 
         // Submit dummy data to adapters
-        adapterRVProps.submitList(getDummyProperties())
+        adapterRVNearby.submitList(getDummyProperties())
+        adapterRVRecommendation.submitList(getDummyProperties())
         adapterRVCategories.submitList(getDummyCategories())
     }
 

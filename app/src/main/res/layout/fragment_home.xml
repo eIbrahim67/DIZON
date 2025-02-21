@@ -67,13 +67,16 @@
                 android:id="@+id/chatbot_layout"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginStart="5dp"
-                app:cardCornerRadius="15dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="50dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/search_layout"
-                app:layout_constraintTop_toBottomOf="@id/notificationLayout">
+                app:layout_constraintTop_toBottomOf="@id/notificationLayout"
+                app:strokeColor="@color/gray_v1"
+                app:strokeWidth="2dp">
 
                 <ImageView
                     android:id="@+id/itemChatbotImage"
@@ -90,10 +93,13 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                app:cardCornerRadius="15dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="50dp"
                 app:layout_constraintEnd_toStartOf="@id/chatbot_layout"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/notificationLayout">
+                app:layout_constraintTop_toBottomOf="@id/notificationLayout"
+                app:strokeColor="@color/gray_v1"
+                app:strokeWidth="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -159,8 +165,50 @@
                 app:layout_constraintTop_toBottomOf="@id/textViewCategories"
                 tools:listitem="@layout/item_rv_categories" />
 
+            <TextView
+                android:id="@+id/textViewNearby"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:text="Property nearby"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recyclerviewCategories" />
+
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerviewProps"
+                android:id="@+id/recyclerviewNearby"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewNearby"
+                tools:listitem="@layout/item_rv_nearby" />
+
+            <TextView
+                android:id="@+id/textViewRecommendation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:text="Recommendation"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recyclerviewNearby" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerviewRecommendation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -168,8 +216,8 @@
                 android:layout_marginEnd="20dp"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/recyclerviewCategories"
-                tools:listitem="@layout/item_rv_featured_plans" />
+                app:layout_constraintTop_toBottomOf="@id/textViewRecommendation"
+                tools:listitem="@layout/item_rv_recommendation" />
 
             <TextView
                 android:layout_width="0dp"
@@ -186,7 +234,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recyclerviewProps" />
+                app:layout_constraintTop_toBottomOf="@id/recyclerviewRecommendation" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
