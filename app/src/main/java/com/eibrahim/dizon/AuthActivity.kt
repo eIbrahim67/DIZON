@@ -24,6 +24,5 @@ class AuthActivity : AppCompatActivity() {
         navController =
             supportFragmentManager.findFragmentById(R.id.nav_auth)
                 ?.findNavController()
-
     }
 }
