@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    tools:context=".login.view.LoginFragment">
+    android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:padding="24dp"
-        >
+        tools:context=".login.view.LoginFragment">
 
         <TextView
             android:id="@+id/welcomeTextView"
@@ -89,7 +88,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:id="@+id/txtForgotPassword"
+            android:id="@+id/forgotPasswordButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -100,7 +99,7 @@
             app:layout_constraintTop_toBottomOf="@id/passwordTextInputLayout" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnLogin"
+            android:id="@+id/signUpbtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -110,7 +109,7 @@
             app:cornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtForgotPassword" />
+            app:layout_constraintTop_toBottomOf="@id/forgotPasswordButton" />
 
 
         <Button
@@ -130,12 +129,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnLogin"
+            app:layout_constraintTop_toBottomOf="@+id/signUpbtn"
             app:strokeColor="@android:color/darker_gray"
             app:strokeWidth="1dp" />
 
         <TextView
-            android:id="@+id/txtRegister"
+            android:id="@+id/signUpTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sign_up_button"

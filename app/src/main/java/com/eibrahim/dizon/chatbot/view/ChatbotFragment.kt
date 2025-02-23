@@ -4,18 +4,21 @@ import androidx.fragment.app.viewModels
 import com.eibrahim.dizon.R
 import com.eibrahim.dizon.chatbot.viewModel.ChatbotViewModel
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.eibrahim.dizon.chatbot.model.Message
+import com.eibrahim.dizon.chatbot.model.ChatMessage
 import com.eibrahim.dizon.chatbot.view.adapter.ChatAdapter
+import com.eibrahim.dizon.core.response.Response
+import com.eibrahim.dizon.core.utils.UtilsFunctions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class ChatbotFragment : Fragment() {
@@ -25,10 +28,12 @@ class ChatbotFragment : Fragment() {
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var chatRecyclerView: RecyclerView
     private lateinit var inputEditText: EditText
-    private lateinit var sendButton: Button
+    private lateinit var sendButton: ImageView
+    private lateinit var recordButton: ImageView
+    private lateinit var uploadButton: ImageView
+    private val utils = UtilsFunctions
 
-    // Maintains the conversation history.
-    private val conversationHistory = mutableListOf<Message>()
+    private val conversationHistory = mutableListOf<ChatMessage>()
 
     private lateinit var chatAdapter: ChatAdapter
 
@@ -42,7 +47,9 @@ class ChatbotFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         chatRecyclerView = view.findViewById(R.id.chatRecyclerView)
         inputEditText = view.findViewById(R.id.inputEditText)
-        sendButton = view.findViewById(R.id.recordButton)
+        sendButton = view.findViewById(R.id.sendButton)
+        recordButton = view.findViewById(R.id.recordButton)
+        uploadButton = view.findViewById(R.id.uploadButton)
         bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
         chatAdapter = ChatAdapter(conversationHistory)
         chatRecyclerView.apply {
@@ -50,30 +57,54 @@ class ChatbotFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
         }
         bottomNavigationView.visibility = View.GONE
-        // Send button click
         sendButton.setOnClickListener {
             val userMessage = inputEditText.text.toString().trim()
             if (userMessage.isNotEmpty()) {
-                // Append the user's message
-                val message = Message("user", userMessage)
+                val message = ChatMessage("user", userMessage)
                 conversationHistory.add(message)
                 chatAdapter.notifyItemInserted(conversationHistory.size - 1)
                 chatRecyclerView.scrollToPosition(conversationHistory.size - 1)
                 inputEditText.text.clear()
 
-                // Send the message along with full conversation history to the backend
                 viewModel.startChat(userMessage)
             }
         }
 
-        // Observe the chat response LiveData
-        viewModel.chatMessages.observe(viewLifecycleOwner, Observer { response ->
-            val assistantMessage = Message("assistant", response)
-            Log.d("test", response)
-            conversationHistory.add(assistantMessage)
-            chatAdapter.notifyItemInserted(conversationHistory.size - 1)
-            chatRecyclerView.scrollToPosition(conversationHistory.size - 1)
+        inputEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (!s.isNullOrEmpty()) {
+                    sendButton.visibility = View.VISIBLE
+                    uploadButton.visibility = View.GONE
+                    recordButton.visibility = View.GONE
+                } else {
+                    sendButton.visibility = View.GONE
+                    uploadButton.visibility = View.VISIBLE
+                    recordButton.visibility = View.VISIBLE
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+
+        viewModel.chatMessages.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Response.Loading -> {
+
+                }
+                is Response.Success -> {
+                    val assistantMessage = ChatMessage("assistant", response.data)
+                    Log.d("test", response.data)
+                    conversationHistory.add(assistantMessage)
+                    chatAdapter.notifyItemInserted(conversationHistory.size - 1)
+                    chatRecyclerView.scrollToPosition(conversationHistory.size - 1)
+                }
+                is Response.Failure -> {
+                    utils.createFailureResponse(response, requireContext())
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {
