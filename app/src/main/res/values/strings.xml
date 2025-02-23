@@ -24,7 +24,7 @@
     <string name="welcome_message"> Login here </string>
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>
-    <string name="forgot_password">Forgot Password?</string>
+    <string name="forgot_password">Forgot your password?</string>
     <string name="sign_in">Log In</string>
     <string name="sign_up_button">Don\'t have an account? Sign Up</string>
     <string name="Login_With_Google">Login with Google</string>
@@ -48,5 +48,6 @@
     <string name="new_password_hint">New Password</string>
     <string name="confirm_new_password_hint">Confirm New Password</string>
     <string name="submit">Submit</string>
+    <string name="or_log_in_with">OR Log in With</string>
 
 </resources>
