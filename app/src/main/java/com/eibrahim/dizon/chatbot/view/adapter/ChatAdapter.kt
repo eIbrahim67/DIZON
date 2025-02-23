@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eibrahim.dizon.R
 import com.eibrahim.dizon.chatbot.model.Message
 import com.google.android.material.card.MaterialCardView
+import io.noties.markwon.Markwon
 
 class ChatAdapter(private val messages: List<Message>) :
     RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
@@ -45,7 +46,10 @@ class ChatAdapter(private val messages: List<Message>) :
         }
 
         val message = messages[position]
-        holder.messageTextView.text = message.content
+//        holder.messageTextView.text = message.content
+
+        val markwon = Markwon.create(holder.itemView.context)
+        markwon.setMarkdown(holder.messageTextView, message.content)
     }
 
     override fun getItemCount(): Int = messages.size
