@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
+        android:fitsSystemWindows="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -108,7 +109,7 @@
                 app:strokeWidth="0dp">
 
                 <EditText
-                    android:id="@+id/emailEditText"
+                    android:id="@+id/emailRegister"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:background="@color/edit_text_color"

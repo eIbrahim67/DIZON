@@ -31,7 +31,7 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val etEmail = view.findViewById<EditText>(R.id.emailEditText)
+        val etEmail = view.findViewById<EditText>(R.id.emailLogin)
         val etPassword = view.findViewById<EditText>(R.id.passwordLogin)
         val btnLogin = view.findViewById<Button>(R.id.btnLogin)
         val tvForgetPassword = view.findViewById<TextView>(R.id.txtForgotPassword)
@@ -39,7 +39,9 @@ class LoginFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         btnLogin.setOnClickListener {
-            requireActivity().finish()
+            val email = etEmail.text.toString()
+            val password = etPassword.text.toString()
+            viewModel.login(email, password)
         }
 
         view.findViewById<TextView>(R.id.txtForgotPassword).setOnClickListener {
@@ -54,7 +56,7 @@ class LoginFragment : Fragment() {
             result.fold(
                 onSuccess = {
                     Toast.makeText(requireContext(), "Login Successful!", Toast.LENGTH_SHORT).show()
-
+                    requireActivity().finish()
                 },
                 onFailure = { error ->
                     Toast.makeText(requireContext(), error.message ?: "Login Failed", Toast.LENGTH_SHORT).show()

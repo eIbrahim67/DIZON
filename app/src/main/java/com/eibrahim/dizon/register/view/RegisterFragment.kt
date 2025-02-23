@@ -37,7 +37,7 @@ class RegisterFragment : Fragment() {
 
         val btnRegister = view.findViewById<Button>(R.id.btnRegister)
         val etName = view.findViewById<EditText>(R.id.nameEditText)
-        val etEmail = view.findViewById<EditText>(R.id.emailEditText)
+        val etEmail = view.findViewById<EditText>(R.id.emailRegister)
         val etPhone = view.findViewById<EditText>(R.id.numberEditText)
         val etCity = view.findViewById<EditText>(R.id.cityEditText)
         val etPassword = view.findViewById<EditText>(R.id.passwordRegister)
