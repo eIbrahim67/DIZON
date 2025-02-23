@@ -1,19 +1,17 @@
 package com.eibrahim.dizon.chatbot.view.adapter
 
-import android.print.PrintAttributes.Margins
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.core.view.marginEnd
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.eibrahim.dizon.R
-import com.eibrahim.dizon.chatbot.model.Message
+import com.eibrahim.dizon.chatbot.model.ChatMessage
 import com.google.android.material.card.MaterialCardView
 import io.noties.markwon.Markwon
 
-class ChatAdapter(private val messages: List<Message>) :
+class ChatAdapter(private val messages: List<ChatMessage>) :
     RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
 
     class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -25,8 +23,7 @@ class ChatAdapter(private val messages: List<Message>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_chat, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat, parent, false)
         return ChatViewHolder(view)
     }
 
@@ -37,6 +34,8 @@ class ChatAdapter(private val messages: List<Message>) :
             holder.viewStart.visibility = View.VISIBLE
             holder.viewEnd.visibility = View.GONE
             holder.imageCard.visibility = View.GONE
+            ContextCompat.getColor(holder.itemView.context, R.color.blue_v2)
+
         }
         //bot
         else {

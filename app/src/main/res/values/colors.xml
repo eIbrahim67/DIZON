@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
+    <color name="black_v2">#03142a</color>
     <color name="white">#FFFFFF</color>
     <color name="white_v2">#efefef</color>
     <color name="white_v3">#FDFDFD</color>
+    <color name="white_v4">#edf2f8</color>
+    <color name="white_v5">#F5F7FA</color>
     <color name="green">#31B057</color>
     <color name="primary">#129575</color>
     <color name="primary80">#71B1A1</color>
@@ -19,6 +22,8 @@
     <color name="warning">#D9534F</color>
     <color name="gold">#e8b923</color>
     <color name="blue">#165EF0</color>
+    <color name="blue_v2">#4a7feb</color>
+    <color name="blue_v3">#4A86F7</color>
     <color name="gray_v1">#aaa</color>
     <color name="gray_v2">#80EBEBEB</color>
     <color name="gray_v3">#616161</color>

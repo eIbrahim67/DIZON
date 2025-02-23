@@ -10,14 +10,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.eibrahim.dizon.chatbot.model.Message
+import com.eibrahim.dizon.chatbot.model.ChatMessage
 import com.eibrahim.dizon.chatbot.view.adapter.ChatAdapter
 import com.eibrahim.dizon.core.response.Response
 import com.eibrahim.dizon.core.utils.UtilsFunctions
@@ -35,8 +33,7 @@ class ChatbotFragment : Fragment() {
     private lateinit var uploadButton: ImageView
     private val utils = UtilsFunctions
 
-    // Maintains the conversation history.
-    private val conversationHistory = mutableListOf<Message>()
+    private val conversationHistory = mutableListOf<ChatMessage>()
 
     private lateinit var chatAdapter: ChatAdapter
 
@@ -60,18 +57,15 @@ class ChatbotFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
         }
         bottomNavigationView.visibility = View.GONE
-        // Send button click
         sendButton.setOnClickListener {
             val userMessage = inputEditText.text.toString().trim()
             if (userMessage.isNotEmpty()) {
-                // Append the user's message
-                val message = Message("user", userMessage)
+                val message = ChatMessage("user", userMessage)
                 conversationHistory.add(message)
                 chatAdapter.notifyItemInserted(conversationHistory.size - 1)
                 chatRecyclerView.scrollToPosition(conversationHistory.size - 1)
                 inputEditText.text.clear()
 
-                // Send the message along with full conversation history to the backend
                 viewModel.startChat(userMessage)
             }
         }
@@ -97,11 +91,10 @@ class ChatbotFragment : Fragment() {
         viewModel.chatMessages.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Response.Loading -> {
-                    // Optionally show a loading spinner.
+
                 }
                 is Response.Success -> {
-                    // Update your chat UI with the entire conversation.
-                    val assistantMessage = Message("assistant", response.data)
+                    val assistantMessage = ChatMessage("assistant", response.data)
                     Log.d("test", response.data)
                     conversationHistory.add(assistantMessage)
                     chatAdapter.notifyItemInserted(conversationHistory.size - 1)
@@ -112,8 +105,6 @@ class ChatbotFragment : Fragment() {
                 }
             }
         }
-
-
     }
 
     override fun onDestroyView() {
