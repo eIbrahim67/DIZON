@@ -49,5 +49,7 @@
     <string name="confirm_new_password_hint">Confirm New Password</string>
     <string name="submit">Submit</string>
     <string name="or_log_in_with">OR Log in With</string>
+    <string name="login">Login</string>
+    <string name="sign_in_with_google">Login with google</string>
 
 </resources>
