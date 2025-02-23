@@ -269,7 +269,7 @@
                 app:strokeWidth="0dp">
 
                 <EditText
-                    android:id="@+id/dateEditText"
+                    android:id="@+id/passwordRegister"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:background="@color/edit_text_color"
@@ -306,7 +306,7 @@
                 app:strokeWidth="0dp">
 
                 <EditText
-                    android:id="@+id/passwordRegister"
+                    android:id="@+id/confirmPasswordRegister"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:background="@color/edit_text_color"
