@@ -1,5 +1,6 @@
 package com.eibrahim.dizon.main.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.eibrahim.dizon.AuthActivity
 import com.eibrahim.dizon.R
 import com.eibrahim.dizon.main.viewModel.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -27,6 +29,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
+
+        if (!viewModel.isUserLogin())
+            startActivity(Intent(this, AuthActivity::class.java))
+
         setContentView(R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

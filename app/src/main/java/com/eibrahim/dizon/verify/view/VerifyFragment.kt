@@ -30,7 +30,7 @@ class VerifyFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<Button>(R.id.btnVerify).setOnClickListener {
-            findNavController().navigate(R.id.action_verifyFragment_to_nav_main)
+            requireActivity().finish()
         }
     }
 }

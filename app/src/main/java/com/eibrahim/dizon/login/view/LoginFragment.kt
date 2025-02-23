@@ -39,7 +39,7 @@ class LoginFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         btnLogin.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_nav_main)
+            requireActivity().finish()
         }
 
         view.findViewById<TextView>(R.id.txtForgotPassword).setOnClickListener {
