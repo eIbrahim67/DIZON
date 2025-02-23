@@ -39,9 +39,7 @@ class LoginFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         btnLogin.setOnClickListener {
-            val email = etEmail.text.toString()
-            val password = etPassword.text.toString()
-            viewModel.login(email, password)
+            findNavController().navigate(R.id.action_loginFragment_to_nav_main)
         }
 
         view.findViewById<TextView>(R.id.txtForgotPassword).setOnClickListener {
@@ -56,7 +54,7 @@ class LoginFragment : Fragment() {
             result.fold(
                 onSuccess = {
                     Toast.makeText(requireContext(), "Login Successful!", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_loginFragment_to_nav_main)
+
                 },
                 onFailure = { error ->
                     Toast.makeText(requireContext(), error.message ?: "Login Failed", Toast.LENGTH_SHORT).show()

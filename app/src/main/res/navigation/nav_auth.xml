@@ -56,11 +56,4 @@
             android:id="@+id/action_resetPasswordFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="com.eibrahim.dizon.main.view.MainActivity"
-        android:label="Main Activity"
-        app:launchSingleTop="true"
-        app:popUpTo="@id/loginFragment"
-        app:popUpToInclusive="true" />
 </navigation>

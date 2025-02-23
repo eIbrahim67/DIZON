@@ -13,12 +13,5 @@ class LoginViewModel : ViewModel() {
             _loginState.value = Result.failure(Exception("Please fill in all fields"))
             return
         }
-
-        // Simulate authentication (Replace this with Firebase/Auth API)
-        if (email == "user@example.com" && password == "123456") {
-            _loginState.value = Result.success(true)
-        } else {
-            _loginState.value = Result.failure(Exception("Invalid email or password"))
-        }
     }
 }
