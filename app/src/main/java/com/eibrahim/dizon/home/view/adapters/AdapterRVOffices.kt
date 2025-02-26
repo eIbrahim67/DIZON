@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -11,15 +12,15 @@ import com.eibrahim.dizon.R
 import com.eibrahim.dizon.core.remote.Category
 import com.google.android.material.chip.Chip
 
-class AdapterRVCategories(
+class AdapterRVOffices(
     private val goToSearch: ((categoryName: String) -> Unit)? = null
-) : RecyclerView.Adapter<AdapterRVCategories.CategoryViewHolder>() {
+) : RecyclerView.Adapter<AdapterRVOffices.CategoryViewHolder>() {
 
     private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_rv_categories, parent, false)
+            .inflate(R.layout.item_rv_offices, parent, false)
         return CategoryViewHolder(view)
     }
 
@@ -30,10 +31,10 @@ class AdapterRVCategories(
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val category = differ.currentList[position]
-        holder.chipCategory.text = category.name
 
-        // Optional: Set a click listener on the chip to trigger search or filtering.
-        holder.chipCategory.setOnClickListener {
+        holder.officeItemLogo.setImageResource(R.drawable.temp_logo_1)
+
+        holder.officeItemLogo.setOnClickListener {
             goToSearch?.invoke(category.name)
         }
     }
@@ -61,6 +62,6 @@ class AdapterRVCategories(
     override fun getItemCount(): Int = differ.currentList.size
 
     class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val chipCategory: Chip = itemView.findViewById(R.id.chipCategory)
+        val officeItemLogo: ImageView = itemView.findViewById(R.id.officeItemLogo)
     }
 }

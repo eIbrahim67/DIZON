@@ -2,13 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="250dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp">
 
-    <!-- Property Image Card -->
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/itemImageNearbyCard"
+        android:id="@+id/itemImagePropertiesCard"
         android:layout_width="0dp"
         android:layout_height="200dp"
         app:cardCornerRadius="15dp"
@@ -18,21 +17,19 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/itemImageNearby"
+            android:id="@+id/itemImageProperties"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/gray_v4"
             android:scaleType="centerCrop" />
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Nearbyerty Title -->
     <TextView
-        android:id="@+id/itemTitleNearby"
+        android:id="@+id/itemTitleProperties"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="8dp"
         android:fontFamily="monospace"
         android:text="Villa Villa at two double"
@@ -40,36 +37,36 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/itemImageNearbyCard" />
+        app:layout_constraintTop_toBottomOf="@id/itemImagePropertiesCard"
+        app:layout_constraintEnd_toStartOf="@id/itemPriceProperties" />
 
-    <!-- Nearbyerty Location -->
     <TextView
-        android:id="@+id/itemLocationNearby"
-        android:layout_width="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/itemPriceProperties"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="123 LE"
+        android:textColor="@color/black"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBaseline_toBaselineOf="@id/itemTitleProperties"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/itemLocationProperties"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="12dp"
         android:fontFamily="sans-serif-condensed"
         android:text="123, maade, Cairo, Egypt"
         android:textColor="@color/black"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/itemTitleNearby"
-        app:layout_constraintTop_toBottomOf="@id/itemTitleNearby" />
-
-    <!-- Nearbyerty Price -->
-    <TextView
-        android:id="@+id/itemPriceNearby"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemTitleProperties"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="16dp"
-        android:text="123 LE"
-        app:layout_constraintStart_toStartOf="@id/itemTitleNearby"
-        app:layout_constraintTop_toBottomOf="@id/itemLocationNearby"
-        android:textColor="@color/black"
-        android:fontFamily="sans-serif-condensed"
-        android:textSize="22sp"
-        android:textStyle="bold"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

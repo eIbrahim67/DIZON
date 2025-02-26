@@ -4,7 +4,68 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/white_v4">
+    android:background="@color/white_v5">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:fontFamily="monospace"
+        android:text="EBO"
+        android:textColor="@color/blue"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/backLayout"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="500dp"
+        app:strokeWidth="2dp"
+        app:strokeColor="@color/blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:contentDescription="TODO"
+            android:src="@drawable/icon_outline_arrow_left"
+            app:tint="@color/blue" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/botSettings"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="500dp"
+        app:strokeWidth="2dp"
+        app:strokeColor="@color/blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:src="@drawable/icon_outline_more"
+            app:tint="@color/blue" />
+
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"
@@ -14,7 +75,8 @@
         app:layout_constraintBottom_toTopOf="@id/inputContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/botSettings"
         tools:listitem="@layout/item_chat"/>
 
     <com.google.android.material.card.MaterialCardView
@@ -27,6 +89,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/blue"
         app:cardBackgroundColor="@color/white"
         android:layout_margin="10dp">
 
@@ -38,7 +101,7 @@
             <View
                 android:layout_width="2dp"
                 android:layout_height="0dp"
-                android:background="@color/gray_v3"
+                android:background="@color/blue"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/inputEditText"/>
@@ -62,6 +125,7 @@
                 android:src="@drawable/icon_outline_mic"
                 android:text="Send"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:tint="@color/blue"
                 android:padding="8dp"
                 app:layout_constraintStart_toEndOf="@id/inputEditText"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -73,6 +137,7 @@
                 android:src="@drawable/icon_outline_photo"
                 android:padding="8dp"
                 app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/blue"
                 android:text="Send"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/recordButton"

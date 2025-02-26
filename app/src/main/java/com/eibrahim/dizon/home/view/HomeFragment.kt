@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.ImageView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
@@ -14,40 +14,32 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.eibrahim.dizon.R
-import com.eibrahim.dizon.core.remote.Property
-import com.eibrahim.dizon.core.remote.Category
-import com.eibrahim.dizon.core.response.Response
 import com.eibrahim.dizon.core.utils.UtilsFunctions
-import com.eibrahim.dizon.home.view.adapters.AdapterRVCategories
-import com.eibrahim.dizon.home.view.adapters.AdapterRVNearby
-import com.eibrahim.dizon.home.view.adapters.AdapterRVRecommendation
+import com.eibrahim.dizon.home.view.adapters.AdapterRVOffices
+import com.eibrahim.dizon.home.view.adapters.AdapterRVProperties
+import com.eibrahim.dizon.home.view.adapters.AdapterRVProperties80
 import com.eibrahim.dizon.home.viewModel.HomeViewModel
 import com.eibrahim.dizon.main.viewModel.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.card.MaterialCardView
 
 class HomeFragment : Fragment() {
 
-    private lateinit var recyclerviewCategories: RecyclerView
-    private lateinit var recyclerviewNearby: RecyclerView
+    private lateinit var recyclerviewOffices: RecyclerView
+    private lateinit var recyclerviewNew: RecyclerView
     private lateinit var recyclerviewRecommendation: RecyclerView
-    private lateinit var currentDate: TextView
-    private lateinit var textViewHello: TextView
+    private lateinit var recyclerviewSponsored: RecyclerView
     private lateinit var bottomNavigationView: BottomNavigationView
-    private lateinit var chatbotLayout: MaterialCardView
+    private lateinit var chatbotLayout: ImageView
 
     private val utils = UtilsFunctions
     private var navController: NavController? = null
-    private val adapterRVNearby = AdapterRVNearby { id -> goToProp(id) }
-    private val adapterRVRecommendation = AdapterRVRecommendation { id -> goToProp(id) }
-    private val adapterRVCategories = AdapterRVCategories { categoryId ->
+    private val adapterRVProperties = AdapterRVProperties { id -> goToProp(id) }
+    private val adapterRVProperties80 = AdapterRVProperties80 { id -> goToProp(id) }
+    private val adapterRVOffices = AdapterRVOffices { categoryId ->
         Log.d("HomeFragment", "Category clicked with id: $categoryId")
-        // Optionally navigate to a search or filter page based on categoryId
     }
-    private val navOptions = NavOptions.Builder()
-        .setEnterAnim(R.anim.slide_in_right)
-        .setPopExitAnim(R.anim.slide_out_right)
-        .build()
+    private val navOptions = NavOptions.Builder().setEnterAnim(R.anim.slide_in_right)
+        .setPopExitAnim(R.anim.slide_out_right).build()
     private val viewModel: HomeViewModel by viewModels()
     private val sharedViewModel: MainViewModel by activityViewModels()
 
@@ -66,80 +58,46 @@ class HomeFragment : Fragment() {
     }
 
     private fun initUi(view: View) {
-        recyclerviewCategories = view.findViewById(R.id.recyclerviewCategories)
-        recyclerviewNearby = view.findViewById(R.id.recyclerviewNearby)
+        recyclerviewOffices = view.findViewById(R.id.recyclerviewCategories)
+        recyclerviewNew = view.findViewById(R.id.recyclerviewNew)
         recyclerviewRecommendation = view.findViewById(R.id.recyclerviewRecommendation)
+        recyclerviewSponsored = view.findViewById(R.id.recyclerviewSponsored)
 
-        textViewHello = view.findViewById(R.id.textViewHello)
-        currentDate = view.findViewById(R.id.currentDate)
         chatbotLayout = view.findViewById(R.id.chatbot_layout)
 
         bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
         bottomNavigationView.visibility = View.VISIBLE
 
-        navController = requireActivity().supportFragmentManager
-            .findFragmentById(R.id.main_nav_host_fragment)
-            ?.findNavController()
+        navController =
+            requireActivity().supportFragmentManager.findFragmentById(R.id.main_nav_host_fragment)
+                ?.findNavController()
 
     }
 
     private fun updateUi() {
         // Set adapters for RecyclerViews
-        recyclerviewCategories.adapter = adapterRVCategories
-        recyclerviewNearby.adapter = adapterRVNearby
-        recyclerviewRecommendation.adapter = adapterRVRecommendation
+        recyclerviewOffices.adapter = adapterRVOffices
+        recyclerviewNew.adapter = adapterRVProperties
+        recyclerviewRecommendation.adapter = adapterRVProperties80
+        recyclerviewSponsored.adapter = adapterRVProperties80
 
-        // Submit dummy data to adapters
-        adapterRVNearby.submitList(getDummyProperties())
-        adapterRVRecommendation.submitList(getDummyProperties())
-        adapterRVCategories.submitList(getDummyCategories())
+        adapterRVProperties.submitList(viewModel.getList())
+        adapterRVProperties80.submitList(viewModel.getList())
+
+        adapterRVOffices.submitList(viewModel.getCate())
     }
 
 
     private fun listenerUi() {
         chatbotLayout.setOnClickListener {
             navController?.navigate(
-                R.id.ChatbotFragment,
-                null,
-                navOptions
+                R.id.ChatbotFragment, null, navOptions
             )
         }
     }
 
     private fun initObservers() {
-        viewModel.getCurrentDate()
-        viewModel.currentDate.observe(viewLifecycleOwner) { date ->
 
-            when (date) {
-                is Response.Loading -> {}
-
-                is Response.Success -> {
-                    currentDate.text = date.data
-                }
-
-                is Response.Failure -> {
-                    utils.createFailureResponse(date, requireContext())
-                }
-            }
-
-        }
-
-        viewModel.getHelloSate()
-        viewModel.helloSate.observe(viewLifecycleOwner) { date ->
-
-            when (date) {
-                is Response.Loading -> {}
-
-                is Response.Success -> {
-                    textViewHello.text = date.data
-                }
-
-                is Response.Failure -> {
-                    utils.createFailureResponse(date, requireContext())
-                }
-            }
-
-        }
     }
 
     private fun goToProp(id: Int) {
@@ -148,104 +106,4 @@ class HomeFragment : Fragment() {
         // Navigation to property detail can be implemented here
     }
 
-    // Generate dummy property data
-    private fun getDummyProperties(): List<Property> {
-        return listOf(
-            Property(
-                id = 1,
-                title = "Modern Apartment",
-                description = "A modern apartment in the heart of the city.",
-                address = "123 Main St",
-                city = "New York",
-                state = "NY",
-                zipCode = "10001",
-                country = "USA",
-                latitude = 40.7128,
-                longitude = -74.0060,
-                price = 450000.0,
-                area = 850.0,
-                bedrooms = 2,
-                bathrooms = 2,
-                floors = 1,
-                images = listOf(url),
-                createdAt = System.currentTimeMillis(),
-                updatedAt = null
-            ),
-            Property(
-                id = 2,
-                title = "Cozy Cottage",
-                description = "A charming cottage with a beautiful garden.",
-                address = "456 Elm St",
-                city = "Boston",
-                state = "MA",
-                zipCode = "02118",
-                country = "USA",
-                latitude = 42.3601,
-                longitude = -71.0589,
-                price = 350000.0,
-                area = 1200.0,
-                bedrooms = 3,
-                bathrooms = 2,
-                floors = 2,
-                images = listOf(url),
-                createdAt = System.currentTimeMillis(),
-                updatedAt = null
-            ),
-            Property(
-                id = 3,
-                title = "Luxury Villa",
-                description = "A luxurious villa with state-of-the-art amenities.",
-                address = "789 Oak Ave",
-                city = "Los Angeles",
-                state = "CA",
-                zipCode = "90001",
-                country = "USA",
-                latitude = 34.0522,
-                longitude = -118.2437,
-                price = 1200000.0,
-                area = 3500.0,
-                bedrooms = 5,
-                bathrooms = 4,
-                floors = 2,
-                images = listOf(url),
-                createdAt = System.currentTimeMillis(),
-                updatedAt = null
-            )
-        )
-    }
-
-    // Generate dummy category data
-    private fun getDummyCategories(): List<Category> {
-        return listOf(
-            Category(
-                id = 1,
-                name = "Apartments",
-                description = "Find modern apartments for rent or sale.",
-                iconUrl = "https://images.ctfassets.net/pg6xj64qk0kh/2uUvn1x29JUfeHVuzakyhJ/9b540ac51547aa6954433e6e19db76fb/camden-atlantic-apartments-plantation-fl-pool-at-dusk-view.JPG"
-            ),
-            Category(
-                id = 2,
-                name = "Houses",
-                description = "Explore beautiful houses with spacious interiors.",
-                iconUrl = url2
-            ),
-            Category(
-                id = 3,
-                name = "Commercial",
-                description = "Discover commercial properties for business needs.",
-                iconUrl = url2
-            ),
-            Category(
-                id = 4,
-                name = "Luxury",
-                description = "Browse luxury properties with premium amenities.",
-                iconUrl = "https://topluxuryproperty.com//uploadfile/gallery/damac-islands-0_3_638615954946025321_820465_.jpg"
-            )
-        )
-    }
-
-    val url =
-        "https://firebasestorage.googleapis.com/v0/b/gympro-eibrahim.appspot.com/o/Morehead-Low-Country-1.avif?alt=media&token=c00e6c97-7aff-4357-8fc0-cad4ca407c2a"
-    val url2 =
-        "https://firebasestorage.googleapis.com/v0/b/gympro-eibrahim.appspot.com/o/custom-home-builder-toronto.jpg?alt=media&token=47a2627b-c7cb-43ca-9f6f-d4579faf7619"
 }

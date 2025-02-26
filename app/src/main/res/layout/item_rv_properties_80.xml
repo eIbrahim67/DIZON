@@ -2,13 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="350dp"
     android:layout_height="wrap_content"
     android:layout_margin="5dp">
 
-    <!-- Recommendationerty Image Card -->
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/itemImageRecommendationCard"
+        android:id="@+id/itemImagePropertiesCard80"
         android:layout_width="0dp"
         android:layout_height="200dp"
         app:cardCornerRadius="15dp"
@@ -18,16 +17,15 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/itemImageRecommendation"
+            android:id="@+id/itemImageProperties80"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/gray_v4"
             android:scaleType="centerCrop" />
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Recommendationerty Title -->
     <TextView
-        android:id="@+id/itemTitleRecommendation"
+        android:id="@+id/itemTitleProperties80"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -39,12 +37,11 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/itemImageRecommendationCard"
-        app:layout_constraintEnd_toStartOf="@id/itemPriceRecommendation" />
+        app:layout_constraintTop_toBottomOf="@id/itemImagePropertiesCard80"
+        app:layout_constraintEnd_toStartOf="@id/itemPriceProperties80" />
 
-    <!-- Recommendationerty Price -->
     <TextView
-        android:id="@+id/itemPriceRecommendation"
+        android:id="@+id/itemPriceProperties80"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -53,12 +50,11 @@
         android:fontFamily="sans-serif-condensed"
         android:textSize="22sp"
         android:textStyle="bold"
-        app:layout_constraintBaseline_toBaselineOf="@id/itemTitleRecommendation"
+        app:layout_constraintBaseline_toBaselineOf="@id/itemTitleProperties80"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Recommendationerty Location -->
     <TextView
-        android:id="@+id/itemLocationRecommendation"
+        android:id="@+id/itemLocationProperties80"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -69,7 +65,7 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/itemTitleRecommendation"
+        app:layout_constraintTop_toBottomOf="@id/itemTitleProperties80"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 

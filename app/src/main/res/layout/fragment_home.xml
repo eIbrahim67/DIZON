@@ -8,7 +8,7 @@
     android:scrollbars="none"
     tools:context=".home.view.HomeFragment">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent">
@@ -18,121 +18,118 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/currentDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
-                android:textColor="@color/gray_v1"
-                android:textSize="14sp"
+                android:fontFamily="monospace"
+                android:text="@string/app_name"
+                android:textColor="@color/blue"
+                android:textSize="28sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/textViewHello"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/menuLayout"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="20dp"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="500dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/currentDate" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/blue"
+                app:strokeWidth="2dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:contentDescription="TODO"
+                    android:src="@drawable/icon_outline_menu"
+                    app:tint="@color/blue" />
+
+            </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/notificationLayout"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
-                app:cardBackgroundColor="@color/gray_v2"
+                app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="500dp"
-                app:layout_constraintBottom_toBottomOf="@id/textViewHello"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/currentDate">
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/blue"
+                app:strokeWidth="2dp">
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:contentDescription="TODO"
-                    android:src="@drawable/user" />
+                    android:layout_margin="10dp"
+                    android:src="@drawable/icon_outline_notification"
+                    app:tint="@color/blue" />
 
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
+            <ImageView
                 android:id="@+id/chatbot_layout"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="50dp"
+                android:background="@drawable/bc_right_half_circle"
+                android:src="@drawable/icon_chatbot_v1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/search_layout"
-                app:layout_constraintTop_toBottomOf="@id/notificationLayout"
-                app:strokeColor="@color/gray_v1"
-                app:strokeWidth="2dp">
+                app:layout_constraintTop_toBottomOf="@id/menuLayout" />
 
-                <ImageView
-                    android:id="@+id/itemChatbotImage"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/icon_chatbot_v1" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
+            <LinearLayout
                 android:id="@+id/search_layout"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/bc_left_half_circle"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="50dp"
                 app:layout_constraintEnd_toStartOf="@id/chatbot_layout"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/notificationLayout"
-                app:strokeColor="@color/gray_v1"
-                app:strokeWidth="2dp">
+                app:layout_constraintTop_toBottomOf="@id/menuLayout">
 
-                <LinearLayout
+                <ImageView
+                    android:id="@+id/itemCategoryImage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/icon_selector_search"
+                    app:tint="@color/blue" />
+
+                <EditText
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/search" />
 
-                    <ImageView
-                        android:id="@+id/itemCategoryImage"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="10dp"
-                        android:src="@drawable/icon_selector_search" />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:background="@android:color/transparent"
-                        android:hint="@string/search" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/textViewCategories"
+                android:id="@+id/textViewOffices"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
-                android:text="Categories"
+                android:text="Offices"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -149,9 +146,9 @@
                 android:textColor="@color/blue"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/textViewCategories"
+                app:layout_constraintBottom_toBottomOf="@id/textViewOffices"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/textViewCategories" />
+                app:layout_constraintTop_toTopOf="@id/textViewOffices" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerviewCategories"
@@ -162,36 +159,37 @@
                 android:layout_marginEnd="20dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/textViewCategories"
-                tools:listitem="@layout/item_rv_categories" />
+                app:layout_constraintTop_toBottomOf="@id/textViewOffices"
+                tools:listitem="@layout/item_rv_offices" />
 
             <TextView
-                android:id="@+id/textViewNearby"
+                android:id="@+id/textViewSponsored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
-                android:text="Property nearby"
-                android:textColor="@color/black"
+                android:text="Sponsored"
+                android:textColor="@color/blue"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/recyclerviewCategories" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerviewNearby"
+                android:id="@+id/recyclerviewSponsored"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginEnd="20dp"
+                android:clipToPadding="false"
                 android:orientation="horizontal"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textViewNearby"
-                tools:listitem="@layout/item_rv_nearby" />
+                app:layout_constraintTop_toBottomOf="@id/textViewSponsored"
+                tools:listitem="@layout/item_rv_properties_80" />
 
             <TextView
                 android:id="@+id/textViewRecommendation"
@@ -205,19 +203,48 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recyclerviewNearby" />
+                app:layout_constraintTop_toBottomOf="@id/recyclerviewSponsored" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerviewRecommendation"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/textViewRecommendation"
+                tools:listitem="@layout/item_rv_properties_80" />
+
+            <TextView
+                android:id="@+id/textViewNew"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:text="Recently"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recyclerviewRecommendation" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerviewNew"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="20dp"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/textViewRecommendation"
-                tools:listitem="@layout/item_rv_recommendation" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewNew"
+                tools:listitem="@layout/item_rv_properties" />
 
             <TextView
                 android:layout_width="0dp"
@@ -228,16 +255,16 @@
                 android:layout_marginBottom="40dp"
                 android:gravity="center"
                 android:text="Feel free to suggest any features you'd like to see in our app by sending us your feedback through the support section."
-                android:textColor="@color/gray_v1"
+                android:textColor="@color/gray"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recyclerviewRecommendation" />
+                app:layout_constraintTop_toBottomOf="@id/recyclerviewNew" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

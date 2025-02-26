@@ -11,17 +11,17 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.eibrahim.dizon.R
-import com.eibrahim.dizon.core.remote.Property
+import com.eibrahim.dizon.home.model.PropertyListing
 
-class AdapterRVNearby(
+class AdapterRVProperties(
     private val goToProp: ((id: Int) -> Unit)
-) : RecyclerView.Adapter<AdapterRVNearby.CategoryViewHolder>() {
+) : RecyclerView.Adapter<AdapterRVProperties.CategoryViewHolder>() {
 
     private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_rv_nearby, parent, false)
+            .inflate(R.layout.item_rv_properties, parent, false)
         return CategoryViewHolder(view)
     }
 
@@ -34,7 +34,7 @@ class AdapterRVNearby(
         val property = differ.currentList[position]
 
         // Load property image using Glide
-        property.images[0].let { url ->
+        property.image.let { url ->
             Glide.with(context)
                 .load(url)
                 .centerCrop()
@@ -42,28 +42,28 @@ class AdapterRVNearby(
         }
 
         // Set property title, location, and price
-        holder.itemTitleProp.text = property.title
-        holder.itemLocationProp.text = "${property.address}, ${property.city}, ${property.country}"
-        holder.itemPriceProp.text = "$${property.price}" // Format as needed
+        holder.itemTitleProp.text = property.type
+        //holder.itemLocationProp.text = property.tags.toString()
+        //holder.itemPriceProp.text = property.link // Format as needed
 
         // Set click listener for the entire item
         holder.itemView.setOnClickListener {
-            goToProp(property.id)
+            //goToProp(property.id)
         }
     }
 
     private val differ = AsyncListDiffer(this, DIFF_CALLBACK)
 
-    fun submitList(propertyList: List<Property>) {
-        differ.submitList(propertyList)
+    fun submitList(PropertyListingList: List<PropertyListing>) {
+        differ.submitList(PropertyListingList)
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Property>() {
-            override fun areItemsTheSame(oldItem: Property, newItem: Property): Boolean =
-                oldItem.id == newItem.id
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<PropertyListing>() {
+            override fun areItemsTheSame(oldItem: PropertyListing, newItem: PropertyListing): Boolean =
+                oldItem.title == newItem.title
 
-            override fun areContentsTheSame(oldItem: Property, newItem: Property): Boolean =
+            override fun areContentsTheSame(oldItem: PropertyListing, newItem: PropertyListing): Boolean =
                 oldItem == newItem
         }
     }
@@ -71,9 +71,9 @@ class AdapterRVNearby(
     override fun getItemCount(): Int = differ.currentList.size
 
     class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val itemImageProp: ImageView = itemView.findViewById(R.id.itemImageNearby)
-        val itemTitleProp: TextView = itemView.findViewById(R.id.itemTitleNearby)
-        val itemLocationProp: TextView = itemView.findViewById(R.id.itemLocationNearby)
-        val itemPriceProp: TextView = itemView.findViewById(R.id.itemPriceNearby)
+        val itemImageProp: ImageView = itemView.findViewById(R.id.itemImageProperties)
+        val itemTitleProp: TextView = itemView.findViewById(R.id.itemTitleProperties)
+        val itemLocationProp: TextView = itemView.findViewById(R.id.itemLocationProperties)
+        val itemPriceProp: TextView = itemView.findViewById(R.id.itemPriceProperties)
     }
 }

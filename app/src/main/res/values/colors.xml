@@ -24,7 +24,7 @@
     <color name="blue">#165EF0</color>
     <color name="blue_v2">#4a7feb</color>
     <color name="blue_v3">#4A86F7</color>
-    <color name="gray_v1">#aaa</color>
+    <color name="gray">#aaa</color>
     <color name="gray_v2">#80EBEBEB</color>
     <color name="gray_v3">#616161</color>
     <color name="gray_v4">#80B3B3B3</color>
@@ -33,4 +33,5 @@
     <color name="edit_text_color">#F1F4FF</color>
     <color name="background_google_btn">#f5f5f5</color>
     <color name="backgroundApp">#fef7ff</color>
+    <color name="gold_v2">#BD9000</color>
 </resources>
