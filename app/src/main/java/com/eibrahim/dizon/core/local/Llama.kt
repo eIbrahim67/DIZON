@@ -1,9 +1,5 @@
 package com.eibrahim.dizon.core.local
 
-import android.util.Log
-import android.widget.Toast
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
@@ -11,8 +7,6 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import okhttp3.*
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
@@ -20,9 +14,7 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class Llama {
-    private val client = OkHttpClient.Builder()
-        .readTimeout(0, TimeUnit.MILLISECONDS)
-        .build()
+    private val client = OkHttpClient.Builder().readTimeout(0, TimeUnit.MILLISECONDS).build()
 
     /**
      * Makes a POST request to your local Flask chat endpoint and streams the response.
@@ -39,10 +31,8 @@ class Llama {
         onComplete: () -> Unit
     ) {
         val requestBody = jsonPayload.toRequestBody("application/json".toMediaTypeOrNull())
-        val request = Request.Builder()
-            .url("http://10.0.2.2:5000/chat") // Adjust URL if necessary.
-            .post(requestBody)
-            .build()
+        val request = Request.Builder().url("http://10.0.2.2:5000/chat") // Adjust URL if necessary.
+            .post(requestBody).build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -76,17 +66,12 @@ class Llama {
      */
     suspend fun fetchChatResponse(jsonPayload: String): String = suspendCoroutine { cont ->
         val conversationBuilder = StringBuilder()
-        getChatStream(
-            jsonPayload,
-            onMessageReceived = { line ->
-                conversationBuilder.append(line).append("\n")
-            },
-            onError = { error ->
-                cont.resumeWithException(error)
-            },
-            onComplete = {
-                cont.resume(conversationBuilder.toString())
-            }
-        )
+        getChatStream(jsonPayload, onMessageReceived = { line ->
+            conversationBuilder.append(line).append("\n")
+        }, onError = { error ->
+            cont.resumeWithException(error)
+        }, onComplete = {
+            cont.resume(conversationBuilder.toString())
+        })
     }
 }

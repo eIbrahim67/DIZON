@@ -95,7 +95,7 @@ class ChatbotFragment : Fragment() {
                 }
                 is Response.Success -> {
                     val assistantMessage = ChatMessage("assistant", response.data)
-                    Log.d("test", response.data)
+                    //Log.d("test", response.data)
                     conversationHistory.add(assistantMessage)
                     chatAdapter.notifyItemInserted(conversationHistory.size - 1)
                     chatRecyclerView.scrollToPosition(conversationHistory.size - 1)
