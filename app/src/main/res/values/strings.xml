@@ -52,4 +52,12 @@
     <string name="login">Login</string>
     <string name="sign_in_with_google">Login with google</string>
 
+    <!-- ... OTP ... -->
+    <string name="enter_otp">Enter OTP</string>
+    <string name="enter_the_otp_code_we_just_sent_nyou_on_your_registered_email_phone_number">Enter the OTP code we just sent\nyou on your registered Email/Phone number</string>
+    <string name="empty" >-</string>
+    <string name="didn_t_get_otp">Didn’t get OTP?</string>
+    <string name="resend_otp">Resend OTP</string>
+
+
 </resources>
