@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/white_v6"
     android:scrollbars="none"
     tools:context=".home.view.HomeFragment">
 
@@ -17,20 +17,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:fontFamily="monospace"
-                android:text="@string/app_name"
-                android:textColor="@color/blue"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <!--            <ImageView-->
+            <!--                android:layout_width="50dp"-->
+            <!--                android:layout_height="50dp"-->
+            <!--                android:layout_marginStart="20dp"-->
+            <!--                android:layout_marginTop="20dp"-->
+            <!--                android:layout_marginEnd="20dp"-->
+            <!--                android:text="@string/app_name"-->
+            <!--                android:src="@mipmap/ic_logo"-->
+            <!--                android:textColor="@color/blue"-->
+            <!--                android:textSize="28sp"-->
+            <!--                android:textStyle="bold"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent" />-->
 
 
             <com.google.android.material.card.MaterialCardView
@@ -43,16 +43,15 @@
                 app:cardCornerRadius="500dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:strokeColor="@color/blue"
-                app:strokeWidth="2dp">
+                app:strokeColor="@color/gray_v6"
+                app:strokeWidth="1dp">
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="10dp"
                     android:contentDescription="TODO"
-                    android:src="@drawable/icon_outline_menu"
-                    app:tint="@color/blue" />
+                    android:src="@drawable/man" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -66,15 +65,15 @@
                 app:cardCornerRadius="500dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:strokeColor="@color/blue"
-                app:strokeWidth="2dp">
+                app:strokeColor="@color/gray_v6"
+                app:strokeWidth="1dp">
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="10dp"
                     android:src="@drawable/icon_outline_notification"
-                    app:tint="@color/blue" />
+                    app:tint="@color/black" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -89,7 +88,8 @@
                 android:src="@drawable/icon_chatbot_v1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/search_layout"
-                app:layout_constraintTop_toBottomOf="@id/menuLayout" />
+                app:layout_constraintTop_toBottomOf="@id/menuLayout"
+                app:tint="@color/black" />
 
             <LinearLayout
                 android:id="@+id/search_layout"
@@ -98,7 +98,6 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bc_left_half_circle"
-                app:cardBackgroundColor="@color/white"
                 app:layout_constraintEnd_toStartOf="@id/chatbot_layout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/menuLayout">
@@ -110,7 +109,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="10dp"
                     android:src="@drawable/icon_selector_search"
-                    app:tint="@color/blue" />
+                    app:tint="@color/black" />
 
                 <EditText
                     android:layout_width="match_parent"
@@ -118,6 +117,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:background="@android:color/transparent"
+                    android:editable="false"
                     android:hint="@string/search" />
 
             </LinearLayout>
@@ -127,7 +127,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:text="Offices"
                 android:textColor="@color/black"
@@ -154,10 +154,11 @@
                 android:id="@+id/recyclerviewCategories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
+                android:clipToPadding="false"
                 android:orientation="horizontal"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@id/textViewOffices"
                 tools:listitem="@layout/item_rv_offices" />
@@ -167,11 +168,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:text="Sponsored"
-                android:textColor="@color/blue"
-                android:textSize="20sp"
+                android:textColor="@color/blue_v2"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/recyclerviewCategories" />
@@ -183,27 +184,195 @@
                 android:layout_marginTop="5dp"
                 android:clipToPadding="false"
                 android:orientation="horizontal"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textViewSponsored"
                 tools:listitem="@layout/item_rv_properties_80" />
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/categoryCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                app:cardCornerRadius="5dp"
+                app:cardBackgroundColor="@color/white"
+                app:strokeColor="@color/gray_v6"
+                app:layout_constraintTop_toBottomOf="@id/recyclerviewSponsored">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/categoryHouse"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/bc_circle"
+                        android:padding="10dp"
+                        android:src="@drawable/icon_outline_house"
+                        app:layout_constraintEnd_toStartOf="@+id/categoryVilla"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/black" />
+
+                    <TextView
+                        android:id="@+id/labelHouse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:labelFor="@id/categoryHouse"
+                        android:text="House"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/roboto_mono_variable"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@id/categoryHouse"
+                        app:layout_constraintStart_toStartOf="@id/categoryHouse"
+                        app:layout_constraintTop_toBottomOf="@id/categoryHouse" />
+
+
+                    <ImageView
+                        android:id="@+id/categoryVilla"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/bc_circle"
+                        android:padding="10dp"
+                        android:src="@drawable/icon_outline_villa"
+                        app:cardBackgroundColor="@color/white_v4"
+                        app:layout_constraintEnd_toStartOf="@+id/categoryApartment"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/categoryHouse"
+                        app:layout_constraintTop_toTopOf="@id/categoryHouse"
+                        app:tint="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:labelFor="@id/categoryVilla"
+                        android:text="Villa"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/roboto_mono_variable"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@id/categoryVilla"
+                        app:layout_constraintStart_toStartOf="@id/categoryVilla"
+                        app:layout_constraintTop_toBottomOf="@id/categoryVilla" />
+
+                    <ImageView
+                        android:id="@+id/categoryApartment"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/bc_circle"
+                        android:padding="10dp"
+                        android:src="@drawable/icon_outline_apartment"
+                        app:cardBackgroundColor="@color/white_v4"
+                        app:layout_constraintEnd_toStartOf="@+id/categoryHotel"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/categoryVilla"
+                        app:layout_constraintTop_toTopOf="@id/categoryHouse"
+                        app:tint="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:labelFor="@+id/categoryApartment"
+                        android:text="Apartment"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/roboto_mono_variable"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@id/categoryApartment"
+                        app:layout_constraintStart_toStartOf="@id/categoryApartment"
+                        app:layout_constraintTop_toBottomOf="@id/categoryApartment" />
+
+                    <ImageView
+                        android:id="@+id/categoryHotel"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/bc_circle"
+                        android:padding="10dp"
+                        android:src="@drawable/icon_outline_hotel"
+                        app:cardBackgroundColor="@color/white_v4"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/categoryApartment"
+                        app:layout_constraintTop_toTopOf="@id/categoryHouse"
+                        app:tint="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:labelFor="@+id/categoryHotel"
+                        android:text="Hotel"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/roboto_mono_variable"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@id/categoryHotel"
+                        app:layout_constraintStart_toStartOf="@id/categoryHotel"
+                        app:layout_constraintTop_toBottomOf="@id/categoryHotel" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/categoryAll"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@drawable/bc_circle"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/categoryHotel"
+                        app:layout_constraintStart_toStartOf="@id/categoryHouse"
+                        app:layout_constraintTop_toBottomOf="@id/labelHouse">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:gravity="center_vertical"
+                            android:text="All Category"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="10dp"
+                            android:rotation="90"
+                            android:src="@drawable/icon_arrow"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
             <TextView
                 android:id="@+id/textViewRecommendation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:text="Recommendation"
                 android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recyclerviewSponsored" />
+                app:layout_constraintTop_toBottomOf="@id/categoryCard" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerviewRecommendation"
@@ -212,8 +381,8 @@
                 android:layout_marginTop="5dp"
                 android:clipToPadding="false"
                 android:orientation="horizontal"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@id/textViewRecommendation"
                 tools:listitem="@layout/item_rv_properties_80" />
@@ -223,11 +392,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:text="Recently"
                 android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/recyclerviewRecommendation" />

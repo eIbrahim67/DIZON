@@ -7,6 +7,7 @@
     <color name="white_v3">#FDFDFD</color>
     <color name="white_v4">#edf2f8</color>
     <color name="white_v5">#F5F7FA</color>
+    <color name="white_v6">#FAFAFA</color>
     <color name="green">#31B057</color>
     <color name="primary">#129575</color>
     <color name="primary80">#71B1A1</color>
@@ -29,6 +30,7 @@
     <color name="gray_v3">#616161</color>
     <color name="gray_v4">#80B3B3B3</color>
     <color name="gray_v5">#EBEBEB</color>
+    <color name="gray_v6">#C7C7C7</color>
     <color name="primary_color">#1F41BB</color>
     <color name="edit_text_color">#F1F4FF</color>
     <color name="background_google_btn">#f5f5f5</color>
