@@ -1,3 +1,7 @@
 package com.eibrahim.dizon.chatbot.model
 
-data class ChatMessage(val role: String, val content: String)
+data class ChatMessage(
+    val content: String,
+    val role: String = "bot",
+    val isFromUser: Boolean =false
+)

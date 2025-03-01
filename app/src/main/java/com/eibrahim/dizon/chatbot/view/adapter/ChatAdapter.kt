@@ -16,37 +16,24 @@ class ChatAdapter(private val messages: List<ChatMessage>) :
 
     class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val messageTextView: TextView = itemView.findViewById(R.id.messageTextView)
-        val imageCard: MaterialCardView = itemView.findViewById(R.id.imageCard)
-        val viewEnd: View = itemView.findViewById(R.id.viewEnd)
-        val viewStart: View = itemView.findViewById(R.id.viewStart)
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat, parent, false)
+        val layout = if (viewType == 0) {
+            R.layout.item_chat_user // User message layout
+        } else {
+            R.layout.item_chat_bot  // Bot message layout
+        }
+        val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
         return ChatViewHolder(view)
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return if (messages[position].isFromUser) 0 else 1 // 0 for user, 1 for bot
+    }
+
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
-
-        //user
-        if (position % 2 == 0) {
-            holder.viewStart.visibility = View.VISIBLE
-            holder.viewEnd.visibility = View.GONE
-            holder.imageCard.visibility = View.GONE
-            ContextCompat.getColor(holder.itemView.context, R.color.blue_v2)
-
-        }
-        //bot
-        else {
-            holder.viewEnd.visibility = View.VISIBLE
-            holder.imageCard.visibility = View.VISIBLE
-            holder.viewStart.visibility = View.GONE
-        }
-
         val message = messages[position]
-//        holder.messageTextView.text = message.content
-
         val markwon = Markwon.create(holder.itemView.context)
         markwon.setMarkdown(holder.messageTextView, message.content)
     }

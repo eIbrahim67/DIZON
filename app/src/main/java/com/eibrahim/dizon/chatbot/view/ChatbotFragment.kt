@@ -60,7 +60,7 @@ class ChatbotFragment : Fragment() {
         sendButton.setOnClickListener {
             val userMessage = inputEditText.text.toString().trim()
             if (userMessage.isNotEmpty()) {
-                val message = ChatMessage("user", userMessage)
+                val message = ChatMessage(userMessage, "user", true)
                 conversationHistory.add(message)
                 chatAdapter.notifyItemInserted(conversationHistory.size - 1)
                 chatRecyclerView.scrollToPosition(conversationHistory.size - 1)
@@ -94,7 +94,7 @@ class ChatbotFragment : Fragment() {
 
                 }
                 is Response.Success -> {
-                    val assistantMessage = ChatMessage("assistant", response.data)
+                    val assistantMessage = ChatMessage(response.data, "assistant", false)
                     //Log.d("test", response.data)
                     conversationHistory.add(assistantMessage)
                     chatAdapter.notifyItemInserted(conversationHistory.size - 1)
