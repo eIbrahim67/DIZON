@@ -1,27 +1,8 @@
 package com.eibrahim.dizon.home.viewModel
 
-import android.content.Context
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.eibrahim.dizon.core.local.Llama
 import com.eibrahim.dizon.core.remote.Category
-import com.eibrahim.dizon.core.response.Response
-import com.eibrahim.dizon.core.utils.UtilsFunctions.applyResponse
 import com.eibrahim.dizon.home.model.PropertyListing
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
-
-import com.opencsv.CSVReader
-import java.io.FileReader
-import java.io.InputStreamReader
-import java.io.StringReader
 
 class HomeViewModel : ViewModel() {
 

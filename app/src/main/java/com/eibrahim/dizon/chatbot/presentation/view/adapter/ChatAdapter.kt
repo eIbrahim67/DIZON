@@ -1,14 +1,12 @@
-package com.eibrahim.dizon.chatbot.view.adapter
+package com.eibrahim.dizon.chatbot.presentation.view.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.eibrahim.dizon.R
-import com.eibrahim.dizon.chatbot.model.ChatMessage
-import com.google.android.material.card.MaterialCardView
+import com.eibrahim.dizon.chatbot.domain.model.ChatMessage
 import io.noties.markwon.Markwon
 
 class ChatAdapter(private val messages: List<ChatMessage>) :
@@ -35,6 +33,7 @@ class ChatAdapter(private val messages: List<ChatMessage>) :
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
         val message = messages[position]
         val markwon = Markwon.create(holder.itemView.context)
+
         markwon.setMarkdown(holder.messageTextView, message.content)
     }
 
