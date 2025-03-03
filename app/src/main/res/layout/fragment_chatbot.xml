@@ -4,21 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_v5">
+    android:background="@color/white_v6">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:text="EBO"
+        android:fontFamily="@font/roboto_mono_variable"
+        android:gravity="center"
+        android:text="AI Search\nAssistant"
         android:textColor="@color/blue"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="24sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toBottomOf="@id/backLayout"
+        app:layout_constraintEnd_toStartOf="@id/botSettings"
+        app:layout_constraintStart_toEndOf="@id/backLayout"
+        app:layout_constraintTop_toTopOf="@id/backLayout" />
 
 
     <com.google.android.material.card.MaterialCardView
@@ -27,11 +29,11 @@
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        app:cardBackgroundColor="@color/gray_v2"
+        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="500dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="@color/blue"
+        app:strokeColor="@color/gray_v6"
         app:strokeWidth="1dp">
 
         <ImageView
@@ -39,8 +41,8 @@
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:contentDescription="TODO"
-            android:src="@drawable/icon_outline_arrow_left"
-            app:tint="@color/blue" />
+            android:src="@drawable/icon_outline_arrow"
+            app:tint="@color/black" />
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -50,11 +52,11 @@
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        app:cardBackgroundColor="@color/gray_v2"
+        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="500dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="@color/blue"
+        app:strokeColor="@color/gray_v6"
         app:strokeWidth="1dp">
 
         <ImageView
@@ -62,7 +64,7 @@
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:src="@drawable/icon_outline_more"
-            app:tint="@color/blue" />
+            app:tint="@color/black" />
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -82,84 +84,98 @@
         android:id="@+id/inputContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:minHeight="55dp"
         android:orientation="horizontal"
         android:padding="8dp"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="50dp"
+        app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/buttonsContainer"
         app:layout_constraintStart_toStartOf="parent"
-        app:strokeColor="@color/blue">
+        app:strokeColor="@color/gray_v6">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <EditText
+            android:id="@+id/inputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp">
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:background="@color/blue"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/inputEditText"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/inputEditText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:maxLines="2"
-                android:layout_marginStart="10dp"
-                android:background="@android:color/transparent"
-                android:hint="Type a message"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/recordButton"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/recordButton"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:padding="8dp"
-                android:src="@drawable/icon_outline_mic"
-                android:text="Send"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/inputEditText"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/blue" />
-
-            <ImageView
-                android:id="@+id/uploadButton"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginEnd="10dp"
-                android:padding="8dp"
-                android:src="@drawable/icon_outline_photo"
-                android:text="Send"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/recordButton"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/blue" />
-
-            <ImageView
-                android:id="@+id/sendButton"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:padding="8dp"
-                android:rotation="-45"
-                android:src="@drawable/icon_outline_send"
-                android:text="Send"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:tint="@color/blue"
-                app:layout_constraintStart_toEndOf="@id/inputEditText"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:background="@android:color/transparent"
+            android:hint="Type a message"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/recordButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </com.google.android.material.card.MaterialCardView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buttonsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/inputContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/inputContainer"
+        app:layout_constraintTop_toTopOf="@id/inputContainer">
+
+
+        <ImageView
+            android:id="@+id/recordButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:background="@drawable/bc_circle"
+            android:padding="8dp"
+            android:src="@drawable/icon_outline_mic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/blue" />
+
+        <ImageView
+            android:id="@+id/uploadButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/bc_circle"
+            android:padding="8dp"
+            android:src="@drawable/icon_outline_photo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/recordButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/blue" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/sendButtonCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:cardBackgroundColor="@color/blue"
+            app:cardCornerRadius="50dp"
+            app:strokeColor="@color/gray_v6"
+            app:strokeWidth="1dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:rotation="180"
+                android:padding="8dp"
+                android:layout_gravity="center"
+                android:src="@drawable/icon_solid_arrow"
+                android:text="Send"
+                app:tint="@color/white" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

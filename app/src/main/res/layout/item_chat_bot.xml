@@ -65,7 +65,7 @@
             android:layout_marginEnd="10dp"
             android:rotation="180"
             app:tint="@color/white"
-            android:src="@drawable/icon_outline_arrow_left"
+            android:src="@drawable/icon_outline_arrow"
             android:layout_gravity="end|center_vertical"/>
 
     </com.google.android.material.card.MaterialCardView>
