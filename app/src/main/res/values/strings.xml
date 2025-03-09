@@ -61,5 +61,31 @@
     <string name="let_s_find_your_n_dream_house">Let’s find your \n dream house!</string>
     <string name="favorite_list">Favorite List</string>
 
+    <!-- ... details ... -->
+    <string name="for_sale">For Sale</string>
+    <string name="price">Price</string>
+    <string name="apartment_name">Apartment Name</string>
+    <string name="type_apartment">Type: Apartment</string>
+    <string name="size_apartment">Size: 120 sq m</string>
+    <string name="bed_number">Beds: 3</string>
+    <string name="bath_number">Baths: 2</string>
+    <string name="description">Description</string>
+    <string name="amenities">Amenities</string>
+    <string name="swimming_pool">Swimming Pool</string>
+    <string name="gym">Gym</string>
+    <string name="parking">Parking</string>
+    <string name="security">Security</string>
+    <string name="property_location_map">Property Location Map</string>
+    <string name="view_on_map">View on Map</string>
+    <string name="contact_agent">Contact Agent</string>
+    <string name="owner_name">Owner Name</string>
+    <string name="owner_number">Owner Number</string>
+    <string name="call">Call</string>
+    <string name="whatsapp">WhatsApp</string>
+    <string name="icon_apartment">Apartment Icon</string>
+    <string name="icon_home">Home Icon</string>
+    <string name="icon_hotel">Hotel Icon</string>
+    <string name="icon_bath">Bath Icon</string>
+
 
 </resources>
