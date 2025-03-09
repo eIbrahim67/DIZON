@@ -1,10 +1,18 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    kotlin("kapt")
+
 
 }
 
 android {
+    // ... other configurations
+    buildFeatures {
+        //noinspection DataBindingWithoutKapt
+        dataBinding = true
+        viewBinding = true
+    }
     namespace = "com.eibrahim.dizon"
     compileSdk = 35
 
@@ -65,6 +73,19 @@ dependencies {
     implementation ("androidx.navigation:navigation-fragment-ktx:2.7.6")
     implementation ("androidx.navigation:navigation-ui-ktx:2.7.6")
     implementation ("com.opencsv:opencsv:4.6")
+
+    // ... other dependencies from Ibrahim
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
+    kapt("com.github.bumptech.glide:compiler:4.12.0")
+    implementation("androidx.databinding:databinding-runtime:7.4.2")
+
+
+
+
+
+
+
 
 
 }
