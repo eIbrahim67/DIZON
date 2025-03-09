@@ -1,6 +1,5 @@
-package com.eibrahim.dizon.login.view
+package com.eibrahim.dizon.auth.login.view
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +12,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.eibrahim.dizon.R
+import com.eibrahim.dizon.auth.login.viewModel.LoginViewModel
 
 class LoginFragment : Fragment() {
 

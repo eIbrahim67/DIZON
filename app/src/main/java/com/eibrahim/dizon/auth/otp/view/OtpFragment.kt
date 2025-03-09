@@ -1,4 +1,4 @@
-package com.eibrahim.dizon.otp
+package com.eibrahim.dizon.auth.otp.view
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.eibrahim.dizon.R
+import com.eibrahim.dizon.auth.otp.viewModel.OtpViewModel
 
 class OtpFragment : Fragment() {
 

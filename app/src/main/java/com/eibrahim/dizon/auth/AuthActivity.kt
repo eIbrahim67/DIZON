@@ -1,4 +1,4 @@
-package com.eibrahim.dizon
+package com.eibrahim.dizon.auth
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -7,6 +7,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.eibrahim.dizon.R
 
 class AuthActivity : AppCompatActivity() {
 

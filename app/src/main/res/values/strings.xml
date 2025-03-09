@@ -58,6 +58,8 @@
     <string name="empty" >-</string>
     <string name="didn_t_get_otp">Didn’t get OTP?</string>
     <string name="resend_otp">Resend OTP</string>
+    <string name="let_s_find_your_n_dream_house">Let’s find your \n dream house!</string>
+    <string name="favorite_list">Favorite List</string>
 
 
 </resources>

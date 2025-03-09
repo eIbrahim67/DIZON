@@ -1,4 +1,4 @@
-package com.eibrahim.dizon.verify.view
+package com.eibrahim.dizon.auth.verify.view
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -7,9 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.navigation.fragment.findNavController
 import com.eibrahim.dizon.R
-import com.eibrahim.dizon.verify.viewModel.VerifyViewModel
+import com.eibrahim.dizon.auth.verify.viewModel.VerifyViewModel
 
 class VerifyFragment : Fragment() {
 

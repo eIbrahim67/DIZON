@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_action_home_to_ChatbotFragment"
             app:destination="@id/ChatbotFragment" />
+        <action
+            android:id="@+id/action_action_home_to_favoriteFragment"
+            app:destination="@id/favoriteFragment" />
     </fragment>
 
     <fragment
@@ -20,7 +23,12 @@
         android:name="com.eibrahim.dizon.chatbot.view.ChatbotFragment"
         android:label="ChatbotFragment"
         tools:layout="@layout/fragment_chatbot"/>
-<!--    <fragment-->
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="com.eibrahim.dizon.favorite.view.FavoriteFragment"
+        android:label="fragment_favourit"
+        tools:layout="@layout/fragment_favourit" />
+    <!--    <fragment-->
 <!--        android:id="@+id/action_train"-->
 <!--        android:name="com.eibrahim67.gympro.train.view.TrainFragment"-->
 <!--        android:label="fragment_train"-->

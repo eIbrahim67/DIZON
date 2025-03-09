@@ -1,4 +1,4 @@
-package com.eibrahim.dizon.resetpassword
+package com.eibrahim.dizon.auth.resetpassword
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle

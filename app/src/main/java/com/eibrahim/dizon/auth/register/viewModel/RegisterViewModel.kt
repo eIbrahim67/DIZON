@@ -1,4 +1,4 @@
-package com.eibrahim.dizon.register.viewModel
+package com.eibrahim.dizon.auth.register.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

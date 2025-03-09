@@ -1,4 +1,4 @@
-package com.eibrahim.dizon.forgetpassword
+package com.eibrahim.dizon.auth.forgetpassword.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

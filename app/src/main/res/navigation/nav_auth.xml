@@ -6,7 +6,7 @@
     app:startDestination="@id/loginFragment">
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.eibrahim.dizon.login.view.LoginFragment"
+        android:name="com.eibrahim.dizon.auth.login.view.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -18,16 +18,16 @@
     </fragment>
     <fragment
         android:id="@+id/forgetPasswordFragment"
-        android:name="com.eibrahim.dizon.forgetpassword.ForgetPasswordFragment"
+        android:name="com.eibrahim.dizon.auth.forgetpassword.view.ForgetPasswordFragment"
         android:label="fragment_forget_password"
         tools:layout="@layout/fragment_forget_password" >
         <action
-            android:id="@+id/action_forgetPasswordFragment_to_resetPasswordFragment"
-            app:destination="@id/resetPasswordFragment" />
+            android:id="@+id/action_forgetPasswordFragment_to_otpFragment"
+            app:destination="@id/otpFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.eibrahim.dizon.register.view.RegisterFragment"
+        android:name="com.eibrahim.dizon.auth.register.view.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
@@ -36,16 +36,25 @@
     </fragment>
     <fragment
         android:id="@+id/verifyFragment"
-        android:name="com.eibrahim.dizon.verify.view.VerifyFragment"
+        android:name="com.eibrahim.dizon.auth.verify.view.VerifyFragment"
         android:label="fragment_verify"
         tools:layout="@layout/fragment_verify" />
     <fragment
         android:id="@+id/resetPasswordFragment"
-        android:name="com.eibrahim.dizon.resetpassword.ResetPasswordFragment"
+        android:name="com.eibrahim.dizon.auth.resetpassword.ResetPasswordFragment"
         android:label="fragment_reset_password"
         tools:layout="@layout/fragment_reset_password" >
         <action
             android:id="@+id/action_resetPasswordFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/otpFragment"
+        android:name="com.eibrahim.dizon.auth.otp.view.OtpFragment"
+        android:label="fragment_otp"
+        tools:layout="@layout/fragment_otp" >
+        <action
+            android:id="@+id/action_otpFragment_to_resetPasswordFragment"
+            app:destination="@id/resetPasswordFragment" />
     </fragment>
 </navigation>

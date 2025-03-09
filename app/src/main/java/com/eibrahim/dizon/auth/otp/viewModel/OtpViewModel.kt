@@ -1,4 +1,4 @@
-package com.eibrahim.dizon.otp
+package com.eibrahim.dizon.auth.otp.viewModel
 
 import androidx.lifecycle.ViewModel
 

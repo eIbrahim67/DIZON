@@ -1,4 +1,4 @@
-package com.eibrahim.dizon.verify.viewModel
+package com.eibrahim.dizon.auth.verify.viewModel
 
 import androidx.lifecycle.ViewModel
 

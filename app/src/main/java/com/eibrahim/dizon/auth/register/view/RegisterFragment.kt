@@ -1,4 +1,4 @@
-package com.eibrahim.dizon.register.view
+package com.eibrahim.dizon.auth.register.view
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -11,7 +11,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.eibrahim.dizon.R
-import com.eibrahim.dizon.register.viewModel.RegisterViewModel
+import com.eibrahim.dizon.auth.register.viewModel.RegisterViewModel
 
 typealias RegistrationResult = Result<Boolean>
 
