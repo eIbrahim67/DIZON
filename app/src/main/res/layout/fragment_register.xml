@@ -306,15 +306,24 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView11"
                 app:strokeWidth="0dp">
 
-                <EditText
-                    android:id="@+id/confirmPasswordRegister"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:background="@color/edit_text_color"
-                    android:drawableRight="@drawable/eye"
-                    android:hint="********"
-                    android:inputType="textPassword"
-                    android:padding="8dp" />
+                    app:errorEnabled="true"
+                    app:passwordToggleEnabled="true"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/confirmPasswordRegister"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/edit_text_color"
+                        android:hint="********"
+                        android:inputType="textPassword"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -343,15 +352,32 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView12"
                 app:strokeWidth="0dp">
 
-                <EditText
-                    android:id="@+id/confirmPassword"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:background="@color/edit_text_color"
-                    android:drawableRight="@drawable/eye"
-                    android:hint="*********"
-                    android:inputType="textPassword"
-                    android:padding="8dp" />
+                    app:errorEnabled="true"
+                    app:passwordToggleEnabled="true"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView12"
+                    >
+
+                    <EditText
+                        android:id="@+id/confirmPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/edit_text_color"
+                        android:hint="*********"
+                        android:inputType="textPassword"
+                       />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
 
             </com.google.android.material.card.MaterialCardView>
 

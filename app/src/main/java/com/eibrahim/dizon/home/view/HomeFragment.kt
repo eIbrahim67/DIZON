@@ -30,6 +30,8 @@ class HomeFragment : Fragment() {
     private lateinit var recyclerviewSponsored: RecyclerView
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var chatbotLayout: ImageView
+    private lateinit var details: ImageView
+
 
     private val utils = UtilsFunctions
     private var navController: NavController? = null
@@ -62,7 +64,7 @@ class HomeFragment : Fragment() {
         recyclerviewNew = view.findViewById(R.id.recyclerviewNew)
         recyclerviewRecommendation = view.findViewById(R.id.recyclerviewRecommendation)
         recyclerviewSponsored = view.findViewById(R.id.recyclerviewSponsored)
-
+        details=view.findViewById(R.id.goToDetails)
         chatbotLayout = view.findViewById(R.id.chatbot_layout)
 
         bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
@@ -92,6 +94,13 @@ class HomeFragment : Fragment() {
         chatbotLayout.setOnClickListener {
             navController?.navigate(
                 R.id.ChatbotFragment, null, navOptions
+            )
+        }
+
+        // navigate to details for test detailsFragment
+        details.setOnClickListener{
+            navController?.navigate(
+                R.id.detailsFragment, null, navOptions
             )
         }
     }

@@ -67,7 +67,7 @@
     <string name="apartment_name">Apartment Name</string>
     <string name="type_apartment">Type: Apartment</string>
     <string name="size_apartment">Size: 120 sq m</string>
-    <string name="bed_number">Beds: 3</string>
+    <string name="bed_number">Beds: 4</string>
     <string name="bath_number">Baths: 2</string>
     <string name="description">Description</string>
     <string name="amenities">Amenities</string>
@@ -86,6 +86,7 @@
     <string name="icon_home">Home Icon</string>
     <string name="icon_hotel">Hotel Icon</string>
     <string name="icon_bath">Bath Icon</string>
+    <string name="room_number">Room: 3</string>
 
 
 </resources>

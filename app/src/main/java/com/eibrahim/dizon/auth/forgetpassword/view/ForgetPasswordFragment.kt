@@ -42,7 +42,7 @@ class ForgetPasswordFragment : Fragment() {
             result.fold(
                 onSuccess = {
                     Toast.makeText(requireContext(), "Reset link sent successfully", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_forgetPasswordFragment_to_resetPasswordFragment)
+                    findNavController().navigate(R.id.action_forgetPasswordFragment_to_otpFragment)
                             },
                 onFailure = { error ->
                     Toast.makeText(requireContext(), error.message ?: "Failed to send reset link", Toast.LENGTH_SHORT).show()

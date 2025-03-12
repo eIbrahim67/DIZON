@@ -13,8 +13,6 @@ class DetailsViewModel : ViewModel() {
     val agentContact: String = "+1 123-456-7890"
     val agentImageUrl: String = "YOUR_AGENT_IMAGE_URL" // Replace with actual URL
 
-    val amenities: List<String> = listOf("Swimming Pool", "Gym", "Parking", "Security")
-
 
 
 
