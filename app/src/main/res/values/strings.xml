@@ -88,5 +88,21 @@
     <string name="icon_bath">Bath Icon</string>
     <string name="room_number">Room: 3</string>
 
+    <!-- ... Edit Profile ... -->
+
+    <string name="edit_profile">Edit Profile</string>
+    <string name="agent_profile_image">agent profile image</string>
+    <string name="edit">Edit</string>
+    <string name="remove">Remove</string>
+    <string name="personal_details">Personal Details</string>
+    <string name="ibrahim">Ibrahim</string>
+    <string name="email_ex">Ibrahim@Gmail.com</string>
+    <string name="city_ex">Zagazig</string>
+    <string name="code">Code</string>
+    <string name="_20">+20</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="Phone_ex">01102251486</string>
+    <string name="update">Update</string>
+
 
 </resources>
