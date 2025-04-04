@@ -6,7 +6,6 @@ import com.eibrahim.dizon.chatbot.presentation.viewModel.ChatbotViewModel
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,45 +42,55 @@ class ChatbotFragment : Fragment() {
     private lateinit var sendButtonCard: MaterialCardView
     private lateinit var recordButton: ImageView
     private lateinit var uploadButton: ImageView
-    private val utils = UtilsFunctions
 
     private val conversationHistory = mutableListOf<ChatMessage>()
-
     private lateinit var chatAdapter: ChatAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
+        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_chatbot, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // Initialize view references
         chatRecyclerView = view.findViewById(R.id.chatRecyclerView)
         inputEditText = view.findViewById(R.id.inputEditText)
         sendButtonCard = view.findViewById(R.id.sendButtonCard)
         recordButton = view.findViewById(R.id.recordButton)
         uploadButton = view.findViewById(R.id.uploadButton)
         bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
+
+        // Setup RecyclerView adapter.
         chatAdapter = ChatAdapter(conversationHistory)
+
         chatRecyclerView.apply {
             adapter = chatAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
+
+        // Hide bottom navigation while chatting.
         bottomNavigationView.visibility = View.GONE
+
+        // Send button click listener.
         sendButtonCard.setOnClickListener {
             val userMessage = inputEditText.text.toString().trim()
             if (userMessage.isNotEmpty()) {
-                val message = ChatMessage(userMessage, "user", true)
-                conversationHistory.add(message)
+                conversationHistory.add(
+                    ChatMessage(
+                        content = userMessage, role = "user", isFromUser = true
+                    )
+                )
                 chatAdapter.notifyItemInserted(conversationHistory.size - 1)
                 chatRecyclerView.scrollToPosition(conversationHistory.size - 1)
                 inputEditText.text.clear()
-
                 viewModel.startChat(userMessage)
             }
         }
 
+        // Text change listener to toggle visibility of buttons.
         inputEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if (!s.isNullOrEmpty()) {
@@ -95,70 +104,49 @@ class ChatbotFragment : Fragment() {
                 }
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(
+                s: CharSequence?, start: Int, count: Int, after: Int
+            ) { /* no-op */
+            }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun onTextChanged(
+                s: CharSequence?, start: Int, before: Int, count: Int
+            ) { /* no-op */
+            }
         })
 
+        // Observe chat responses from the ViewModel.
         viewModel.chatMessages.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Response.Loading -> {
-                    //loading
+                    // Optionally show a loading indicator here.
                 }
 
                 is Response.Success -> {
-
-                    val assistantMessage = response.data
-
-                    try {
-                        val rawContent = assistantMessage.content
-                        // Split the content at the start of the "search_properties" key.
-                        val splitIndex = rawContent.indexOf("\"search_properties\":")
-                        if (splitIndex != -1) {
-                            val messagePart = rawContent.substring(0, splitIndex).trim()
-                            val searchPropertiesPart = rawContent.substring(splitIndex).trim()
-
-                            // Optionally, remove any trailing commas or add missing braces.
-                            // For instance, if messagePart looks like: "message": "Hello! How can I assist you today?"
-                            // you might want to remove the key to get only the message text.
-                            // Here's one way to extract just the message string:
-                            val messageRegex = Regex("\"message\":\\s*\"(.*?)\"")
-                            val matchResult = messageRegex.find(messagePart)
-                            val messageString = matchResult?.groupValues?.get(1) ?: ""
-
-                            // Now, for the searchPropertiesPart, you might need to add outer braces if missing.
-//                            val fixedSearchProperties =
-//                                if (!searchPropertiesPart.trim().startsWith("{")) {
-//                                    "{ $searchPropertiesPart }"
-//                                } else {
-//                                    searchPropertiesPart
-//                                }
-
-                            //val searchProperties: SearchProperties = Gson().fromJson(fixedSearchProperties, SearchProperties::class.java)
-
-                            Log.d("messageString", messageString)
-                            Log.d("searchPropertiesPart", searchPropertiesPart)
-
-                            conversationHistory.add(
-                                ChatMessage(
-                                    messageString,
-                                    assistantMessage.role,
-                                    assistantMessage.isFromUser
-                                )
-                            )
-                            chatAdapter.notifyItemInserted(conversationHistory.size - 1)
-                            chatRecyclerView.scrollToPosition(conversationHistory.size - 1)
-                        } else {
-                            Log.e("ParsingError", "Could not find search_properties key.")
-                        }
-
-                    } catch (e: Exception) {
-                        Log.e("ParsingError", e.toString())
+                    var dummyImages: List<String>? = null
+                    // Add the bot's response to the conversation history.
+                    // Check for additional properties if needed.
+                    if (response.data.search_properties.parameters.displaySearchResults) {
+                        dummyImages = listOf(
+                            "https://www.propertyfinder.ae/property/aabc8ff45bd7d606b615a23f3adf928e/416/272/MODE/35a74d/13614520-ffa59o.webp?ctr=ae",
+                            "https://www.propertyfinder.ae/property/d5596f824e7b2fe3d8e4820fb91ec05e/416/272/MODE/0df2db/13635501-e8d76o.webp?ctr=ae",
+                            "https://www.propertyfinder.ae/property/12b02a5be8bc4c6fe9d687201869f6f4/416/272/MODE/4d9f5f/13634529-d796co.webp?ctr=ae",
+                            "https://www.propertyfinder.ae/property/45ebd0c4db2ee14ec4cb803368cad4be/416/272/MODE/0f8f4a/13624487-f1e5fo.webp?ctr=ae"
+                        )
                     }
+                    conversationHistory.add(
+                        ChatMessage(
+                            content = response.data.message, // Optionally leave empty or add a caption.
+                            images = dummyImages
+                        )
+                    )
+
+                    chatAdapter.notifyItemInserted(conversationHistory.size - 1)
+                    chatRecyclerView.scrollToPosition(conversationHistory.size - 1)
                 }
 
                 is Response.Failure -> {
-                    utils.createFailureResponse(response, requireContext())
+                    UtilsFunctions.createFailureResponse(response, requireContext())
                 }
             }
         }
@@ -166,6 +154,9 @@ class ChatbotFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        // Restore bottom navigation visibility.
         bottomNavigationView.visibility = View.VISIBLE
+        // Nullify view references if needed to prevent memory leaks.
+        // For example, if using view binding, set binding = null here.
     }
 }

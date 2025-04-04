@@ -1,8 +1,7 @@
 package com.eibrahim.dizon.chatbot.domain.model
 
-// Represents the overall response from ChatLlama
 data class ChatResponse(
-    val message: String,
+    val message: String,  // This key may be absent if you're only extracting search_properties
     val search_properties: SearchProperties
 )
 
@@ -14,14 +13,15 @@ data class SearchProperties(
 data class SearchParameters(
     val location: Location,
     val property_type: String,
-    val bedrooms: Range?,
-    val bathrooms: Range?,
-    val square_footage: RangeWithUnit?,
-    val lot_size: RangeWithUnit?,
-    val budget: RangeWithCurrency?,
+    val bedrooms: Range,
+    val bathrooms: Range,
+    val square_footage: RangeWithUnit,
+    val lot_size: RangeWithUnit,
+    val budget: RangeWithCurrency,
     val transaction: String,
     val property_status: PropertyStatus,
-    val amenities: Amenities
+    val amenities: Amenities,
+    val displaySearchResults: Boolean
 )
 
 data class Location(

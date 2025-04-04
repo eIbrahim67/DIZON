@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white_v5"
+    android:background="@color/white_v6"
     android:padding="8dp">
 
     <ImageView
@@ -37,12 +37,13 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
+        android:visibility="gone"
         android:id="@+id/resultCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         app:cardBackgroundColor="@color/blue_v3"
         app:cardCornerRadius="5dp"
-        android:layout_marginTop="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/botIcon"
@@ -52,9 +53,9 @@
             android:id="@+id/result"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:layout_marginStart="10dp"
             android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="10dp"
+            android:padding="5dp"
             android:text="Show Results"
             android:textColor="@color/white"
             android:textSize="14sp" />
@@ -62,11 +63,91 @@
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="10dp"
             android:rotation="180"
-            app:tint="@color/white"
             android:src="@drawable/icon_outline_arrow"
-            android:layout_gravity="end|center_vertical"/>
+            app:tint="@color/white" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:visibility="gone"
+        android:id="@+id/finalResultCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/botIcon"
+        app:layout_constraintTop_toBottomOf="@id/resultCard">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageItem1"
+                android:layout_width="0dp"
+                android:scaleType="centerCrop"
+                android:layout_height="80dp"
+                android:background="@color/gray"
+                app:layout_constraintEnd_toStartOf="@+id/imageItem2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageItem2"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop"
+                android:background="@color/gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/imageItem1"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageItem3"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop"
+                android:background="@color/gray"
+                app:layout_constraintEnd_toStartOf="@+id/imageItem4"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageItem2" />
+
+            <ImageView
+                android:id="@+id/imageItem4"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:background="@color/gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                android:scaleType="centerCrop"
+                app:layout_constraintStart_toEndOf="@+id/imageItem3"
+                app:layout_constraintTop_toTopOf="@id/imageItem3" />
+
+            <TextView
+                android:id="@+id/seeAllResults"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:background="#CCFFFFFF"
+                android:fontFamily="@font/roboto_mono_variable"
+                android:gravity="center"
+                android:text="See All Results"
+                android:textColor="@color/blue"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@id/imageItem4"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@id/imageItem4"
+                app:layout_constraintTop_toTopOf="@id/imageItem4" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
 

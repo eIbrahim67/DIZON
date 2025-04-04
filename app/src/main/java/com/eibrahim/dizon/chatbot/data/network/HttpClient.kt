@@ -21,7 +21,7 @@ class HttpClient {
      * @param callback The callback to handle the asynchronous response.
      */
 
-    public fun post(jsonPayload: String, url: String, callback: Callback) {
+    fun post(jsonPayload: String, url: String, callback: Callback) {
 
         val requestBody = jsonPayload.toRequestBody("application/json".toMediaTypeOrNull())
 

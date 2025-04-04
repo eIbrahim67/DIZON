@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
+    app:cardBackgroundColor="@color/white_v6"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="2dp"
+    android:layout_margin="5dp"
     app:strokeColor="@color/gray_v6"
-    app:cardCornerRadius="5dp"
-    app:strokeWidth="0dp"
-    app:cardBackgroundColor="@color/white_v6">
+    app:strokeWidth="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -25,32 +26,66 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/itemSaleType"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/bc_corners_10"
+            android:gravity="center"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:text="For Sale"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/black" />
+
+        <ImageView
+            android:id="@+id/itemAddToWishlist"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/bc_corners_50"
+            android:padding="10dp"
+            android:src="@drawable/icon_selector_love"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/black" />
+
+        <TextView
             android:id="@+id/textView14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/bc_solid_circle"
             android:fontFamily="@font/roboto_mono_variable"
-            android:padding="5dp"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="5dp"
             android:text="3 bedrooms"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/itemImageProperties"
             app:layout_constraintEnd_toStartOf="@+id/textView16"
             app:layout_constraintHorizontal_bias="0.5"
-            android:layout_marginBottom="10dp"
             app:layout_constraintStart_toEndOf="@+id/textView15" />
 
         <TextView
             android:id="@+id/textView16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/bc_solid_circle"
             android:fontFamily="@font/roboto_mono_variable"
-            android:padding="5dp"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="5dp"
             android:text="2 bathrooms"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/itemImageProperties"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginBottom="10dp"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/textView14" />
 
@@ -58,10 +93,13 @@
             android:id="@+id/textView15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/bc_solid_circle"
             android:fontFamily="@font/roboto_mono_variable"
-            android:padding="5dp"
-            android:layout_marginBottom="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="5dp"
             android:text="171 meters"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/itemImageProperties"
