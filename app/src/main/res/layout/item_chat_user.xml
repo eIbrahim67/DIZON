@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        app:cardBackgroundColor="@color/white"
+        app:cardBackgroundColor="@color/banana_v1"
         app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -36,7 +36,6 @@
         app:cardCornerRadius="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@id/botIcon"
         app:layout_constraintTop_toBottomOf="@id/textCard">
 
         <TextView
@@ -46,7 +45,7 @@
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="10dp"
             android:padding="5dp"
-            android:text="Show Results"
+            android:text="@string/show_results"
             android:textColor="@color/white"
             android:textSize="14sp" />
 
@@ -70,7 +69,6 @@
         app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@id/botIcon"
         app:layout_constraintTop_toBottomOf="@id/resultCard">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -124,7 +122,7 @@
                 android:background="#CCFFFFFF"
                 android:fontFamily="@font/roboto_mono_variable"
                 android:gravity="center"
-                android:text="See All Results"
+                android:text="@string/see_all_results"
                 android:textColor="@color/blue"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@id/imageItem4"

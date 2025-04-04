@@ -66,10 +66,10 @@ dependencies {
 
     implementation(libs.okhttp)
     implementation (libs.core)
-    implementation ("com.google.code.gson:gson:2.9.0")
-    implementation ("androidx.navigation:navigation-fragment-ktx:2.7.6")
-    implementation ("androidx.navigation:navigation-ui-ktx:2.7.6")
-    implementation ("com.opencsv:opencsv:4.6")
+    implementation (libs.gson)
+    implementation (libs.androidx.navigation.fragment.ktx)
+    implementation (libs.androidx.navigation.ui.ktx.v276)
+    implementation (libs.opencsv)
 
 
 }

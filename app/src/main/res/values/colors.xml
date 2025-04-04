@@ -36,4 +36,6 @@
     <color name="background_google_btn">#f5f5f5</color>
     <color name="backgroundApp">#fef7ff</color>
     <color name="gold_v2">#BD9000</color>
+    <color name="purple">#2f204a</color>
+    <color name="banana_v1">#fcf7b3</color>
 </resources>

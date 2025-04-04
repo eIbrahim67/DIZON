@@ -63,6 +63,23 @@ class ChatbotFragment : Fragment() {
         uploadButton = view.findViewById(R.id.uploadButton)
         bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
 
+
+        conversationHistory.add(
+            ChatMessage(
+                content = "Hi",
+                role = "user",
+                isFromUser = true,
+                images = null
+            ),
+        )
+        conversationHistory.add(
+            ChatMessage(
+                content = "Hello, How can I assist you?",
+                role = "bot",
+                isFromUser = false,
+                images = null
+            ),
+        )
         // Setup RecyclerView adapter.
         chatAdapter = ChatAdapter(conversationHistory)
 
@@ -70,6 +87,7 @@ class ChatbotFragment : Fragment() {
             adapter = chatAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
+
 
         // Hide bottom navigation while chatting.
         bottomNavigationView.visibility = View.GONE
@@ -95,11 +113,9 @@ class ChatbotFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 if (!s.isNullOrEmpty()) {
                     sendButtonCard.visibility = View.VISIBLE
-                    uploadButton.visibility = View.GONE
                     recordButton.visibility = View.GONE
                 } else {
                     sendButtonCard.visibility = View.GONE
-                    uploadButton.visibility = View.VISIBLE
                     recordButton.visibility = View.VISIBLE
                 }
             }

@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             app:tint="@color/black"
             android:layout_margin="5dp"
-            android:contentDescription="TODO"
+            android:contentDescription="@string/office_logo"
             android:src="@drawable/temp_logo_1" />
 
     </com.google.android.material.card.MaterialCardView>
@@ -41,6 +41,6 @@
         android:textStyle="bold"
         android:layout_marginTop="5dp"
         android:fontFamily="monospace"
-        android:text="Office"/>
+        android:text="@string/offices"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

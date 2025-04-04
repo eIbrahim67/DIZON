@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/ChatbotFragment"
-        android:name="com.eibrahim.dizon.chatbot.view.ChatbotFragment"
+        android:name="com.eibrahim.dizon.chatbot.presentation.view.ChatbotFragment"
         android:label="ChatbotFragment"
         tools:layout="@layout/fragment_chatbot"/>
     <fragment
