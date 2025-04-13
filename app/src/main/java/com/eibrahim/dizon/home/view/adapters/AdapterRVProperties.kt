@@ -14,7 +14,7 @@ import com.eibrahim.dizon.R
 import com.eibrahim.dizon.home.model.PropertyListing
 
 class AdapterRVProperties(
-    private val goToProp: ((id: Int) -> Unit)
+    private val goToProp: ((property: PropertyListing) -> Unit)
 ) : RecyclerView.Adapter<AdapterRVProperties.CategoryViewHolder>() {
 
     private lateinit var context: Context
@@ -34,28 +34,26 @@ class AdapterRVProperties(
         val property = differ.currentList[position]
 
         // Load property image using Glide
-        property.image.let { url ->
+        property.imageUrl.let { url ->
             Glide.with(context)
                 .load(url)
                 .centerCrop()
                 .into(holder.itemImageProp)
         }
 
-        // Set property title, location, and price
-        holder.itemTitleProp.text = property.type
-        //holder.itemLocationProp.text = property.tags.toString()
-        //holder.itemPriceProp.text = property.link // Format as needed
+        // Set property title (or type as needed)
+        holder.itemTitleProp.text = property.propertyType
 
-        // Set click listener for the entire item
+        // Set click listener: pass the entire property listing object
         holder.itemView.setOnClickListener {
-            //goToProp(property.id)
+            goToProp(property)
         }
     }
 
     private val differ = AsyncListDiffer(this, DIFF_CALLBACK)
 
-    fun submitList(PropertyListingList: List<PropertyListing>) {
-        differ.submitList(PropertyListingList)
+    fun submitList(propertyListingList: List<PropertyListing>) {
+        differ.submitList(propertyListingList)
     }
 
     companion object {
@@ -73,7 +71,6 @@ class AdapterRVProperties(
     class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val itemImageProp: ImageView = itemView.findViewById(R.id.itemImageProperties)
         val itemTitleProp: TextView = itemView.findViewById(R.id.itemTitleProperties)
-        val itemLocationProp: TextView = itemView.findViewById(R.id.itemLocationProperties)
-        val itemPriceProp: TextView = itemView.findViewById(R.id.itemPriceProperties)
+        // Add more views if needed (e.g., location, price)
     }
 }

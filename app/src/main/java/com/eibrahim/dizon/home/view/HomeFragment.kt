@@ -35,8 +35,18 @@ class HomeFragment : Fragment() {
 
     private val utils = UtilsFunctions
     private var navController: NavController? = null
-    private val adapterRVProperties = AdapterRVProperties { id -> goToProp(id) }
-    private val adapterRVProperties80 = AdapterRVProperties80 { id -> goToProp(id) }
+    private val adapterRVProperties = AdapterRVProperties { property ->
+        val bundle = Bundle().apply {
+            putSerializable("property", property)
+        }
+        findNavController().navigate(R.id.action_action_home_to_detailsFragment, bundle)
+    }
+    private val adapterRVProperties80 = AdapterRVProperties80 { property ->
+        val bundle = Bundle().apply {
+            putSerializable("property", property)
+        }
+        findNavController().navigate(R.id.action_action_home_to_detailsFragment, bundle)
+    }
     private val adapterRVOffices = AdapterRVOffices { categoryId ->
         Log.d("HomeFragment", "Category clicked with id: $categoryId")
     }
@@ -64,7 +74,7 @@ class HomeFragment : Fragment() {
         recyclerviewNew = view.findViewById(R.id.recyclerviewNew)
         recyclerviewRecommendation = view.findViewById(R.id.recyclerviewRecommendation)
         recyclerviewSponsored = view.findViewById(R.id.recyclerviewSponsored)
-        details=view.findViewById(R.id.goToDetails)
+        details = view.findViewById(R.id.goToDetails)
         chatbotLayout = view.findViewById(R.id.chatbot_layout)
 
         bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
@@ -98,7 +108,7 @@ class HomeFragment : Fragment() {
         }
 
         // navigate to details for test detailsFragment
-        details.setOnClickListener{
+        details.setOnClickListener {
             navController?.navigate(
                 R.id.detailsFragment, null, navOptions
             )
@@ -109,10 +119,5 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun goToProp(id: Int) {
-        // Handle property item click event
-        Log.d("HomeFragment", "Property clicked with id: $id")
-        // Navigation to property detail can be implemented here
-    }
 
 }

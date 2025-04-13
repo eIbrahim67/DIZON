@@ -14,7 +14,7 @@ import com.eibrahim.dizon.R
 import com.eibrahim.dizon.home.model.PropertyListing
 
 class AdapterRVProperties80(
-    private val goToProp: ((id: Int) -> Unit)
+    private val goToProp: ((property: PropertyListing) -> Unit)
 ) : RecyclerView.Adapter<AdapterRVProperties80.CategoryViewHolder>() {
 
     private lateinit var context: Context
@@ -34,36 +34,35 @@ class AdapterRVProperties80(
         val property = differ.currentList[position]
 
         // Load property image using Glide
-        property.image.let { url ->
-            Glide.with(context).load(url).centerCrop().into(holder.itemImageProp)
+        property.imageUrl.let { url ->
+            Glide.with(context)
+                .load(url)
+                .centerCrop()
+                .into(holder.itemImageProp)
         }
 
-        // Set property title, location, and price
-        holder.itemTitleProp.text = property.type
-        //holder.itemLocationProp.text = property.tags.toString()
-        //holder.itemPriceProp.text = property.link // Format as needed
+        // Set property title (or type as needed)
+        holder.itemTitleProp.text = property.propertyType
 
-        // Set click listener for the entire item
+        // Set click listener: pass the entire property listing object
         holder.itemView.setOnClickListener {
-            //goToProp(property.id)
+            goToProp(property)
         }
     }
 
     private val differ = AsyncListDiffer(this, DIFF_CALLBACK)
 
-    fun submitList(PropertyListingList: List<PropertyListing>) {
-        differ.submitList(PropertyListingList)
+    fun submitList(propertyListingList: List<PropertyListing>) {
+        differ.submitList(propertyListingList)
     }
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<PropertyListing>() {
-            override fun areItemsTheSame(
-                oldItem: PropertyListing, newItem: PropertyListing
-            ): Boolean = oldItem.title == newItem.title
+            override fun areItemsTheSame(oldItem: PropertyListing, newItem: PropertyListing): Boolean =
+                oldItem.title == newItem.title
 
-            override fun areContentsTheSame(
-                oldItem: PropertyListing, newItem: PropertyListing
-            ): Boolean = oldItem == newItem
+            override fun areContentsTheSame(oldItem: PropertyListing, newItem: PropertyListing): Boolean =
+                oldItem == newItem
         }
     }
 
@@ -72,7 +71,6 @@ class AdapterRVProperties80(
     class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val itemImageProp: ImageView = itemView.findViewById(R.id.itemImageProperties80)
         val itemTitleProp: TextView = itemView.findViewById(R.id.itemTitleProperties80)
-        val itemLocationProp: TextView = itemView.findViewById(R.id.itemLocationProperties80)
-        val itemPriceProp: TextView = itemView.findViewById(R.id.itemPriceProperties80)
+        // Add more views if needed (e.g., location, price)
     }
 }

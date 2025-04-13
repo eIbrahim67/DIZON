@@ -63,23 +63,6 @@ class ChatbotFragment : Fragment() {
         uploadButton = view.findViewById(R.id.uploadButton)
         bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
 
-
-        conversationHistory.add(
-            ChatMessage(
-                content = "Hi",
-                role = "user",
-                isFromUser = true,
-                images = null
-            ),
-        )
-        conversationHistory.add(
-            ChatMessage(
-                content = "Hello, How can I assist you?",
-                role = "bot",
-                isFromUser = false,
-                images = null
-            ),
-        )
         // Setup RecyclerView adapter.
         chatAdapter = ChatAdapter(conversationHistory)
 

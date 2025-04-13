@@ -264,4 +264,3 @@ Now, please respond accordingly to the following input:
         [User Input Here]
     """.trimIndent()
 }
-
