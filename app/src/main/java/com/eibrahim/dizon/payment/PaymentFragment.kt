@@ -1,4 +1,4 @@
-package com.eibrahim.dizon.edit_profile
+package com.eibrahim.dizon.payment
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -8,13 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.eibrahim.dizon.R
 
-class EditProfileFragment : Fragment() {
+class PaymentFragment : Fragment() {
 
     companion object {
-        fun newInstance() = EditProfileFragment()
+        fun newInstance() = PaymentFragment()
     }
 
-    private val viewModel: EditProfileViewModel by viewModels()
+    private val viewModel: PaymentViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +26,6 @@ class EditProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_edit_profile, container, false)
+        return inflater.inflate(R.layout.fragment_payment, container, false)
     }
 }

@@ -131,5 +131,17 @@
     <string name="show_results">Show Results</string>
     <string name="see_all_results">See All Results</string>
     <string name="office_logo">Office Logo</string>
+    <string name="credit_card_details">Credit Card Details</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="name_on_card">Name on card</string>
+    <string name="meet_patel">Meet Patel</string>
+    <string name="card_number">Card number</string>
+    <string name="_0000_0000_0000_0000">0000 0000 0000 0000</string>
+    <string name="card_expiration">Card expiration</string>
+    <string name="month">Month</string>
+    <string name="year">Year</string>
+    <string name="card_security_code">Card Security Code</string>
+    <string name="card_code">Code</string>
+    <string name="continue_payment">Continue</string>
 
 </resources>
