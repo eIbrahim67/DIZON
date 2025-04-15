@@ -9,14 +9,14 @@ class LoginViewModel : ViewModel() {
     val loginState: LiveData<Result<Boolean>> = _loginState
 
     fun login(email: String, password: String) {
+        _loginState.value = Result.success(true)
         if (email.isEmpty() || password.isEmpty()) {
-            _loginState.value = Result.failure(Exception("Please fill in all fields"))
+            //_loginState.value = Result.failure(Exception("Please fill in all fields"))
             return
         }
 
         // Simulate authentication (Replace this with Firebase/Auth API)
         if (email == "moamen@gmail.com" && password == "123456") {
-            _loginState.value = Result.success(true)
         } else {
             _loginState.value = Result.failure(Exception("Invalid email or password"))
         }
