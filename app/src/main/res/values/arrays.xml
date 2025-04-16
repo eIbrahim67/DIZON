@@ -1,4 +1,39 @@
 <resources>
+    <string-array name="cities">
+        <item>Cairo</item>
+        <item>Giza</item>
+        <item>Alexandria</item>
+        <item>Dakahlia</item>
+        <item>Sharqia</item>
+        <item>Monufia</item>
+        <item>Qalyubia</item>
+        <item>Beheira</item>
+        <item>Gharbia</item>
+        <item>Port Said</item>
+        <item>Damietta</item>
+        <item>Ismailia</item>
+        <item>Suez</item>
+        <item>Kafr El Sheikh</item>
+        <item>Fayoum</item>
+        <item>Beni Suef</item>
+        <item>Minya</item>
+        <item>Assiut</item>
+        <item>Sohag</item>
+        <item>Qena</item>
+        <item>Aswan</item>
+        <item>Luxor</item>
+        <item>Marsa Matruh</item>
+        <item>Red Sea</item>
+        <item>New Valley</item>
+        <item>North Sinai</item>
+        <item>South Sinai</item>
+    </string-array>
+
+    <string-array name="property_types">
+        <item>For Sale</item>
+        <item>For Rent</item>
+    </string-array>
+
     <string-array name="country_codes">
         <item>🇪🇬 +20 Egypt</item>
         <item>🇸🇦 +966 Saudi Arabia</item>
@@ -6,6 +41,7 @@
         <item>🇺🇸 +1 USA</item>
         <item>🇬🇧 +44 UK</item>
     </string-array>
+
     <string-array name="months_array">
         <item>Select Month</item> <!-- Hint -->
         <item>January</item>
