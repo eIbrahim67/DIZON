@@ -43,10 +43,11 @@
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_gravity="center"
-                android:background="@drawable/icon_fav2"
+                android:background="@drawable/icon_fav"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
-                android:focusable="true" />
+                android:focusable="true"
+                app:tint="@color/red"/>
 
         </com.google.android.material.card.MaterialCardView>
 

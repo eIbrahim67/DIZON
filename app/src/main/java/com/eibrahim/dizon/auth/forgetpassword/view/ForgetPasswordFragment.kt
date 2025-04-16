@@ -19,8 +19,6 @@ class ForgetPasswordFragment : Fragment() {
         fun newInstance() = ForgetPasswordFragment()
     }
 
-    private val viewModel: ForgetPasswordViewModel by viewModels()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,24 +28,10 @@ class ForgetPasswordFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val etEmail = view.findViewById<EditText>(R.id.etEmail)
         val btnSendResetLink = view.findViewById<MaterialButton>(R.id.btnSendResetLink)
 
         btnSendResetLink.setOnClickListener {
-            val email = etEmail.text.toString()
-            viewModel.sendPasswordReset(email)
-        }
-
-        viewModel.resetPasswordState.observe(viewLifecycleOwner) { result ->
-            result.fold(
-                onSuccess = {
-                    Toast.makeText(requireContext(), "Reset link sent successfully", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_forgetPasswordFragment_to_otpFragment)
-                },
-                onFailure = { error ->
-                    Toast.makeText(requireContext(), error.message ?: "Failed to send reset link", Toast.LENGTH_SHORT).show()
-                }
-            )
+            findNavController().navigate(R.id.action_forgetPasswordFragment_to_otpFragment)
         }
     }
 }
