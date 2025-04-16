@@ -8,7 +8,7 @@
     app:strokeColor="@color/gray_v6"
     app:cardCornerRadius="12dp"
     app:strokeWidth="1dp"
-    app:cardElevation="6dp"
+    app:cardElevation="4dp"
     app:cardBackgroundColor="@color/white_v6">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -92,7 +92,7 @@
             android:layout_marginBottom="12dp"
             android:fontFamily="@font/roboto_mono_variable"
             android:text="123, maade, Cairo, Egypt"
-            android:textColor="@color/gray_v4"
+            android:textColor="@color/gray_v3"
             android:textSize="14sp"
             android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="parent"
