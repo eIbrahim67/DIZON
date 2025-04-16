@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/dialog_background"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp">
 
     <!-- Warning Message -->
 

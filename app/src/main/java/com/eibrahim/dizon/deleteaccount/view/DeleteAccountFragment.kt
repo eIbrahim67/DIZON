@@ -8,37 +8,33 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.eibrahim.dizon.R
-import com.eibrahim.dizon.databinding.FragmentDeleteAccountBinding
 import com.eibrahim.dizon.deleteaccount.viewmodel.DeleteAccountViewModel
 import com.google.android.material.button.MaterialButton
 
 class DeleteAccountFragment : Fragment() {
 
-    private var _binding: FragmentDeleteAccountBinding? = null
-    private val binding get() = _binding!!
-
     private val viewModel: DeleteAccountViewModel by viewModels()
+    private var confirmationDialog: Dialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentDeleteAccountBinding.inflate(inflater, container, false)
-        return binding.root
+        return inflater.inflate(R.layout.fragment_delete_account, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.backArrow.setOnClickListener {
+        view.findViewById<View>(R.id.backArrow).setOnClickListener {
             viewModel.onGoBackClicked()
         }
 
-        binding.btnGoBack.setOnClickListener {
+        view.findViewById<MaterialButton>(R.id.btnGoBack).setOnClickListener {
             viewModel.onGoBackClicked()
         }
 
-        binding.btnDeleteAccount.setOnClickListener {
+        view.findViewById<MaterialButton>(R.id.btnDeleteAccount).setOnClickListener {
             viewModel.onDeleteAccountClicked()
         }
 
@@ -50,52 +46,66 @@ class DeleteAccountFragment : Fragment() {
 
         viewModel.navigateBack.observe(viewLifecycleOwner) { shouldNavigate ->
             if (shouldNavigate == true) {
-                requireActivity().onBackPressed()
+                requireActivity().onBackPressedDispatcher.onBackPressed()
             }
         }
 
         viewModel.deleteCompleted.observe(viewLifecycleOwner) { completed ->
             if (completed == true) {
-                requireActivity().onBackPressed()
+                confirmationDialog?.dismiss()
+                confirmationDialog = null
+                requireActivity().onBackPressedDispatcher.onBackPressed()
             }
         }
     }
 
     private fun showConfirmationDialog() {
-        val dialog = Dialog(requireContext())
-        dialog.setContentView(R.layout.dialog_confirm_delete)
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        confirmationDialog?.dismiss() // Dismiss any existing dialog
+        confirmationDialog = Dialog(requireContext()).apply {
+            setContentView(R.layout.dialog_confirm_delete)
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
+            window?.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
 
-        val btnCancel = dialog.findViewById<MaterialButton>(R.id.btnCancel)
-        val btnConfirm = dialog.findViewById<MaterialButton>(R.id.btnConfirm)
-        val loadingIndicator = dialog.findViewById<View>(R.id.loadingIndicator)
+            val btnCancel = findViewById<MaterialButton>(R.id.btnCancel)
+            val btnConfirm = findViewById<MaterialButton>(R.id.btnConfirm)
+            val loadingIndicator = findViewById<View>(R.id.loadingIndicator)
 
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            if (isLoading == true) {
-                btnCancel.visibility = View.GONE
-                btnConfirm.visibility = View.GONE
-                loadingIndicator.visibility = View.VISIBLE
+            viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+                if (isLoading == true) {
+                    btnCancel.visibility = View.GONE
+                    btnConfirm.visibility = View.GONE
+                    loadingIndicator.visibility = View.VISIBLE
+                } else {
+                    btnCancel.visibility = View.VISIBLE
+                    btnConfirm.visibility = View.VISIBLE
+                    loadingIndicator.visibility = View.GONE
+                }
             }
-        }
 
-        btnCancel.setOnClickListener {
-            viewModel.onCancelDelete()
-            dialog.dismiss()
-        }
+            btnCancel.setOnClickListener {
+                viewModel.onCancelDelete()
+                dismiss()
+            }
 
-        btnConfirm.setOnClickListener {
-            viewModel.onConfirmDelete()
-        }
+            btnConfirm.setOnClickListener {
+                viewModel.onConfirmDelete()
+            }
 
-        dialog.setOnDismissListener {
-            viewModel.onCancelDelete()
-        }
+            setOnDismissListener {
+                viewModel.onCancelDelete()
+                confirmationDialog = null
+            }
 
-        dialog.show()
+            show()
+        }
     }
 
     override fun onDestroyView() {
+        confirmationDialog?.dismiss()
+        confirmationDialog = null
         super.onDestroyView()
-        _binding = null
     }
 }

@@ -31,11 +31,8 @@ class DeleteAccountViewModel : ViewModel() {
 
     fun onConfirmDelete() {
         _showConfirmationDialog.value = false
-        _isLoading.value = true
 
         viewModelScope.launch {
-            delay(2000)
-            _isLoading.value = false
             _deleteCompleted.value = true
         }
     }
