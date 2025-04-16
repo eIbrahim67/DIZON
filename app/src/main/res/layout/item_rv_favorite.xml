@@ -1,62 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="350dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
+    android:layout_margin="8dp"
     app:strokeColor="@color/gray_v6"
-    app:cardCornerRadius="5dp"
-    app:strokeWidth="0dp"
+    app:cardCornerRadius="12dp"
+    app:strokeWidth="1dp"
+    app:cardElevation="6dp"
     app:cardBackgroundColor="@color/white_v6">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="8dp">
 
         <ImageView
             android:id="@+id/itemImageProperties80"
             android:layout_width="0dp"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
+            android:layout_height="180dp"
             android:background="@color/white"
+            android:scaleType="centerCrop"
+            android:foreground="@drawable/image_border"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:background="@color/white"
-            android:src="@drawable/icon_fav2"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardElevation="4dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeWidth="0.5dp">
+
+            <ImageButton
+                android:id="@+id/btn_love"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center"
+                android:background="@drawable/icon_fav2"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true" />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:id="@+id/itemTitleProperties80"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="8dp"
             android:fontFamily="@font/roboto_mono_variable"
-            android:text="Villa Villa at two double"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="Villa Villa\nat two double"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="normal"
+            app:layout_constraintEnd_toStartOf="@+id/itemPriceProperties80"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/itemPriceProperties80" />
+            app:layout_constraintTop_toBottomOf="@+id/itemImageProperties80" />
 
         <TextView
             android:id="@+id/itemPriceProperties80"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
             android:fontFamily="@font/roboto_mono_variable"
             android:text="150000000LE"
-            android:textColor="@color/black"
-            android:textSize="22sp"
+            android:textColor="@color/primary_color"
+            android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/itemImageProperties80" />
 
         <TextView
@@ -64,12 +87,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="12dp"
             android:fontFamily="@font/roboto_mono_variable"
             android:text="123, maade, Cairo, Egypt"
-            android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textColor="@color/gray_v4"
+            android:textSize="14sp"
             android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
