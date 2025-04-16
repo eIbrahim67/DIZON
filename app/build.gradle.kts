@@ -73,4 +73,7 @@ dependencies {
 
     implementation (libs.material.v161)
 
+    implementation (libs.material.v140)
+    implementation ("com.google.android.material:material:1.4.0")
+
 }

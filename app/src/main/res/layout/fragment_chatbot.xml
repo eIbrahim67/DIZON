@@ -7,20 +7,19 @@
     android:background="@color/white_v6">
 
     <TextView
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="10dp"
         android:fontFamily="@font/roboto_mono_variable"
         android:gravity="center"
-        android:text="Chat with EBO"
+        android:text="EBO"
         android:textColor="@color/purple"
         android:textSize="26sp"
         android:textStyle="bold|italic"
-        app:layout_constraintBottom_toBottomOf="@id/backLayout"
-        app:layout_constraintEnd_toStartOf="@id/botSettings"
-        app:layout_constraintStart_toEndOf="@id/backLayout"
-        app:layout_constraintTop_toTopOf="@id/backLayout" />
+        app:layout_constraintBottom_toBottomOf="@id/botImageLayout"
+        app:layout_constraintStart_toEndOf="@id/botImageLayout"
+        app:layout_constraintTop_toTopOf="@id/botImageLayout" />
 
 
     <com.google.android.material.card.MaterialCardView
@@ -29,7 +28,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        app:cardBackgroundColor="@color/white_v2"
+        app:cardBackgroundColor="@color/white_v6"
         app:cardCornerRadius="500dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -41,20 +40,21 @@
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:contentDescription="TODO"
-            android:src="@drawable/icon_outline_arrow"
+            android:src="@drawable/icon_arrow"
+            android:rotation="-90"
             app:tint="@color/black" />
 
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/botSettings"
+        android:id="@+id/botImageLayout"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
         app:cardBackgroundColor="@color/purple"
         app:cardCornerRadius="500dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/backLayout"
         app:layout_constraintTop_toTopOf="parent"
         app:strokeColor="@color/gray_v6"
         app:strokeWidth="1dp">
@@ -62,11 +62,27 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:src="@drawable/icon_outline_more"
+            android:layout_margin="5dp"
+            android:contentDescription="TODO"
+            android:src="@drawable/icon_chatbot_v1"
             app:tint="@color/white" />
 
     </com.google.android.material.card.MaterialCardView>
+
+
+    <ImageView
+        android:id="@+id/botSettings"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:rotation="90"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/icon_outline_more"
+        app:tint="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"

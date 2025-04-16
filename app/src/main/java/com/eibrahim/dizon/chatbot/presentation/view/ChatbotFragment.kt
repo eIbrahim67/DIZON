@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eibrahim.dizon.chatbot.data.network.ChatLlamaStreamProcessor
 import com.eibrahim.dizon.chatbot.data.network.HttpClient
 import com.eibrahim.dizon.chatbot.domain.model.ChatMessage
-import com.eibrahim.dizon.chatbot.domain.repository.ChatRepositoryImpl
+import com.eibrahim.dizon.chatbot.domain.repositoryImpl.ChatRepositoryImpl
 import com.eibrahim.dizon.chatbot.domain.usecase.GetChatResponseUseCase
 import com.eibrahim.dizon.chatbot.presentation.view.adapter.ChatAdapter
 import com.eibrahim.dizon.chatbot.presentation.viewModel.ChatbotViewModelFactory
@@ -63,6 +63,23 @@ class ChatbotFragment : Fragment() {
         uploadButton = view.findViewById(R.id.uploadButton)
         bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
 
+
+        conversationHistory.add(
+            ChatMessage(
+                content = "Hi",
+                role = "user",
+                isFromUser = true,
+                images = null
+            ),
+        )
+        conversationHistory.add(
+            ChatMessage(
+                content = "Hello, How can I assist you?",
+                role = "bot",
+                isFromUser = false,
+                images = null
+            ),
+        )
         // Setup RecyclerView adapter.
         chatAdapter = ChatAdapter(conversationHistory)
 

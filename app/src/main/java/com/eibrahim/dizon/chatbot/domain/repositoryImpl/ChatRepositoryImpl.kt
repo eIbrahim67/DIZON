@@ -1,17 +1,13 @@
-package com.eibrahim.dizon.chatbot.domain.repository
+package com.eibrahim.dizon.chatbot.domain.repositoryImpl
 
-import android.util.Log
 import com.eibrahim.dizon.chatbot.data.network.ChatLlamaStreamProcessor
 import com.eibrahim.dizon.chatbot.data.repository.ChatRepository
 import com.eibrahim.dizon.chatbot.domain.model.ChatMessage
 import com.eibrahim.dizon.core.response.FailureReason
 import com.eibrahim.dizon.core.response.Response
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
 
 class ChatRepositoryImpl(
     private val streamProcessor: ChatLlamaStreamProcessor

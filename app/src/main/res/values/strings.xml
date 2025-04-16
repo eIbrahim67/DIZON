@@ -143,5 +143,6 @@
     <string name="card_security_code">Card Security Code</string>
     <string name="card_code">Code</string>
     <string name="continue_payment">Continue</string>
+    <string name="profile">Profile</string>
 
 </resources>

@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView = findViewById(R.id.bottom_navigation)
 
         navController =
-            supportFragmentManager.findFragmentById(R.id.nav_main)
+            supportFragmentManager.findFragmentById(R.id.main_nav_host_fragment)
                 ?.findNavController()
 
         navController?.let {

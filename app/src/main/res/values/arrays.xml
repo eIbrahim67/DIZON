@@ -29,7 +29,7 @@
         <item>South Sinai</item>
     </string-array>
 
-    <string-array name="property_types">
+    <string-array name="property_sell_or_rent">
         <item>For Sale</item>
         <item>For Rent</item>
     </string-array>
@@ -68,4 +68,6 @@
         <item>2029</item>
         <item>2030</item>
     </string-array>
+    <string-array name="number_options">1,2,3,4,5</string-array>
+    <string-array name="property_types">House, Apartment, Villa, Hotel</string-array>
 </resources>
