@@ -18,6 +18,16 @@
     <string name="i_understood_the">I understood the</string>
     <string name="terms_and_policy">terms and policy.</string>
     <string name="sign_up_with_google">Sign up with Google</string>
+    <string name="i_have_read_and_agree_to_the">I have read and agree to the</string>
+    <string name="terms_of_use">Terms of Use</string>
+    <string name="age_too_young">You must be at least 16 years old</string>
+    <string name="all_fields_required">All fields must be filled</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="terms_not_accepted">You must agree to the Terms of Use</string>
+    <string name="invalid_date_format">Invalid date format</string>
+    <string name="invalid_birth_date">Invalid birth date</string>
+    <string name="registration_successful">Registration Successful</string>
+    <string name="registration_failed">Registration Failed</string>
 
     <!--login fragment-->
     <string name="app_logo_description">App Logo</string>
@@ -143,6 +153,20 @@
     <string name="card_security_code">Card Security Code</string>
     <string name="card_code">Code</string>
     <string name="continue_payment">Continue</string>
+
+    <!-- ... profile ... -->
+    <string name="logout">Logout</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="change_language">Change Language</string>
+    <string name="language">العربية</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="about_us">About us</string>
+    <string name="personal_information">Edite Profile</string>
+    <string name="account_settings">Account</string>
+    <string name="user_name">Moamen Abdelrahman</string>
     <string name="profile">Profile</string>
+    <string name="more">More</string>
+    <string name="uplode_your_property">Uplode Your Property</string>
+
 
 </resources>
