@@ -3,6 +3,7 @@ package com.eibrahim.dizon.addproperty.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
@@ -62,5 +63,17 @@ class AddPropertyViewModel(private val repository: PropertyRepository) : ViewMod
                 _errorMessage.value = "Failed to add property. Please try again."
             }
         }
+    }
+}
+
+class AddPropertyViewModelFactory(
+    private val repository: PropertyRepository
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(AddPropertyViewModel::class.java)) {
+            return AddPropertyViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

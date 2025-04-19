@@ -19,16 +19,16 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp">
 
-            <!-- Your registration form UI elements go here -->
-
+            <!-- Sign Up Title -->
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="44dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/sign_up"
                 android:textColor="@color/primary_color"
                 android:textSize="28sp"
@@ -36,6 +36,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <!-- Create Your Account -->
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
@@ -48,6 +49,7 @@
                 app:layout_constraintStart_toStartOf="@+id/textView4"
                 app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
+            <!-- Name -->
             <TextView
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
@@ -70,19 +72,30 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView6"
-                app:strokeWidth="0dp">
+                app:strokeWidth="1dp">
 
-                <EditText
-                    android:id="@+id/nameEditText"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:background="@color/edit_text_color"
-                    android:hint="@string/ex_name"
-                    android:inputType="text"
-                    android:padding="8dp" />
+                    app:boxCornerRadiusBottomEnd="10dp"
+                    app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxStrokeWidth="0dp"
+                    app:hintEnabled="false">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/nameEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:hint="@string/ex_name"
+                        android:inputType="text"
+                        android:padding="8dp" />
+                </com.google.android.material.textfield.TextInputLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Email -->
             <TextView
                 android:id="@+id/textView7"
                 android:layout_width="wrap_content"
@@ -106,19 +119,30 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView7"
-                app:strokeWidth="0dp">
+                app:strokeWidth="1dp">
 
-                <EditText
-                    android:id="@+id/emailRegister"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:background="@color/edit_text_color"
-                    android:ems="10"
-                    android:hint="@string/ex_email"
-                    android:inputType="textEmailAddress"
-                    android:padding="8dp" />
+                    app:boxCornerRadiusBottomEnd="10dp"
+                    app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxStrokeWidth="0dp"
+                    app:hintEnabled="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/emailRegister"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:hint="@string/ex_email"
+                        android:inputType="textEmailAddress"
+                        android:padding="8dp" />
+                </com.google.android.material.textfield.TextInputLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Phone Number -->
             <TextView
                 android:id="@+id/textView8"
                 android:layout_width="wrap_content"
@@ -142,49 +166,60 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView8"
-                app:strokeWidth="0dp">
+                app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@color/edit_text_color"
                     android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:padding="6dp"
+                        android:src="@drawable/egyflag"/>
 
                     <TextView
                         android:id="@+id/CodeOfPhone"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:hint="+20"
-                        android:padding="8dp"
+                        android:padding="6dp"
+                        android:text="+20"
+                        android:textSize="18sp" />
 
-                        android:textSize="16sp" />
-
-                    <Spinner
-                        android:id="@+id/spinnerCity"
-                        android:layout_width="30dp"
-                        android:layout_height="match_parent"
-                        android:spinnerMode="dialog" />
 
                     <View
                         android:layout_width="2dp"
                         android:layout_height="match_parent"
                         android:background="@color/gray_v4" />
 
-                    <EditText
-                        android:id="@+id/numberEditText"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="0dp"
-                        android:layout_height="60dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@color/edit_text_color"
-                        android:ems="10"
-                        android:hint="ex: 01001234567"
-                        android:inputType="number"
-                        android:padding="8dp" />
-                </LinearLayout>
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp"
+                        app:boxStrokeWidth="0dp"
+                        app:hintEnabled="false">
 
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/numberEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:hint="ex: 1001234567"
+                            android:inputType="number"
+                            android:padding="8dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- City -->
             <TextView
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
@@ -208,11 +243,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView9"
-                app:strokeWidth="0dp">
+                app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@color/edit_text_color"
                     android:orientation="horizontal">
 
@@ -221,8 +256,8 @@
                         android:layout_width="30dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
-                        android:spinnerMode="dialog"
-
+                        android:spinnerMode="dropdown"
+                        android:entries="@array/cities"
                         />
 
                     <View
@@ -230,20 +265,30 @@
                         android:layout_height="match_parent"
                         android:background="@color/gray_v4" />
 
-                    <EditText
-                        android:id="@+id/cityEditText"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="0dp"
-                        android:layout_height="60dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@color/edit_text_color"
-                        android:ems="10"
-                        android:hint="@string/ex_city"
-                        android:inputType="text"
-                        android:padding="8dp" />
-                </LinearLayout>
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp"
+                        app:boxStrokeWidth="0dp"
+                        app:hintEnabled="false">
 
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/cityEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:hint="@string/ex_city"
+                            android:inputType="text"
+                            android:padding="8dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Birth of Date -->
             <TextView
                 android:id="@+id/textView10"
                 android:layout_width="wrap_content"
@@ -267,20 +312,35 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView10"
-                app:strokeWidth="0dp">
+                app:strokeWidth="1dp">
 
-                <EditText
-                    android:id="@+id/passwordRegister"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/birthDateInputLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:background="@color/edit_text_color"
-                    android:drawableRight="@drawable/baseline_date_range_24"
-                    android:hint="10/01/2002"
-                    android:inputType="date"
-                    android:padding="8dp" />
+                    app:boxCornerRadiusBottomEnd="10dp"
+                    app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxStrokeWidth="0dp"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/baseline_date_range_24"
+                    app:hintEnabled="false">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/birthOfDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:hint="10/01/2002"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:maxLines="1"
+                        android:padding="8dp" />
+                </com.google.android.material.textfield.TextInputLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Password -->
             <TextView
                 android:id="@+id/textView11"
                 android:layout_width="wrap_content"
@@ -304,29 +364,32 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView11"
-                app:strokeWidth="0dp">
+                app:strokeWidth="1dp">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:background="@color/edit_text_color"
-                    app:errorEnabled="true"
+                    app:boxCornerRadiusBottomEnd="10dp"
+                    app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxStrokeWidth="0dp"
+
                     app:passwordToggleEnabled="true"
-                    >
+                    app:hintEnabled="false">
+
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/confirmPasswordRegister"
+                        android:id="@+id/passwordRegister"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/edit_text_color"
+                        android:layout_height="60dp"
                         android:hint="********"
                         android:inputType="textPassword"
-                        />
-
+                        android:padding="8dp" />
                 </com.google.android.material.textfield.TextInputLayout>
-
-
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Confirm Password -->
             <TextView
                 android:id="@+id/textView12"
                 android:layout_width="wrap_content"
@@ -350,41 +413,35 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView12"
-                app:strokeWidth="0dp">
+                app:strokeWidth="1dp">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:background="@color/edit_text_color"
-                    app:errorEnabled="true"
+                    app:boxCornerRadiusBottomEnd="10dp"
+                    app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxStrokeWidth="0dp"
                     app:passwordToggleEnabled="true"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView12"
-                    >
+                    app:hintEnabled="false">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/confirmPassword"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/edit_text_color"
-                        android:hint="*********"
+                        android:layout_height="60dp"
+                        android:hint="********"
                         android:inputType="textPassword"
-                       />
+                        android:padding="8dp" />
                 </com.google.android.material.textfield.TextInputLayout>
-
-
-
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Terms and Conditions Checkbox -->
             <CheckBox
                 android:id="@+id/checkBox"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="24dp"
                 android:buttonTint="@color/primary_color"
@@ -395,35 +452,34 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:text="@string/i_understood_the"
+                android:layout_marginStart="8dp"
+                android:text="@string/i_have_read_and_agree_to_the"
                 app:layout_constraintStart_toEndOf="@+id/checkBox"
-                app:layout_constraintTop_toTopOf="@+id/checkBox" />
+                app:layout_constraintTop_toTopOf="@+id/checkBox"
+                app:layout_constraintBottom_toBottomOf="@+id/checkBox" />
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
-                android:layout_marginTop="14dp"
-                android:text="@string/terms_and_policy"
+                android:text="@string/terms_of_use"
                 android:textColor="@color/primary_color"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/textView"
-                app:layout_constraintTop_toTopOf="@+id/checkBox" />
+                app:layout_constraintTop_toTopOf="@+id/checkBox"
+                app:layout_constraintBottom_toBottomOf="@+id/checkBox" />
 
-
+            <!-- Sign Up Button -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/materialCardView8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="20dp"
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="10dp"
-                app:cardElevation="8dp"
+                app:cardElevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/checkBox"
@@ -440,11 +496,13 @@
                     android:insetRight="0dp"
                     android:insetBottom="0dp"
                     android:text="@string/sign_up_btn"
+                    android:textAllCaps="true"
                     android:textColor="@android:color/white"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     app:cornerRadius="10dp" />
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- OR Divider -->
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
@@ -477,20 +535,23 @@
                     android:background="@color/black" />
             </LinearLayout>
 
+            <!-- Sign Up with Google Button -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="20dp"
+                android:layout_marginBottom="16dp"
                 android:elevation="4dp"
                 app:cardCornerRadius="10dp"
-                app:cardElevation="8dp"
+                app:cardElevation="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout"
                 app:strokeColor="@color/primary_color"
-                app:strokeWidth="2dp">
+                app:strokeWidth="1dp">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/signupWithGoogle"
@@ -503,19 +564,15 @@
                     android:insetBottom="0dp"
                     android:text="@string/sign_up_with_google"
                     android:textColor="@color/black"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     app:cornerRadius="10dp"
                     app:icon="@drawable/google_logo"
                     app:iconGravity="textStart"
                     app:iconPadding="8dp"
                     app:iconSize="26dp"
                     app:iconTint="@null" />
-
             </com.google.android.material.card.MaterialCardView>
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

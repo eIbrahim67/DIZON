@@ -1,20 +1,23 @@
 package com.eibrahim.dizon.addproperty.view
 
-import androidx.fragment.app.viewModels
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import com.eibrahim.dizon.R
-import com.eibrahim.dizon.addproperty.viewmodel.AddPropertyViewModel
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.eibrahim.dizon.R
+import com.eibrahim.dizon.addproperty.viewmodel.AddPropertyViewModel
+import com.eibrahim.dizon.addproperty.viewmodel.AddPropertyViewModelFactory
+import com.eibrahim.dizon.addproperty.viewmodel.PropertyRepository
 import com.eibrahim.dizon.databinding.FragmentAddPropertyBinding
 import com.google.android.material.chip.Chip
 
@@ -23,7 +26,7 @@ class AddPropertyFragment : Fragment() {
     private var _binding: FragmentAddPropertyBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: AddPropertyViewModel by viewModels()
+    private lateinit var viewModel: AddPropertyViewModel
     private val imageUris = mutableListOf<Uri>()
 
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -35,13 +38,12 @@ class AddPropertyFragment : Fragment() {
                     return@let
                 }
 
-                // (5MB = 5 * 1024 * 1024 bytes)
                 val cursor = requireContext().contentResolver.query(uri, null, null, null, null)
                 cursor?.use {
                     if (it.moveToFirst()) {
                         val sizeIndex = it.getColumnIndex(android.provider.OpenableColumns.SIZE)
                         val size = it.getLong(sizeIndex)
-                        if (size > 5 * 1024 * 1024) { // 5MB
+                        if (size > 5 * 1024 * 1024) {
                             Toast.makeText(requireContext(), "Image size exceeds 5MB limit", Toast.LENGTH_LONG).show()
                             return@let
                         }
@@ -79,6 +81,20 @@ class AddPropertyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Initialize the repository (replace with actual implementation)
+        val repository = PropertyRepository() // TODO: Provide proper instance
+        val factory = AddPropertyViewModelFactory(repository)
+
+        // Initialize ViewModel with factory
+        viewModel = ViewModelProvider(this, factory).get(AddPropertyViewModel::class.java)
+
+        // Set up Spinner adapter
+        val propertyTypes = arrayOf("Apartment", "House", "Condo", "Villa") // Example types
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, propertyTypes)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.typeSpinner.adapter = adapter
+        binding.typeSpinner.setSelection(0) // Set default selection
+
         binding.addImageButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
@@ -86,11 +102,12 @@ class AddPropertyFragment : Fragment() {
         }
 
         binding.submitButton.setOnClickListener {
-            val title = binding.titleInput.text.toString()
+
+           /* val title = binding.titleInput.text.toString()
             val description = binding.descriptionInput.text.toString()
             val price = binding.priceInput.text.toString().toDoubleOrNull() ?: 0.0
             val location = binding.locationInput.text.toString()
-            val type = binding.typeSpinner.selectedItem.toString()
+            val type = binding.typeSpinner.selectedItem?.toString() ?: "Apartment" // Fallback to default
             val size = binding.sizeInput.text.toString().toIntOrNull() ?: 0
             val rooms = binding.roomsInput.text.toString().toIntOrNull() ?: 0
             val beds = binding.bedsInput.text.toString().toIntOrNull() ?: 0
@@ -118,17 +135,19 @@ class AddPropertyFragment : Fragment() {
                 bathrooms = bathrooms,
                 amenities = amenities,
                 images = imageStrings
-            )
+            )*/
+
+            findNavController().navigate(R.id.paymentFragment)
         }
 
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+       /* viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.submitButton.isEnabled = !isLoading
         }
 
         viewModel.addSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 Toast.makeText(requireContext(), "Property added successfully", Toast.LENGTH_SHORT).show()
-                requireActivity().onBackPressed()
+                findNavController().navigate(R.id.paymentFragment)
             }
         }
 
@@ -136,11 +155,11 @@ class AddPropertyFragment : Fragment() {
             message?.let {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
-        }
+        }*/
     }
 
-    override fun onDestroyView() {
+    /*override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
+    }*/
 }

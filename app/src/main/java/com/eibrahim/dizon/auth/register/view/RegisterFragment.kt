@@ -1,6 +1,6 @@
 package com.eibrahim.dizon.auth.register.view
 
-import androidx.fragment.app.viewModels
+import android.app.DatePickerDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,63 +8,68 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.navigation.fragment.findNavController
 import com.eibrahim.dizon.R
-import com.eibrahim.dizon.auth.register.viewModel.RegisterViewModel
-
-typealias RegistrationResult = Result<Boolean>
+import java.util.Calendar
 
 class RegisterFragment : Fragment() {
-
-    private val viewModel: RegisterViewModel by viewModels()
-
 
     companion object {
         fun newInstance() = RegisterFragment()
     }
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_register, container, false)
-    }
+    ): View = inflater.inflate(R.layout.fragment_register, container, false)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val btnRegister = view.findViewById<Button>(R.id.btnRegister)
-        val etName = view.findViewById<EditText>(R.id.nameEditText)
-        val etEmail = view.findViewById<EditText>(R.id.emailRegister)
-        val etPhone = view.findViewById<EditText>(R.id.numberEditText)
-        val etCity = view.findViewById<EditText>(R.id.cityEditText)
-        val etPassword = view.findViewById<EditText>(R.id.passwordRegister)
+        val etDate = view.findViewById<EditText>(R.id.birthOfDate)
 
-        btnRegister.setOnClickListener {
-            val name = etName.text.toString()
-            val email = etEmail.text.toString()
-            val phone = etPhone.text.toString()
-            val city = etCity.text.toString()
-            val password = etPassword.text.toString()
-
-            viewModel.registerUser(name, email, phone, city, password)
-        }
-        viewModel.registrationState.observe(viewLifecycleOwner) { result ->
-            handleRegistrationResult(result)
-        }
-    }
-
-    private fun handleRegistrationResult(result: RegistrationResult) {
-        result.fold(
-            onSuccess = {
-                Toast.makeText(requireContext(), "Registration Successful", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_registerFragment_to_verifyFragment)
-            },
-            onFailure = { error ->
-                Toast.makeText(requireContext(), error.message ?: "Registration Failed", Toast.LENGTH_SHORT).show()
+        // Set up DatePickerDialog for birth date
+        etDate.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            DatePickerDialog(
+                requireContext(),
+                { _, year, month, day ->
+                    etDate.setText(String.format("%02d/%02d/%d", day, month + 1, year))
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            ).apply {
+                datePicker.maxDate = Calendar.getInstance().apply { set(2025, 3, 5) }.timeInMillis
+                show()
             }
-        )
+        }
+
+        // Format manual input to DD/MM/YYYY
+        etDate.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                val input = s.toString().filter { it.isDigit() }
+                val formatted = StringBuilder()
+                for (i in input.indices) {
+                    if (i == 2 || i == 4) formatted.append('/')
+                    if (i < 8) formatted.append(input[i])
+                }
+                etDate.removeTextChangedListener(this)
+                etDate.setText(formatted)
+                etDate.setSelection(formatted.length)
+                etDate.addTextChangedListener(this)
+            }
+        })
+
+        // Navigate to verifyFragment on button click
+        btnRegister.setOnClickListener {
+            findNavController().navigate(R.id.action_registerFragment_to_verifyFragment)
+        }
     }
 }

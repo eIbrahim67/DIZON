@@ -40,5 +40,27 @@
         android:id="@+id/detailsFragment"
         android:name="com.eibrahim.dizon.details.DetailsFragment"
         android:label="DetailsFragment" />
+    <fragment
+        android:id="@+id/addPropertyFragment"
+        android:name="com.eibrahim.dizon.addproperty.view.AddPropertyFragment"
+        android:label="AddPropertyFragment" />
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.eibrahim.dizon.change_password.ChangePasswordFragment"
+        android:label="ChangePasswordFragment" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.eibrahim.dizon.edit_profile.EditProfileFragment"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" />
+    <fragment
+        android:id="@+id/deleteAccountFragment"
+        android:name="com.eibrahim.dizon.deleteaccount.view.DeleteAccountFragment"
+        android:label="fragment_delete_account"
+        tools:layout="@layout/fragment_delete_account" />
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.eibrahim.dizon.payment.PaymentFragment"
+        android:label="PaymentFragment" />
 
 </navigation>
