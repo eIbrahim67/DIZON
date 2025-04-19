@@ -75,7 +75,7 @@ class SearchFragment : Fragment() {
         }
 
         filter_layout.setOnClickListener {
-            val btmSh = BottomSheetDialogFragment(R.layout.fragment_search)
+            val btmSh = BottomSheetDialogFragment(R.layout.bottomsheet_filter)
             btmSh.show(requireActivity().supportFragmentManager, "FilterBottomSheet")
 
         }
