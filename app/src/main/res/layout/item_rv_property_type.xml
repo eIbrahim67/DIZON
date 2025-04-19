@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             app:tint="@color/black"
             android:layout_margin="8dp"
-            android:contentDescription="@string/property_type"
+            android:contentDescription="Property Type"
             android:src="@drawable/icon_outline_apartment" />
 
     </com.google.android.material.card.MaterialCardView>
