@@ -167,6 +167,47 @@
     <string name="profile">Profile</string>
     <string name="more">More</string>
     <string name="uplode_your_property">Uplode Your Property</string>
+    <string name="first_name">First name</string>
+    <string name="ex_first_name">e.g. John</string>
+    <string name="last_name">Last Name</string>
+    <string name="ex_last_name">e.g. Doe</string>
+    <string name="register_loading">Register loading</string>
+    <string name="register_success">Register success</string>
 
+    <string name="error_first_name_required">First name is required</string>
+    <string name="error_invalid_email">Invalid email address</string>
+    <string name="error_invalid_phone">Invalid phone number</string>
+    <string name="error_invalid_date">Invalid date format (DD/MM/YYYY)</string>
+    <string name="error_password_short">Password must be at least 8 characters</string>
+    <string name="error_password_mismatch">Passwords do not match</string>
+    <string name="error_terms_not_accepted">You must agree to the terms and conditions</string>
+
+    <string name="verify_loading">Verifying...</string>
+    <string name="verify_success">Verification successful!</string>
+    <string name="resend_code_sent">OTP resent successfully</string>
+
+    <string name="otp_verifying">Verifying OTP...</string>
+    <string name="otp_success">OTP verified successfully!</string>
+    <string name="error_invalid_otp">Please enter a valid 5-digit OTP</string>
+    <string name="resend_otp_loading">Resending OTP...</string>
+    <string name="resend_otp_success">OTP resent successfully!</string>
+
+    <string name="forget_password_loading">Sending reset link...</string>
+    <string name="forget_password_success">Reset link sent successfully!</string>
+
+    <string name="error_email_not_provided">Error: Email not provided</string>
+    <string name="reset_password_loading">Resetting password...</string>
+    <string name="reset_password_success">Password reset successfully!</string>
+    <string name="error_empty_password">Please fill in both password fields</string>
+    <string name="error_password_too_short">Password must be at least 6 characters</string>
+    <string name="error_passwords_not_match">Passwords do not match</string>
+
+    <string name="error_password_complexity">Password must contain letters, numbers, and special characters</string>
+
+    <string name="ex_phone">ex: 1001234567</string>
+
+    <string name="login_loading">Logging in...</string>
+    <string name="login_success">Login successful!</string>
+    <string name="error_email_required">Email is required</string>
 
 </resources>

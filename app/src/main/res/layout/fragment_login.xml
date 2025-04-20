@@ -19,7 +19,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,8 +27,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
@@ -68,7 +65,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailTextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:textColorHint="@color/gray"
                 app:boxBackgroundColor="@color/edit_text_color"
@@ -95,11 +92,10 @@
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordTextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:textColorHint="@color/gray"
                 app:boxBackgroundColor="@color/edit_text_color"
@@ -168,7 +164,6 @@
                     app:cornerRadius="10dp" />
             </com.google.android.material.card.MaterialCardView>
 
-
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card21"
                 android:layout_width="match_parent"
@@ -205,7 +200,6 @@
                     app:iconTint="@null" />
 
             </com.google.android.material.card.MaterialCardView>
-
 
             <TextView
                 android:id="@+id/txtRegister"
