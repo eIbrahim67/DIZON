@@ -40,6 +40,8 @@ class VerifyFragment : Fragment() {
         val otpDigit3 = view.findViewById<EditText>(R.id.otp_digit_3)
         val otpDigit4 = view.findViewById<EditText>(R.id.otp_digit_4)
         val otpDigit5 = view.findViewById<EditText>(R.id.otp_digit_5)
+        val otpDigit6 = view.findViewById<EditText>(R.id.otp_digit_6)
+
 
         // Get email from arguments
         val email = arguments?.getString("email") ?: run {
@@ -50,7 +52,7 @@ class VerifyFragment : Fragment() {
         Log.d("VerifyFragment", "Received email: $email")
 
         // Auto-move to next OTP field
-        val otpFields = listOf(otpDigit1, otpDigit2, otpDigit3, otpDigit4, otpDigit5)
+        val otpFields = listOf(otpDigit1, otpDigit2, otpDigit3, otpDigit4, otpDigit5,otpDigit6)
         otpFields.forEachIndexed { index, editText ->
             editText.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -91,7 +93,7 @@ class VerifyFragment : Fragment() {
         btnVerify.setOnClickListener {
             Log.d("VerifyFragment", "Verify button clicked")
             val otp = otpFields.joinToString("") { it.text.toString().trim() }
-            if (otp.length != 5) {
+            if (otp.length != 6) {
                 Toast.makeText(requireContext(), R.string.error_invalid_otp, Toast.LENGTH_SHORT).show()
                 Log.d("VerifyFragment", "Invalid OTP length: ${otp.length}")
                 return@setOnClickListener

@@ -9,8 +9,8 @@
 
     <View
         android:id="@+id/blue_circle_bg"
-        android:layout_width="227dp"
-        android:layout_height="233dp"
+        android:layout_width="200dp"
+        android:layout_height="210dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="-80dp"
@@ -38,7 +38,7 @@
                 android:id="@+id/welcomeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="72dp"
+                android:layout_marginTop="26dp"
                 android:gravity="center"
                 android:text="@string/welcome_message"
                 android:textColor="@color/primary_color"

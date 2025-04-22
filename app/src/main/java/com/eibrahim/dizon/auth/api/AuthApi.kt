@@ -19,24 +19,24 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface AuthApi {
-    @POST("api/Authorization/signup")
+    @POST("/api/Authentication/signup")
     suspend fun register(@Body request: RegisterRequest): Response<RegisterResponse>
 
-    @POST("api/Authorization/verify-otp")
+    @POST("/api/Authentication/verify-otp")
     suspend fun verifyOtp(@Body request: VerifyRequest): Response<VerifyResponse>
 
-    @POST("api/Authorization/verify-otp")
+    @POST("/api/Authentication/verify-otp")
     suspend fun verifyOtpForReset(@Body request: OtpRequest): Response<OtpResponse>
 
-    @POST("api/Authorization/resend-otp")
+    @POST("/api/Authentication/resend-otp")
     suspend fun resendOtp(@Body request: ResendOtpRequest): Response<ResendOtpResponse>
 
-    @POST("api/Authorization/forgot-password")
+    @POST("/api/Authentication/forgot-password")
     suspend fun forgotPassword(@Body request: ForgetPasswordRequest): Response<ForgetPasswordResponse>
 
-    @POST("api/Authorization/reset-password")
+    @POST("/api/Authentication/reset-password")
     suspend fun resetPassword(@Body request: ResetPasswordRequest): Response<ResetPasswordResponse>
 
-    @POST("/api/Authorization/login")
+    @POST("/api/Authentication/login")
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
 }
