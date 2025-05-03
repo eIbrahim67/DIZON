@@ -2,11 +2,12 @@ package com.eibrahim.dizon.home.view
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
@@ -30,23 +31,13 @@ class HomeFragment : Fragment() {
     private lateinit var recyclerviewSponsored: RecyclerView
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var chatbotLayout: ImageView
-    private lateinit var details: ImageView
-
 
     private val utils = UtilsFunctions
     private var navController: NavController? = null
-    private val adapterRVProperties = AdapterRVProperties { property ->
-        val bundle = Bundle().apply {
-            putSerializable("property", property)
-        }
-        findNavController().navigate(R.id.action_action_home_to_detailsFragment, bundle)
-    }
-    private val adapterRVProperties80 = AdapterRVProperties80 { property ->
-        val bundle = Bundle().apply {
-            putSerializable("property", property)
-        }
-        findNavController().navigate(R.id.action_action_home_to_detailsFragment, bundle)
-    }
+
+    private val adapterRVProperties = AdapterRVProperties()
+    private val adapterRVProperties80 = AdapterRVProperties80()
+
     private val adapterRVOffices = AdapterRVOffices { categoryId ->
         Log.d("HomeFragment", "Category clicked with id: $categoryId")
     }
@@ -74,7 +65,6 @@ class HomeFragment : Fragment() {
         recyclerviewNew = view.findViewById(R.id.recyclerviewNew)
         recyclerviewRecommendation = view.findViewById(R.id.recyclerviewRecommendation)
         recyclerviewSponsored = view.findViewById(R.id.recyclerviewSponsored)
-        details = view.findViewById(R.id.goToDetails)
         chatbotLayout = view.findViewById(R.id.chatbot_layout)
 
         bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
@@ -92,11 +82,34 @@ class HomeFragment : Fragment() {
         recyclerviewNew.adapter = adapterRVProperties
         recyclerviewRecommendation.adapter = adapterRVProperties80
         recyclerviewSponsored.adapter = adapterRVProperties80
+        viewModel.loadRecommendations()
 
-        adapterRVProperties.submitList(viewModel.getList())
-        adapterRVProperties80.submitList(viewModel.getList())
+        viewModel.properties.observe(viewLifecycleOwner) { response ->
 
-        adapterRVOffices.submitList(viewModel.getCate())
+            if (response != null) {
+                Log.d("Test5", response.data.toString())
+            }
+            if (response != null) {
+                adapterRVProperties.submitList(response.data.values)
+            }
+            if (response != null) {
+                adapterRVProperties80.submitList(response.data.values)
+            }
+
+        }
+
+        viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
+            Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+        }
+
+        viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
+            if (errorMessage != null) {
+                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+//        adapterRVOffices.submitList(viewModel.getCate())
     }
 
 
@@ -107,12 +120,6 @@ class HomeFragment : Fragment() {
             )
         }
 
-        // navigate to details for test detailsFragment
-        details.setOnClickListener {
-            navController?.navigate(
-                R.id.detailsFragment, null, navOptions
-            )
-        }
     }
 
     private fun initObservers() {
