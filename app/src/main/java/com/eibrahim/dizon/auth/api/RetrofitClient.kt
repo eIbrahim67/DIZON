@@ -3,6 +3,7 @@ package com.eibrahim.dizon.auth.api
 import android.content.Context
 import android.util.Log
 import com.eibrahim.dizon.auth.AuthPreferences
+import com.eibrahim.dizon.details.model.PropertyApi
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
