@@ -33,10 +33,11 @@
             app:layout_constraintTop_toTopOf="@+id/backFilterBtn" />
 
         <TextView
+            android:id="@+id/applyFilter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
-            android:text="Reset"
+            android:text="Apply"
             android:textColor="@color/blue"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -288,7 +289,6 @@
             android:clipToPadding="false"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
-            tools:itemCount="9"
             app:carousel_alignment="center"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/labelForInternalAmenities"
@@ -313,7 +313,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:layout_marginTop="10dp"
-            tools:itemCount="9"
             android:clipToPadding="false"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
@@ -341,7 +340,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:layout_marginTop="10dp"
-            tools:itemCount="9"
             android:clipToPadding="false"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
