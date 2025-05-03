@@ -174,7 +174,7 @@
     <string name="register_loading">Register loading</string>
     <string name="register_success">Register success</string>
 
-    <string name="error_first_name_required">First name is required</string>
+    <string name="error_first_name_required">Name is required</string>
     <string name="error_invalid_email">Invalid email address</string>
     <string name="error_invalid_phone">Invalid phone number</string>
     <string name="error_invalid_date">Invalid date format (DD/MM/YYYY)</string>

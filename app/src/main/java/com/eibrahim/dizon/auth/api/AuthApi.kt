@@ -16,7 +16,9 @@ import com.eibrahim.dizon.auth.resetpassword.viewmodel.ResetPasswordRequest
 import com.eibrahim.dizon.auth.resetpassword.viewmodel.ResetPasswordResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface AuthApi {
     @POST("/api/Authentication/signup")
@@ -39,4 +41,15 @@ interface AuthApi {
 
     @POST("/api/Authentication/login")
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
+
+    // Google Sign-In endpoint with idToken
+    @POST("/api/Authentication/login-google")
+    suspend fun loginGoogleWithToken(@Body request: GoogleLoginRequest): Response<LoginResponse>
+
+    @GET("/api/Authentication/google-response")
+    suspend fun googleResponse(@Query("returnUrl") returnUrl: String = "/"): Response<LoginResponse>
 }
+
+data class GoogleLoginRequest(
+    val idToken: String
+)

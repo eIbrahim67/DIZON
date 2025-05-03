@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.eibrahim.dizon.R
+import com.eibrahim.dizon.auth.AuthActivity
+import com.eibrahim.dizon.auth.AuthPreferences
 import com.eibrahim.dizon.auth.login.viewModel.LoginState
 import com.eibrahim.dizon.auth.login.viewModel.LoginViewModel
 import com.google.android.material.textfield.TextInputLayout
@@ -21,6 +23,7 @@ import com.google.android.material.textfield.TextInputLayout
 class LoginFragment : Fragment() {
 
     private val viewModel: LoginViewModel by viewModels()
+    private lateinit var authPreferences: AuthPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,10 +34,15 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("LoginFragment", "onViewCreated called")
+
+        // Initialize AuthPreferences
+        authPreferences = AuthPreferences(requireContext())
 
         val etEmail = view.findViewById<EditText>(R.id.emailLogin)
         val etPassword = view.findViewById<EditText>(R.id.passwordLogin)
         val btnLogin = view.findViewById<Button>(R.id.btnLogin)
+        val btnSignInWithGoogle = view.findViewById<Button>(R.id.signinWithGoogle)
         val emailInputLayout = view.findViewById<TextInputLayout>(R.id.emailTextInputLayout)
         val passwordInputLayout = view.findViewById<TextInputLayout>(R.id.passwordTextInputLayout)
 
@@ -69,37 +77,59 @@ class LoginFragment : Fragment() {
             }
 
             if (isValid) {
-                viewModel.login(email, password)
+                viewModel.login(email, password, authPreferences)
             }
+        }
+
+        // Handle Google Sign-In button click
+        btnSignInWithGoogle.setOnClickListener {
+            Log.d("LoginFragment", "Google Sign-In button clicked")
+            Toast.makeText(requireContext(), "Starting Google Sign-In...", Toast.LENGTH_SHORT).show()
+            val signInIntent = (activity as AuthActivity).googleSignInClient.signInIntent
+            startActivityForResult(signInIntent, AuthActivity.RC_SIGN_IN)
         }
 
         viewModel.loginState.observe(viewLifecycleOwner) { state ->
+            Log.d("LoginFragment", "LoginState changed: $state")
             when (state) {
                 is LoginState.Loading -> {
                     btnLogin.isEnabled = false
-                    Toast.makeText(requireContext(), "Logging in...", Toast.LENGTH_SHORT).show()
+                    btnSignInWithGoogle.isEnabled = false
                 }
                 is LoginState.Success -> {
                     btnLogin.isEnabled = true
+                    btnSignInWithGoogle.isEnabled = true
+                    Log.d("LoginFragment", "Success response: ${state.response}")
+                    // Log the saved token
+                    val savedToken = authPreferences.getToken()
+                    Log.d("LoginFragment", "Saved token: $savedToken")
                     Toast.makeText(requireContext(), "Login successful", Toast.LENGTH_SHORT).show()
-                    requireActivity().finish()
+                    view.postDelayed({
+                        requireActivity().finish()
+                    }, 1000)
                 }
                 is LoginState.Error -> {
                     btnLogin.isEnabled = true
-                    Log.d("LoginFragment", "Error message: ${state.message}")
-
-                    // reset old errors
-                    emailInputLayout.error = null
-                    passwordInputLayout.error = null
-
-                    if (state.message.contains("Invalid email or password", ignoreCase = true)) {
-                        passwordInputLayout.error = state.message
-                    } else {
-                        Toast.makeText(requireContext(), state.message, Toast.LENGTH_LONG).show()
-                    }
+                    btnSignInWithGoogle.isEnabled = true
+                    Log.e("LoginFragment", "Error message: ${state.message}")
+                    Toast.makeText(requireContext(), state.message, Toast.LENGTH_LONG).show()
                 }
             }
         }
 
+        // Handle Google Sign-In result from arguments
+        arguments?.let { args ->
+            Log.d("LoginFragment", "Arguments received: $args")
+            args.getString("googleIdToken")?.let { idToken ->
+                Log.d("LoginFragment", "Received Google idToken: $idToken")
+                Toast.makeText(requireContext(), "Processing Google Sign-In...", Toast.LENGTH_SHORT).show()
+                viewModel.loginWithGoogle(idToken, authPreferences)
+            }
+            args.getString("error")?.let { error ->
+                Log.e("LoginFragment", "Google Sign-In error: $error")
+                Toast.makeText(requireContext(), "Google Sign-In failed: $error", Toast.LENGTH_LONG).show()
+            }
+            arguments = null // Clear arguments after handling
+        }
     }
 }

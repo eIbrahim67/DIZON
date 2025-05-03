@@ -24,6 +24,7 @@ import com.eibrahim.dizon.auth.register.viewModel.RegisterState
 import com.eibrahim.dizon.auth.register.viewModel.RegisterViewModel
 import com.google.android.material.textfield.TextInputLayout
 import java.util.Calendar
+import com.eibrahim.dizon.auth.AuthActivity
 
 class RegisterFragment : Fragment() {
 
@@ -39,6 +40,7 @@ class RegisterFragment : Fragment() {
         Log.d("RegisterFragment", "onViewCreated called")
 
         val btnRegister = view.findViewById<Button>(R.id.btnRegister)
+        val btnSignUpWithGoogle = view.findViewById<Button>(R.id.signupWithGoogle)
         val etFirstName = view.findViewById<EditText>(R.id.firstNameEditText)
         val etLastName = view.findViewById<EditText>(R.id.lastNameEditText)
         val etEmail = view.findViewById<EditText>(R.id.emailRegister)
@@ -54,12 +56,17 @@ class RegisterFragment : Fragment() {
         // Set up Spinner for city selection
         val spinnerCity = view.findViewById<Spinner>(R.id.spinnerCity2)
         spinnerCity.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 val selectedCity = parent?.getItemAtPosition(position).toString()
                 Log.d("RegisterFragment", "City selected: $selectedCity")
                 etCity.setText(selectedCity)
-                // Update hint based on city input
-                cityInputLayout.hint = if (selectedCity.isNotEmpty()) "" else getString(R.string.ex_city)
+                cityInputLayout.hint =
+                    if (selectedCity.isNotEmpty()) "" else getString(R.string.ex_city)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -108,7 +115,6 @@ class RegisterFragment : Fragment() {
         etDate.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
             override fun afterTextChanged(s: Editable?) {
                 val input = s.toString().filter { it.isDigit() }
                 val formatted = StringBuilder()
@@ -130,21 +136,28 @@ class RegisterFragment : Fragment() {
             when (state) {
                 is RegisterState.Loading -> {
                     btnRegister.isEnabled = false
-                    Toast.makeText(requireContext(), R.string.register_loading, Toast.LENGTH_SHORT).show()
+                    btnSignUpWithGoogle.isEnabled = false
                 }
                 is RegisterState.Success -> {
                     btnRegister.isEnabled = true
+                    btnSignUpWithGoogle.isEnabled = true
                     Log.d("RegisterFragment", "Success response: ${state.response}")
-                    Toast.makeText(requireContext(), R.string.register_success, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), R.string.register_success, Toast.LENGTH_SHORT)
+                        .show()
                     view.postDelayed({
                         val bundle = Bundle().apply {
                             putString("email", etEmail.text.toString().trim())
                         }
-                        findNavController().navigate(R.id.action_registerFragment_to_verifyFragment, bundle)
+                        findNavController().navigate(
+                            R.id.action_registerFragment_to_verifyFragment,
+                            bundle
+                        )
                     }, 1000) // Delay navigation by 1 second
                 }
+
                 is RegisterState.Error -> {
                     btnRegister.isEnabled = true
+                    btnSignUpWithGoogle.isEnabled = true
                     Log.e("RegisterFragment", "Error: ${state.message}")
                     Toast.makeText(requireContext(), state.message, Toast.LENGTH_LONG).show()
                 }
@@ -164,11 +177,22 @@ class RegisterFragment : Fragment() {
             val confirmPassword = etConfirmPassword.text.toString().trim()
             val isTermsAccepted = cbTerms.isChecked
 
-            if (validateInputs(firstName, lastName, email, phone, city, birthDate, password, confirmPassword, isTermsAccepted)) {
+            if (validateInputs(
+                    firstName,
+                    lastName,
+                    email,
+                    phone,
+                    city,
+                    birthDate,
+                    password,
+                    confirmPassword,
+                    isTermsAccepted
+                )
+            ) {
                 Log.d("RegisterFragment", "Inputs valid, creating RegisterRequest")
                 val request = RegisterRequest(
                     firstName = firstName,
-                    lastName = lastName.ifBlank { null },
+                    lastName = lastName,
                     email = email,
                     phoneNumber = phone.ifBlank { null },
                     city = city.ifBlank { null },
@@ -183,9 +207,10 @@ class RegisterFragment : Fragment() {
                 Log.d("RegisterFragment", "Input validation failed")
             }
         }
+
     }
 
-    private fun validateInputs(
+    fun validateInputs(
         firstName: String,
         lastName: String,
         email: String,
@@ -197,7 +222,6 @@ class RegisterFragment : Fragment() {
         isTermsAccepted: Boolean
     ): Boolean {
         Log.d("RegisterFragment", "Validating inputs")
-        // Reset errors
         view?.findViewById<TextInputLayout>(R.id.firstNameInputLayout)?.error = null
         view?.findViewById<TextInputLayout>(R.id.lastNameInputLayout)?.error = null
         view?.findViewById<TextInputLayout>(R.id.emailInputLayout)?.error = null
@@ -216,7 +240,12 @@ class RegisterFragment : Fragment() {
             isValid = false
         }
 
-        // Last name is optional, no validation needed
+        if (lastName.isBlank()) {
+            val layout = view?.findViewById<TextInputLayout>(R.id.lastNameInputLayout)
+            layout?.error = getString(R.string.error_first_name_required)
+            Log.d("RegisterFragment", "Last name error set: ${layout?.error}")
+            isValid = false
+        }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             val layout = view?.findViewById<TextInputLayout>(R.id.emailInputLayout)
@@ -232,8 +261,6 @@ class RegisterFragment : Fragment() {
             isValid = false
         }
 
-        // City is optional, no validation needed
-
         if (birthDate.isNotBlank() && !birthDate.matches(Regex("\\d{2}/\\d{2}/\\d{4}"))) {
             val layout = view?.findViewById<TextInputLayout>(R.id.birthDateInputLayout)
             layout?.error = getString(R.string.error_invalid_date)
@@ -241,7 +268,6 @@ class RegisterFragment : Fragment() {
             isValid = false
         }
 
-        // Validate password length and complexity
         if (password.isEmpty()) {
             val layout = view?.findViewById<TextInputLayout>(R.id.passwordInputLayout)
             layout?.error = getString(R.string.error_empty_password)
@@ -253,7 +279,8 @@ class RegisterFragment : Fragment() {
             Log.d("RegisterFragment", "Password error set: ${layout?.error}")
             isValid = false
         } else {
-            val passwordPattern = Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")
+            val passwordPattern =
+                Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")
             if (!password.matches(passwordPattern)) {
                 val layout = view?.findViewById<TextInputLayout>(R.id.passwordInputLayout)
                 layout?.error = getString(R.string.error_password_complexity)
@@ -262,7 +289,6 @@ class RegisterFragment : Fragment() {
             }
         }
 
-        // Validate confirm password
         if (confirmPassword.isEmpty()) {
             val layout = view?.findViewById<TextInputLayout>(R.id.confirmPasswordInputLayout)
             layout?.error = getString(R.string.error_empty_password)
@@ -276,7 +302,11 @@ class RegisterFragment : Fragment() {
         }
 
         if (!isTermsAccepted) {
-            Toast.makeText(requireContext(), R.string.error_terms_not_accepted, Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                requireContext(),
+                R.string.error_terms_not_accepted,
+                Toast.LENGTH_SHORT
+            ).show()
             Log.d("RegisterFragment", "Terms not accepted")
             isValid = false
         }

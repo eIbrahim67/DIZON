@@ -19,7 +19,6 @@ class RegisterViewModel : ViewModel() {
                 val response = RetrofitClient.api.register(request)
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        // Accept both "success" and "Success" (case-insensitive)
                         if (it.status.equals("success", ignoreCase = true) || it.status.equals("Success", ignoreCase = true)) {
                             _registerState.value = RegisterState.Success(it)
                         } else {

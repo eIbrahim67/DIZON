@@ -88,6 +88,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:hint="@string/ex_first_name"
+                    android:maxLines="1"
                     android:inputType="text"
                     android:padding="8dp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -131,6 +132,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:hint="@string/ex_last_name"
+                    android:maxLines="1"
                     android:inputType="text"
                     android:padding="8dp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -174,6 +176,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:hint="@string/ex_email"
+                    android:maxLines="1"
                     android:inputType="textEmailAddress"
                     android:padding="8dp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -209,7 +212,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/edit_text_color"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingStart="2dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -254,6 +258,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
                             android:hint="ex: 1001234567"
+                            android:maxLines="1"
                             android:inputType="number"
                             android:padding="8dp" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -291,7 +296,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/edit_text_color"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingStart="2dp">
 
                     <Spinner
                         android:id="@+id/spinnerCity2"
@@ -326,6 +332,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
                             android:hint="@string/ex_city"
+                            android:maxLines="1"
                             android:inputType="text"
                             android:padding="8dp" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -419,6 +426,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:hint="********"
+                    android:maxLines="1"
                     android:inputType="textPassword"
                     android:padding="8dp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -463,6 +471,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:hint="********"
+                    android:maxLines="1"
                     android:inputType="textPassword"
                     android:padding="8dp" />
             </com.google.android.material.textfield.TextInputLayout>
