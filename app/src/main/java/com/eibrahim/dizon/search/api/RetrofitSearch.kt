@@ -31,13 +31,13 @@ object RetrofitSearch {
             .addInterceptor { chain: Interceptor.Chain ->
                 val original = chain.request()
                 val requestBuilder = original.newBuilder()
-                    val token1 = "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6WyI0NCIsIjQ0Il0sImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJNb2FtZW4iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJjYW5heTYzNTM0QGFzdGltZWkuY29tIiwiZXhwIjoxNzQ2ODgxOTkzLCJpc3MiOiJodHRwOi8vZGlnaXRhbHByb3BlcnR5YXBpLnJ1bmFzcC5uZXQifQ.tQxl2MVWfvBwGTFHFVuo4qCLCIUDP4N7J_TCtLo3tSY"
-                    requestBuilder.header("Authorization", "Bearer $token1")
-//                authPreferences?.getToken()?.let { token ->
-//                    Log.d("RetrofitClient", "Adding Authorization header with token: $token1")
-//                } ?: run {
-//                    Log.d("RetrofitClient", "No token available for request")
-//                }
+
+                authPreferences?.getToken()?.let { token ->
+                    Log.d("RetrofitClient", "Adding Authorization header with token: $token")
+                    requestBuilder.header("Authorization", "Bearer $token")
+                } ?: run {
+                    Log.d("RetrofitClient", "No token available for request")
+                }
                 val request = requestBuilder.build()
                 chain.proceed(request)
             }
