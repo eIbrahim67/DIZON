@@ -48,12 +48,12 @@ interface AuthApi {
     suspend fun googleResponse(@Query("returnUrl") returnUrl: String = "/"): Response<LoginResponse>
 
     // Added GET endpoint to fetch user profile data
-    @GET("/api/Authentication/GetUser")
+    @GET("/api/User/GetUser")
     suspend fun getUser(): Response<UserResponse> // Uses a new UserResponse data class
 
     // Added PUT endpoint to update user profile with multipart form data
     @Multipart
-    @PUT("/api/Authentication/Update")
+    @PUT("/api/User/Update")
     suspend fun updateUser(
         @Part("FirstName") firstName: RequestBody,
         @Part("LastName") lastName: RequestBody,
