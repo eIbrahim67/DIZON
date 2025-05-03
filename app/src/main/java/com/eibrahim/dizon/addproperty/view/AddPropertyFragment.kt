@@ -8,7 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.HorizontalScrollView
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -18,46 +23,87 @@ import com.eibrahim.dizon.R
 import com.eibrahim.dizon.addproperty.viewmodel.AddPropertyViewModel
 import com.eibrahim.dizon.addproperty.viewmodel.AddPropertyViewModelFactory
 import com.eibrahim.dizon.addproperty.viewmodel.PropertyRepository
-import com.eibrahim.dizon.databinding.FragmentAddPropertyBinding
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
+import com.google.android.material.textfield.TextInputEditText
+import java.io.File
+import java.io.FileOutputStream
+import android.content.res.Resources
+import android.util.TypedValue
 
 class AddPropertyFragment : Fragment() {
 
-    private var _binding: FragmentAddPropertyBinding? = null
-    private val binding get() = _binding!!
-
     private lateinit var viewModel: AddPropertyViewModel
     private val imageUris = mutableListOf<Uri>()
+    private val imageFiles = mutableListOf<File>()
+    private val imageViews = mutableListOf<View>() // Track image views for deletion
+
+    // UI elements
+    private lateinit var btnback: ImageView
+    private lateinit var imagesScrollView: HorizontalScrollView
+    private lateinit var imagesContainer: LinearLayout
+    private lateinit var addImageButton: Button
+    private lateinit var typeSpinner: Spinner
+    private lateinit var listingTypeSpinner: Spinner
+    private lateinit var priceInput: TextInputEditText
+    private lateinit var titleInput: TextInputEditText
+    private lateinit var sizeInput: TextInputEditText
+    private lateinit var roomsInput: TextInputEditText
+    private lateinit var bedsInput: TextInputEditText
+    private lateinit var bathroomsInput: TextInputEditText
+    private lateinit var descriptionInput: TextInputEditText
+    private lateinit var internalAmenitiesChipGroup: ChipGroup
+    private lateinit var externalAmenitiesChipGroup: ChipGroup
+    private lateinit var accessibilityAmenitiesChipGroup: ChipGroup
+    private lateinit var streetInput: TextInputEditText
+    private lateinit var cityInput: TextInputEditText
+    private lateinit var governateInput: TextInputEditText
+    private lateinit var locationUrlInput: TextInputEditText
+    private lateinit var submitButton: Button
 
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.data?.let { uri ->
-                val mimeType = requireContext().contentResolver.getType(uri)
-                if (!isSupportedImageFormat(mimeType)) {
-                    Toast.makeText(requireContext(), "Unsupported image format. Use .jpg, .jpeg, .png, or .gif", Toast.LENGTH_LONG).show()
-                    return@let
+            val data = result.data
+            if (data?.clipData != null) {
+                // Multiple images selected
+                for (i in 0 until data.clipData!!.itemCount) {
+                    val uri = data.clipData!!.getItemAt(i).uri
+                    processImage(uri)
                 }
-
-                val cursor = requireContext().contentResolver.query(uri, null, null, null, null)
-                cursor?.use {
-                    if (it.moveToFirst()) {
-                        val sizeIndex = it.getColumnIndex(android.provider.OpenableColumns.SIZE)
-                        val size = it.getLong(sizeIndex)
-                        if (size > 5 * 1024 * 1024) {
-                            Toast.makeText(requireContext(), "Image size exceeds 5MB limit", Toast.LENGTH_LONG).show()
-                            return@let
-                        }
-                    }
-                }
-
-                imageUris.add(uri)
-                val imageView = ImageView(requireContext()).apply {
-                    layoutParams = ViewGroup.LayoutParams(100, 100)
-                    setImageURI(uri)
-                    setPadding(8, 8, 8, 8)
-                }
-                binding.imagesContainer.addView(imageView)
+            } else if (data?.data != null) {
+                // Single image selected
+                processImage(data.data!!)
             }
+        }
+    }
+
+    private fun processImage(uri: Uri) {
+        val mimeType = requireContext().contentResolver.getType(uri)
+        if (!isSupportedImageFormat(mimeType)) {
+            Toast.makeText(requireContext(), "Unsupported image format. Use .jpg, .jpeg, .png, or .gif", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        val cursor = requireContext().contentResolver.query(uri, null, null, null, null)
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val sizeIndex = it.getColumnIndex(android.provider.OpenableColumns.SIZE)
+                val size = it.getLong(sizeIndex)
+                if (size > 5 * 1024 * 1024) {
+                    Toast.makeText(requireContext(), "Image size exceeds 5MB limit", Toast.LENGTH_LONG).show()
+                    return
+                }
+            }
+        }
+
+        // Convert URI to File
+        val file = uriToFile(uri)
+        if (file != null) {
+            imageUris.add(uri)
+            imageFiles.add(file)
+            addImageView(uri, file)
+        } else {
+            Toast.makeText(requireContext(), "Failed to process image", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -70,84 +116,281 @@ class AddPropertyFragment : Fragment() {
         )
     }
 
+    private fun uriToFile(uri: Uri): File? {
+        return try {
+            val inputStream = requireContext().contentResolver.openInputStream(uri)
+            val file = File(requireContext().cacheDir, "image_${System.currentTimeMillis()}.jpg")
+            inputStream?.use { input ->
+                FileOutputStream(file).use { output ->
+                    input.copyTo(output)
+                }
+            }
+            file
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    private fun dpToPx(dp: Float): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp,
+            Resources.getSystem().displayMetrics
+        ).toInt()
+    }
+
+    private fun addImageView(uri: Uri, file: File) {
+        // Create FrameLayout to hold ImageView and delete icon
+        val frameLayout = FrameLayout(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(dpToPx(10f), dpToPx(10f), dpToPx(10f), dpToPx(10f))
+            }
+        }
+
+        // Create ImageView for the image
+        val imageView = ImageView(requireContext()).apply {
+            layoutParams = FrameLayout.LayoutParams(dpToPx(120f), dpToPx(160f))
+            setImageURI(uri)
+            scaleType = ImageView.ScaleType.CENTER_CROP
+            contentDescription = "Uploaded image"
+        }
+
+        // Create ImageView for the delete icon
+        var deleteIcon = ImageView(requireContext()).apply {
+            layoutParams = FrameLayout.LayoutParams(dpToPx(40f), dpToPx(40f)).apply {
+                gravity = android.view.Gravity.TOP or android.view.Gravity.END
+                setMargins(0, dpToPx(8f), dpToPx(8f), 0)
+            }
+            setImageResource(R.drawable.ic_delete)
+            contentDescription = "Delete image"
+            setOnClickListener {
+                // Remove image from lists and UI
+                val index = imageUris.indexOf(uri)
+                if (index != -1) {
+                    imageUris.removeAt(index)
+                    imageFiles.removeAt(index)
+                    imagesContainer.removeView(frameLayout)
+                    imageViews.remove(frameLayout)
+                    // Hide imagesScrollView if no images remain
+                    if (imageUris.isEmpty()) {
+                        imagesScrollView.visibility = View.GONE
+                    }
+                }
+            }
+        }
+
+        // Add ImageView and delete icon to FrameLayout
+        frameLayout.addView(imageView)
+        frameLayout.addView(deleteIcon)
+
+        // Add FrameLayout to imagesContainer and track it
+        imagesContainer.addView(frameLayout)
+        imageViews.add(frameLayout)
+
+        // Show imagesScrollView when an image is added
+        imagesScrollView.visibility = View.VISIBLE
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentAddPropertyBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        return inflater.inflate(R.layout.fragment_add_property, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize the repository (replace with actual implementation)
-        val repository = PropertyRepository() // TODO: Provide proper instance
+        // Initialize UI elements
+        btnback = view.findViewById(R.id.btnback)
+        imagesScrollView = view.findViewById(R.id.imagesScrollView)
+        imagesContainer = view.findViewById(R.id.imagesContainer)
+        addImageButton = view.findViewById(R.id.addImageButton)
+        typeSpinner = view.findViewById(R.id.typeSpinner)
+        listingTypeSpinner = view.findViewById(R.id.listingTypeSpinner)
+        priceInput = view.findViewById(R.id.priceInput)
+        titleInput = view.findViewById(R.id.titleInput)
+        sizeInput = view.findViewById(R.id.sizeInput)
+        roomsInput = view.findViewById(R.id.roomsInput)
+        bedsInput = view.findViewById(R.id.bedsInput)
+        bathroomsInput = view.findViewById(R.id.bathroomsInput)
+        descriptionInput = view.findViewById(R.id.descriptionInput)
+        internalAmenitiesChipGroup = view.findViewById(R.id.internalAmenitiesChipGroup)
+        externalAmenitiesChipGroup = view.findViewById(R.id.externalAmenitiesChipGroup)
+        accessibilityAmenitiesChipGroup = view.findViewById(R.id.accessibilityAmenitiesChipGroup)
+        streetInput = view.findViewById(R.id.streetInput)
+        cityInput = view.findViewById(R.id.cityInput)
+        governateInput = view.findViewById(R.id.governateInput)
+        locationUrlInput = view.findViewById(R.id.locationUrlInput)
+        submitButton = view.findViewById(R.id.submitButton)
+
+        // Set up back button click listener
+        btnback.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        // Hide imagesScrollView initially
+        imagesScrollView.visibility = View.GONE
+
+        // Initialize the repository
+        val repository = PropertyRepository()
         val factory = AddPropertyViewModelFactory(repository)
 
         // Initialize ViewModel with factory
         viewModel = ViewModelProvider(this, factory).get(AddPropertyViewModel::class.java)
 
-        // Set up Spinner adapter
-        val propertyTypes = arrayOf("Apartment", "House", "Condo", "Villa") // Example types
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, propertyTypes)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.typeSpinner.adapter = adapter
-        binding.typeSpinner.setSelection(0) // Set default selection
+        // Set up Spinner adapters
+        val propertyTypes = arrayOf("Apartment", "House", "Condo", "Villa")
+        val listingTypes = arrayOf("For Sale", "For Rent")
+        val propertyAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, propertyTypes)
+        val listingAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listingTypes)
+        propertyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        listingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        typeSpinner.adapter = propertyAdapter
+        listingTypeSpinner.adapter = listingAdapter
+        typeSpinner.setSelection(0)
+        listingTypeSpinner.setSelection(0)
 
-        binding.addImageButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
+        // Load Amenities with enhanced chip styling
+        viewModel.internalAmenities.observe(viewLifecycleOwner) { response ->
+            internalAmenitiesChipGroup.removeAllViews()
+            response.`$values`.forEach { amenity ->
+                val chip = Chip(requireContext()).apply {
+                    text = amenity.name
+                    isCheckable = true
+                    id = amenity.amenityId
+                    setChipBackgroundColorResource(R.color.chip_background_selector)
+                    setTextColor(resources.getColorStateList(R.color.chip_text_selector, null))
+                    chipStrokeColor = resources.getColorStateList(R.color.chip_stroke_selector, null)
+                    chipStrokeWidth = if (isChecked) 2f else 1f
+                }
+                internalAmenitiesChipGroup.addView(chip)
+            }
+        }
+
+        viewModel.externalAmenities.observe(viewLifecycleOwner) { response ->
+            externalAmenitiesChipGroup.removeAllViews()
+            response.`$values`.forEach { amenity ->
+                val chip = Chip(requireContext()).apply {
+                    text = amenity.name
+                    isCheckable = true
+                    id = amenity.amenityId
+                    setChipBackgroundColorResource(R.color.chip_background_selector)
+                    setTextColor(resources.getColorStateList(R.color.chip_text_selector, null))
+                    chipStrokeColor = resources.getColorStateList(R.color.chip_stroke_selector, null)
+                    chipStrokeWidth = if (isChecked) 2f else 1f
+                }
+                externalAmenitiesChipGroup.addView(chip)
+            }
+        }
+
+        viewModel.accessibilityAmenities.observe(viewLifecycleOwner) { response ->
+            accessibilityAmenitiesChipGroup.removeAllViews()
+            response.`$values`.forEach { amenity ->
+                val chip = Chip(requireContext()).apply {
+                    text = amenity.name
+                    isCheckable = true
+                    id = amenity.amenityId
+                    setChipBackgroundColorResource(R.color.chip_background_selector)
+                    setTextColor(resources.getColorStateList(R.color.chip_text_selector, null))
+                    chipStrokeColor = resources.getColorStateList(R.color.chip_stroke_selector, null)
+                    chipStrokeWidth = if (isChecked) 2f else 1f
+                }
+                accessibilityAmenitiesChipGroup.addView(chip)
+            }
+        }
+
+        addImageButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = "image/*"
+                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            }
             pickImageLauncher.launch(intent)
         }
 
-        binding.submitButton.setOnClickListener {
+        submitButton.setOnClickListener {
+            val title = titleInput.text.toString()
+            val description = descriptionInput.text.toString()
+            val price = priceInput.text.toString().toDoubleOrNull() ?: 0.0
+            val street = streetInput.text.toString().trim()
+            val city = cityInput.text.toString().trim()
+            val governate = governateInput.text.toString().trim()
+            val locationUrl = locationUrlInput.text.toString()
+            val propertyType = typeSpinner.selectedItem?.toString() ?: "Apartment"
+            val listingType = listingTypeSpinner.selectedItem?.toString() ?: "For Sale"
+            val size = sizeInput.text.toString().toIntOrNull() ?: 0
+            val rooms = roomsInput.text.toString().toIntOrNull() ?: 0
+            val beds = bedsInput.text.toString().toIntOrNull() ?: 0
+            val bathrooms = bathroomsInput.text.toString().toIntOrNull() ?: 0
 
-           /* val title = binding.titleInput.text.toString()
-            val description = binding.descriptionInput.text.toString()
-            val price = binding.priceInput.text.toString().toDoubleOrNull() ?: 0.0
-            val location = binding.locationInput.text.toString()
-            val type = binding.typeSpinner.selectedItem?.toString() ?: "Apartment" // Fallback to default
-            val size = binding.sizeInput.text.toString().toIntOrNull() ?: 0
-            val rooms = binding.roomsInput.text.toString().toIntOrNull() ?: 0
-            val beds = binding.bedsInput.text.toString().toIntOrNull() ?: 0
-            val bathrooms = binding.bathroomsInput.text.toString().toIntOrNull() ?: 0
+            // Validate location fields
+            if (street.isBlank() || city.isBlank() || governate.isBlank()) {
+                Toast.makeText(requireContext(), "Please enter Street, City, and Governate", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
 
-            val amenities = mutableListOf<String>()
-            for (i in 0 until binding.amenitiesChipGroup.childCount) {
-                val chip = binding.amenitiesChipGroup.getChildAt(i) as Chip
+            // Validate locationUrl
+            if (locationUrl.isBlank()) {
+                Toast.makeText(requireContext(), "Please enter a valid Location URL", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            val internalAmenityIds = mutableListOf<Int>()
+            for (i in 0 until internalAmenitiesChipGroup.childCount) {
+                val chip = internalAmenitiesChipGroup.getChildAt(i) as Chip
                 if (chip.isChecked) {
-                    amenities.add(chip.text.toString())
+                    internalAmenityIds.add(chip.id)
                 }
             }
 
-            val imageStrings = imageUris.map { it.toString() }
+            val externalAmenityIds = mutableListOf<Int>()
+            for (i in 0 until externalAmenitiesChipGroup.childCount) {
+                val chip = externalAmenitiesChipGroup.getChildAt(i) as Chip
+                if (chip.isChecked) {
+                    externalAmenityIds.add(chip.id)
+                }
+            }
+
+            val accessibilityAmenityIds = mutableListOf<Int>()
+            for (i in 0 until accessibilityAmenitiesChipGroup.childCount) {
+                val chip = accessibilityAmenitiesChipGroup.getChildAt(i) as Chip
+                if (chip.isChecked) {
+                    accessibilityAmenityIds.add(chip.id)
+                }
+            }
 
             viewModel.addProperty(
                 title = title,
                 description = description,
                 price = price,
-                location = location,
-                type = type,
+                street = street,
+                city = city,
+                governate = governate,
+                locationUrl = locationUrl,
+                propertyType = propertyType,
+                listingType = listingType,
                 size = size,
                 rooms = rooms,
                 beds = beds,
                 bathrooms = bathrooms,
-                amenities = amenities,
-                images = imageStrings
-            )*/
-
-            findNavController().navigate(R.id.paymentFragment)
+                imageFiles = imageFiles,
+                internalAmenityIds = internalAmenityIds,
+                externalAmenityIds = externalAmenityIds,
+                accessibilityAmenityIds = accessibilityAmenityIds
+            )
         }
 
-       /* viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding.submitButton.isEnabled = !isLoading
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            submitButton.isEnabled = !isLoading
         }
 
         viewModel.addSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 Toast.makeText(requireContext(), "Property added successfully", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.paymentFragment)
+                findNavController().popBackStack()
             }
         }
 
@@ -155,11 +398,6 @@ class AddPropertyFragment : Fragment() {
             message?.let {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
-        }*/
+        }
     }
-
-    /*override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }*/
 }

@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.eibrahim.dizon.details.model.AmenitiesResponse
 import kotlinx.coroutines.launch
+import java.io.File
 
 class AddPropertyViewModel(private val repository: PropertyRepository) : ViewModel() {
 
@@ -18,49 +20,98 @@ class AddPropertyViewModel(private val repository: PropertyRepository) : ViewMod
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
 
+    private val _internalAmenities = MutableLiveData<AmenitiesResponse>()
+    val internalAmenities: LiveData<AmenitiesResponse> get() = _internalAmenities
+
+    private val _externalAmenities = MutableLiveData<AmenitiesResponse>()
+    val externalAmenities: LiveData<AmenitiesResponse> get() = _externalAmenities
+
+    private val _accessibilityAmenities = MutableLiveData<AmenitiesResponse>()
+    val accessibilityAmenities: LiveData<AmenitiesResponse> get() = _accessibilityAmenities
+
+    init {
+        fetchAmenities()
+    }
+
+    private fun fetchAmenities() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val internalResult = repository.getInternalAmenities()
+                if (internalResult.isSuccess) {
+                    _internalAmenities.value = internalResult.getOrThrow()
+                } else {
+                    _errorMessage.value = "Failed to load internal amenities"
+                }
+
+                val externalResult = repository.getExternalAmenities()
+                if (externalResult.isSuccess) {
+                    _externalAmenities.value = externalResult.getOrThrow()
+                } else {
+                    _errorMessage.value = "Failed to load external amenities"
+                }
+
+                val accessibilityResult = repository.getAccessibilityAmenities()
+                if (accessibilityResult.isSuccess) {
+                    _accessibilityAmenities.value = accessibilityResult.getOrThrow()
+                } else {
+                    _errorMessage.value = "Failed to load accessibility amenities"
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Error loading amenities: ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
     fun addProperty(
         title: String,
         description: String,
         price: Double,
-        location: String,
-        type: String,
+        street: String,
+        city: String,
+        governate: String,
+        locationUrl: String,
+        propertyType: String,
+        listingType: String,
         size: Int,
         rooms: Int,
         beds: Int,
         bathrooms: Int,
-        amenities: List<String>,
-        images: List<String>
+        imageFiles: List<File>,
+        internalAmenityIds: List<Int>,
+        externalAmenityIds: List<Int>,
+        accessibilityAmenityIds: List<Int>
     ) {
-        if (title.isBlank() || description.isBlank() || location.isBlank() || price <= 0 || images.isEmpty()) {
-            _errorMessage.value = "Please fill all required fields and upload at least one image."
+        if (title.isBlank() || description.isBlank() || street.isBlank() || city.isBlank() || governate.isBlank() || locationUrl.isBlank() || price <= 0 || imageFiles.isEmpty()) {
+            _errorMessage.value = "Please fill all required fields, including Street, City, Governate, Location URL, and upload at least one image."
             return
         }
 
         _isLoading.value = true
 
         viewModelScope.launch {
+            val location = "$street, $city, $governate"
             val property = Property(
-                propertyId = "id_${System.currentTimeMillis()}",
-                ownerId = "current_user_id",
                 title = title,
                 description = description,
                 price = price,
                 location = location,
-                type = type,
+                locationUrl = locationUrl,
+                propertyType = propertyType,
+                listingType = listingType,
                 size = size,
-                rooms = rooms,
                 beds = beds,
-                bathrooms = bathrooms,
-                amenities = amenities,
-                images = images
+                bathrooms = bathrooms
             )
 
-            val result = repository.addProperty(property)
+            val result = repository.addProperty(property, imageFiles, internalAmenityIds, externalAmenityIds, accessibilityAmenityIds)
             _isLoading.value = false
             if (result.isSuccess) {
                 _addSuccess.value = true
             } else {
-                _errorMessage.value = "Failed to add property. Please try again."
+                _errorMessage.value = "Failed to add property: ${result.exceptionOrNull()?.message}"
             }
         }
     }

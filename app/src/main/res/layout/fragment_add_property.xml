@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="false"
     android:background="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp">
+        android:padding="20dp"
+        android:paddingBottom="100dp">
 
         <ImageView
             android:id="@+id/btnback"
@@ -20,9 +24,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Title -->
-
-        <!-- Images Upload Section -->
         <TextView
             android:id="@+id/titleLabel"
             android:layout_width="wrap_content"
@@ -34,6 +35,7 @@
             app:layout_constraintStart_toEndOf="@+id/btnback"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Images Upload Section -->
         <TextView
             android:id="@+id/imagesLabel"
             android:layout_width="wrap_content"
@@ -48,8 +50,9 @@
         <HorizontalScrollView
             android:id="@+id/imagesScrollView"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="170dp"
             android:layout_marginTop="8dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imagesLabel">
@@ -57,8 +60,9 @@
             <LinearLayout
                 android:id="@+id/imagesContainer"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="10dp" />
         </HorizontalScrollView>
 
         <com.google.android.material.button.MaterialButton
@@ -91,13 +95,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/addImageButton" />
-        <!-- Type (For Sale/For Rent) -->
+
+        <!-- Property Type -->
         <TextView
             android:id="@+id/typeLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Type"
+            android:text="Property Type"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -108,10 +113,30 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:entries="@array/property_types"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/typeLabel" />
+
+        <!-- Listing Type -->
+        <TextView
+            android:id="@+id/listingTypeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Listing Type"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/typeSpinner" />
+
+        <Spinner
+            android:id="@+id/listingTypeSpinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/listingTypeLabel" />
 
         <!-- Price -->
         <com.google.android.material.textfield.TextInputLayout
@@ -121,7 +146,7 @@
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/typeSpinner">
+            app:layout_constraintTop_toBottomOf="@id/listingTypeSpinner">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/priceInput"
                 android:layout_width="match_parent"
@@ -240,20 +265,20 @@
                 android:minLines="3" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Amenities -->
+        <!-- Internal Amenities -->
         <TextView
-            android:id="@+id/amenitiesLabel"
+            android:id="@+id/internalAmenitiesLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Amenities"
+            android:text="Internal Amenities"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/descriptionInputLayout" />
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/amenitiesChipGroup"
+            android:id="@+id/internalAmenitiesChipGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -261,36 +286,53 @@
             app:singleLine="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/amenitiesLabel">
+            app:layout_constraintTop_toBottomOf="@id/internalAmenitiesLabel" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipSwimmingPool"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Swimming Pool" />
+        <!-- External Amenities -->
+        <TextView
+            android:id="@+id/externalAmenitiesLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="External Amenities"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/internalAmenitiesChipGroup" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipFitnessCenter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Fitness Center" />
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/externalAmenitiesChipGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:chipSpacing="8dp"
+            app:singleLine="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/externalAmenitiesLabel" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipGym"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Gym" />
+        <!-- Accessibility Amenities -->
+        <TextView
+            android:id="@+id/accessibilityAmenitiesLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Accessibility Amenities"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/externalAmenitiesChipGroup" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipRooftopPool"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rooftop Pool" />
-        </com.google.android.material.chip.ChipGroup>
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/accessibilityAmenitiesChipGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:chipSpacing="8dp"
+            app:singleLine="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/accessibilityAmenitiesLabel" />
 
         <!-- Location -->
         <TextView
@@ -302,10 +344,10 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/amenitiesChipGroup" />
+            app:layout_constraintTop_toBottomOf="@id/accessibilityAmenitiesChipGroup" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/locationInputLayout"
+            android:id="@+id/streetInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -313,10 +355,67 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/locationLabel">
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/locationInput"
+                android:id="@+id/streetInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Location (e.g., Cairo, Egypt)" />
+                android:hint="Street" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/cityInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/streetInputLayout">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/cityInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="City" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/governateInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cityInputLayout">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/governateInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Governate" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Location URL -->
+        <TextView
+            android:id="@+id/locationUrlLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Location URL"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/governateInputLayout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/locationUrlInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/locationUrlLabel">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/locationUrlInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Location URL (e.g., Google Maps link)" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.card.MaterialCardView
@@ -332,29 +431,27 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/locationInputLayout"
+            app:layout_constraintTop_toBottomOf="@id/locationUrlInputLayout"
             app:strokeColor="@color/primary_color"
             app:strokeWidth="1dp">
 
-        <!-- Submit Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/submitButton"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:backgroundTint="@color/primary_color"
-            android:text="Add Property"
-            android:textColor="@color/white"
-            android:insetLeft="0dp"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"
-            app:cornerRadius="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/locationInputLayout" />
-
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/submitButton"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:backgroundTint="@color/primary_color"
+                android:text="Add Property"
+                android:textColor="@color/white"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/locationUrlInputLayout" />
         </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+</ScrollView>

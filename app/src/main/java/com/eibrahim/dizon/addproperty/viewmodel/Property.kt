@@ -1,17 +1,14 @@
 package com.eibrahim.dizon.addproperty.viewmodel
 
 data class Property(
-    val propertyId: String,
-    val ownerId: String,
     val title: String,
     val description: String,
     val price: Double,
     val location: String,
-    val type: String, // "For Sale" or "For Rent"
+    val locationUrl: String,
+    val propertyType: String, // e.g., "Apartment", "House"
+    val listingType: String, // e.g., "For Sale", "For Rent"
     val size: Int,
-    val rooms: Int,
     val beds: Int,
-    val bathrooms: Int,
-    val amenities: List<String>,
-    val images: List<String>
+    val bathrooms: Int
 )

@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.eibrahim.dizon.R
 import com.eibrahim.dizon.auth.api.RetrofitClient
@@ -75,6 +76,7 @@ class EditProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Initialize UI components
+        val backButton = view.findViewById<ImageView>(R.id.backButton)
         val firstNameInput = view.findViewById<TextInputEditText>(R.id.FirstNameInput)
         val lastNameInput = view.findViewById<TextInputEditText>(R.id.LastNameInput)
         val emailInput = view.findViewById<TextInputEditText>(R.id.EmailInput)
@@ -85,6 +87,11 @@ class EditProfileFragment : Fragment() {
         val tvName = view.findViewById<TextView>(R.id.tv_name)
         val citySpinner = view.findViewById<Spinner>(R.id.spinnerCity2)
         val imgProfile = view.findViewById<ImageView>(R.id.img_profile)
+
+        // Set up back button click listener
+        backButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
         // Observe ViewModel data
         viewModel.userData.observe(viewLifecycleOwner, Observer { user ->
