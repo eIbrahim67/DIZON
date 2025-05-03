@@ -74,8 +74,8 @@
                 <!-- Profile Image -->
                 <ImageView
                     android:id="@+id/img_profile"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/man"
                     app:layout_constraintTop_toTopOf="parent"
@@ -101,6 +101,9 @@
                     android:layout_height="wrap_content"
                     android:text="@string/user_name"
                     android:textColor="@color/primary_color"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                     app:layout_constraintTop_toBottomOf="@id/img_profile"
                     app:layout_constraintStart_toStartOf="parent"
@@ -150,18 +153,18 @@
 
 
             <TextView
-                android:id="@+id/nameLabel"
+                android:id="@+id/FirstNameLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:layout_marginStart="6dp"
-                android:text="@string/name"
-                android:textColor="#000000"
+                android:text="FirstName"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 />
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/editNamecCardview"
+                android:id="@+id/editFirstNameCardview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -181,7 +184,50 @@
                     app:endIconMode="custom"
                     app:endIconTint="@color/primary_color">
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/nameInput"
+                        android:id="@+id/FirstNameInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:text="@string/ibrahim"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/gray_v3"/>
+                </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/LastNameLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginStart="6dp"
+                android:text="LastName"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/editLastNameCardview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp"
+                android:backgroundTint="@color/white">
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxStrokeWidth="0dp"
+                    app:endIconDrawable="@drawable/ic_edit"
+                    app:endIconMode="custom"
+                    app:endIconTint="@color/primary_color">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/LastNameInput"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@android:color/transparent"
@@ -200,7 +246,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginStart="6dp"
                 android:text="@string/email"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <com.google.android.material.card.MaterialCardView
@@ -209,28 +255,29 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 app:cardCornerRadius="8dp"
-                app:cardElevation="2dp"
-                android:backgroundTint="@color/white">
+                android:clickable="false"
+                android:backgroundTint="@color/gray_v5">
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
+                    android:editable="false"
+                    android:clickable="false"
                     app:boxCornerRadiusBottomEnd="8dp"
                     app:boxCornerRadiusBottomStart="8dp"
                     app:boxCornerRadiusTopEnd="8dp"
                     app:boxCornerRadiusTopStart="8dp"
-                    app:boxStrokeWidth="0dp"
-                    app:endIconDrawable="@drawable/ic_edit"
-                    app:endIconMode="custom"
-                    app:endIconTint="@color/primary_color">
+                    app:boxStrokeWidth="0dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/EmailInput"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
+                        android:background="@color/gray_v5"
                         android:text="@string/email_ex"
-                        android:inputType="textPersonName"
+                        android:inputType="none"
+                        android:editable="false"
+                        android:clickable="false"
                         android:textColor="@color/black"
                         android:textColorHint="@color/gray_v3" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -246,7 +293,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginStart="6dp"
                 android:text="@string/phone"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <com.google.android.material.card.MaterialCardView
@@ -291,7 +338,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginStart="6dp"
                 android:text="@string/city"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <com.google.android.material.card.MaterialCardView
