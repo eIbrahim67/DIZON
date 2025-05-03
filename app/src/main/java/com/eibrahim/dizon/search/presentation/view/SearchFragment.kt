@@ -1,35 +1,30 @@
 package com.eibrahim.dizon.search.presentation.view
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.eibrahim.dizon.R
-import com.eibrahim.dizon.home.view.adapters.AdapterRVProperties
-import com.eibrahim.dizon.home.view.adapters.AdapterRVProperties80
 import com.eibrahim.dizon.search.presentation.viewModel.SearchViewModel
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class SearchFragment : Fragment() {
 
-    private lateinit var searchText: EditText
+    private lateinit var searchType: EditText
+    private lateinit var searchCity: EditText
     private lateinit var searchBtn: Button
     private lateinit var recyclerviewSearch: RecyclerView
     private lateinit var filter_layout: ImageView
 
     private val viewModel: SearchViewModel by viewModels()
-
-    private val adapterRVProperties = AdapterRVProperties {
-        Toast.makeText(requireContext(), "clicked", Toast.LENGTH_SHORT).show()
-    }
+    private val adapterRVProperties = AdapterRVSearch()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,46 +40,75 @@ class SearchFragment : Fragment() {
         updateUi()
         listenerUi()
         initObservers()
-
     }
 
     private fun initUi(view: View) {
-        searchText = view.findViewById(R.id.search_text)
+        searchType = view.findViewById(R.id.search_type_text)
+        searchCity = view.findViewById(R.id.search_city_text)
         filter_layout = view.findViewById(R.id.filter_layout)
         searchBtn = view.findViewById(R.id.search_btn)
         recyclerviewSearch = view.findViewById(R.id.recyclerviewSearch)
         recyclerviewSearch.adapter = adapterRVProperties
-
-
-
-
     }
 
     private fun initObservers() {
+        viewModel.properties.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                Log.d("SearchFragment", "Properties: ${response.data}")
+                adapterRVProperties.submitList(response.data.values)
+            }
+        }
 
+        viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
+            recyclerviewSearch.visibility = if (isLoading) View.GONE else View.VISIBLE
+            // Optionally show a ProgressBar here
+        }
+
+        viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
+            if (errorMessage.isNotEmpty()) {
+                // Optionally show error message in UI
+                Log.e("SearchFragment", "Error: $errorMessage")
+            }
+        }
     }
 
     private fun listenerUi() {
-
-        searchText.addTextChangedListener {
+        searchType.addTextChangedListener {
             searchBtn.visibility = View.VISIBLE
+            viewModel.updateFilterParams(propertyType = it.toString().takeIf { it.isNotBlank() })
+            viewModel.loadAllProperties()
+        }
+
+        searchCity.addTextChangedListener {
+            searchBtn.visibility = View.VISIBLE
+            viewModel.updateFilterParams(city = it.toString().takeIf { it.isNotBlank() })
+            viewModel.loadAllProperties()
         }
 
         searchBtn.setOnClickListener {
             searchBtn.visibility = View.GONE
+            viewModel.loadAllProperties()
         }
 
         filter_layout.setOnClickListener {
-            val btmSh = BottomSheetDialogFragment(R.layout.bottomsheet_filter)
+            val btmSh = FilterBottomSheetFragment()
+            btmSh.setOnApplyFiltersListener { filterParams ->
+                viewModel.updateFilterParams(
+                    propertyType = filterParams.propertyType,
+                    city = filterParams.city,
+                    governate = filterParams.governate,
+                    bedrooms = filterParams.bedrooms,
+                    bathrooms = filterParams.bathrooms,
+                    maxPrice = filterParams.maxPrice,
+                    minPrice = filterParams.minPrice
+                )
+                viewModel.loadAllProperties()
+            }
             btmSh.show(requireActivity().supportFragmentManager, "FilterBottomSheet")
-
         }
-
     }
 
     private fun updateUi() {
         searchBtn.visibility = View.GONE
-        adapterRVProperties.submitList(viewModel.getList())
     }
-
 }

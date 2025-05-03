@@ -15,22 +15,23 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:background="@drawable/bc_right_half_circle"
+        android:background="@drawable/bc_solid_circle"
         android:padding="10dp"
         android:src="@drawable/icon_filter_v1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/search_layout"
+
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/purple" />
 
     <LinearLayout
-        android:id="@+id/search_layout"
+        android:id="@+id/search_type_layout"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/bc_left_half_circle"
-        app:layout_constraintEnd_toStartOf="@id/filter_layout"
+        android:background="@drawable/bc_solid_circle"
+        app:layout_constraintEnd_toStartOf="@+id/search_city_layout"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -44,15 +45,48 @@
             app:tint="@color/black" />
 
         <EditText
-            android:id="@+id/search_text"
+            android:id="@+id/search_type_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
-            android:hint="@string/search" />
+            android:hint="Type" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/search_city_layout"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/bc_solid_circle"
+        app:layout_constraintEnd_toStartOf="@+id/filter_layout"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/search_type_layout"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/icon_selector_search"
+            app:tint="@color/black" />
+
+        <EditText
+            android:id="@+id/search_city_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@android:color/transparent"
+            android:hint="City" />
+
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/search_btn"
@@ -62,8 +96,8 @@
         android:background="@drawable/bc_corners_50"
         android:text="Search"
         android:textSize="16sp"
-        app:backgroundTint="@color/blue"
         android:visibility="gone"
+        app:backgroundTint="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/filter_layout" />
