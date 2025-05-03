@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".details.DetailsFragment">
+    tools:context=".details.view.DetailsFragment">
+
+    <!-- ProgressBar for loading state -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,12 +41,11 @@
                 app:cardCornerRadius="0dp"
                 app:cardElevation="4dp">
 
-                <ImageView
+                <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/viewPager"
                     android:layout_width="match_parent"
                     android:layout_height="240dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/home" />
+                    android:scaleType="centerCrop" />
 
                 <ImageView
                     android:id="@+id/itemAddToWishlist"
@@ -76,13 +88,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="false"
-                    android:text="@string/for_sale"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:chipBackgroundColor="@color/edit_text_color"
                     app:chipStrokeColor="@color/primary_color"
-                    app:chipStrokeWidth="1dp"
-                    tools:visibility="visible" />
+                    app:chipStrokeWidth="1dp" />
+
             </com.google.android.material.chip.ChipGroup>
 
             <TextView
@@ -92,11 +103,9 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="4dp"
-                android:text="$1,000,000"
                 android:textColor="@color/primary_color"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                tools:text="1,200,000 EGP" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvTitle"
@@ -105,7 +114,6 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="16dp"
-                android:text="Modern City Apartment"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -119,53 +127,53 @@
                 android:rowCount="2">
 
                 <TextView
+                    android:id="@+id/tvType"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
                     android:drawableStart="@drawable/ic_type"
                     android:drawablePadding="8dp"
-                    android:text="@string/type_apartment"
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/tvSize"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
                     android:drawableStart="@drawable/ic_size"
                     android:drawablePadding="8dp"
-                    android:text="@string/size_apartment"
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/tvRooms"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
                     android:drawableStart="@drawable/ic_room"
                     android:drawablePadding="8dp"
-                    android:text="@string/room_number"
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/tvBeds"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
                     android:drawableStart="@drawable/icon_bed"
                     android:drawablePadding="8dp"
-                    android:text="@string/bed_number"
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/tvBaths"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
                     android:drawableStart="@drawable/ic_bath"
                     android:drawablePadding="8dp"
-                    android:text="@string/bath_number"
                     android:textSize="16sp" />
 
             </GridLayout>
@@ -189,7 +197,6 @@
                 android:layout_marginBottom="8dp"
                 android:ellipsize="end"
                 android:lineSpacingMultiplier="1.2"
-                android:text="This apartment features a spacious living area, modern kitchen, and stunning city views."
                 android:textSize="18sp" />
 
             <TextView
@@ -226,36 +233,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:chipSpacing="8dp"
-                    app:singleLine="true">
+                    app:singleLine="true" />
 
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
-                        android:clickable="false"
-                        android:text="Central Air Conditioning" />
-
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
-                        android:clickable="false"
-                        android:text="Heating" />
-
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
-                        android:clickable="false"
-                        android:text="In-Unit Laundry" />
-
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
-                        android:clickable="false"
-                        android:text="Walk-in Closet" />
-                </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
 
             <TextView
@@ -281,64 +260,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:chipSpacing="8dp"
-                    app:singleLine="true">
+                    app:singleLine="true" />
 
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
-                        android:clickable="false"
-                        android:text="Swimming Pool" />
-
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
-                        android:clickable="false"
-                        android:text="Fitness Center" />
-
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
-                        android:clickable="false"
-                        android:text="Gym" />
-
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
-                        android:clickable="false"
-                        android:text="Rooftop Pool" />
-
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
-                        android:clickable="false"
-                        android:text="Balcony" />
-
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
-                        android:clickable="false"
-                        android:text="Garden" />
-
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
-                        android:clickable="false"
-                        android:text="Parking" />
-
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
-                        android:clickable="false"
-                        android:text="Security" />
-                </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
 
             <TextView
@@ -364,29 +287,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:chipSpacing="8dp"
-                    app:singleLine="true">
+                    app:singleLine="true" />
 
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
-                        android:clickable="false"
-                        android:text="Wheelchair Accessible" />
-
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
-                        android:clickable="false"
-                        android:text="Elevator" />
-
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
-                        android:clickable="false"
-                        android:text="Ramp Access" />
-                </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
 
             <androidx.cardview.widget.CardView
@@ -479,7 +381,6 @@
                                 android:id="@+id/agent_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Ibrahim Mohamed"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -487,7 +388,6 @@
                                 android:id="@+id/agent_contact"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="+20 01102251486"
                                 android:textColor="@color/blue"
                                 android:textSize="14sp" />
                         </LinearLayout>
@@ -504,10 +404,10 @@
         android:background="@color/white"
         android:gravity="center"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabCall"
@@ -521,8 +421,7 @@
             app:fabSize="normal"
             app:maxImageSize="24dp"
             app:tint="@color/white"
-            app:elevation="2dp"
-            />
+            app:elevation="2dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/message"
@@ -538,8 +437,7 @@
             app:fabSize="normal"
             app:maxImageSize="24dp"
             app:tint="@color/white"
-            app:elevation="2dp"
-            />
+            app:elevation="2dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/whatsapp"
@@ -553,7 +451,7 @@
             app:fabSize="normal"
             app:maxImageSize="64dp"
             app:tint="@null"
-            app:elevation="2dp"
-            />
+            app:elevation="2dp" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
