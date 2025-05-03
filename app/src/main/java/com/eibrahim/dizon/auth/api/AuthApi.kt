@@ -14,11 +14,10 @@ import com.eibrahim.dizon.auth.otp.viewModel.ResendOtpRequest
 import com.eibrahim.dizon.auth.otp.viewModel.ResendOtpResponse
 import com.eibrahim.dizon.auth.resetpassword.viewmodel.ResetPasswordRequest
 import com.eibrahim.dizon.auth.resetpassword.viewmodel.ResetPasswordResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface AuthApi {
     @POST("/api/Authentication/signup")
@@ -42,13 +41,45 @@ interface AuthApi {
     @POST("/api/Authentication/login")
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
 
-    // Google Sign-In endpoint with idToken
     @POST("/api/Authentication/login-google")
     suspend fun loginGoogleWithToken(@Body request: GoogleLoginRequest): Response<LoginResponse>
 
     @GET("/api/Authentication/google-response")
     suspend fun googleResponse(@Query("returnUrl") returnUrl: String = "/"): Response<LoginResponse>
+
+    // Added GET endpoint to fetch user profile data
+    @GET("/api/Authentication/GetUser")
+    suspend fun getUser(): Response<UserResponse> // Uses a new UserResponse data class
+
+    // Added PUT endpoint to update user profile with multipart form data
+    @Multipart
+    @PUT("/api/Authentication/Update")
+    suspend fun updateUser(
+        @Part("FirstName") firstName: RequestBody,
+        @Part("LastName") lastName: RequestBody,
+        @Part("Email") email: RequestBody,
+        @Part("PhoneNumber") phoneNumber: RequestBody,
+        @Part("City") city: RequestBody,
+        @Part("ImageUrl") imageUrl: RequestBody?, // Optional field, can be null
+        @Part image: MultipartBody.Part? // Optional image upload
+    ): Response<UpdateResponse> // Uses a new UpdateResponse data class
 }
+
+// New data class for GET /api/Authentication/GetUser response
+data class UserResponse(
+    val firstName: String?,
+    val lastName: String?,
+    val email: String?,
+    val phoneNumber: String?,
+    val city: String?,
+    val imageUrl: String?
+)
+
+// New data class for PUT /api/Authentication/Update response
+data class UpdateResponse(
+    val status: String?,
+    val message: String?
+)
 
 data class GoogleLoginRequest(
     val idToken: String
