@@ -29,8 +29,28 @@ class AuthActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        // Initialize NavController
         navController = supportFragmentManager.findFragmentById(R.id.nav_auth)?.findNavController()
-        Log.d("AuthActivity", "NavController initialized: ${navController != null}")
+        if (navController == null) {
+            Log.e("AuthActivity", "NavController failed to initialize")
+            return
+        }
+        Log.d("AuthActivity", "NavController initialized successfully")
+
+        // Get start destination from Intent or default to loginFragment
+        val startDestination = intent.getIntExtra("start_destination", R.id.loginFragment)
+        Log.d("AuthActivity", "Received start destination: $startDestination")
+
+        // Set navigation graph with start destination
+        try {
+            navController?.setGraph(R.navigation.nav_auth, Bundle().apply {
+                putInt("start_destination_id", startDestination)
+            })
+            Log.d("AuthActivity", "Navigation graph set with start destination: $startDestination")
+        } catch (e: Exception) {
+            Log.e("AuthActivity", "Failed to set navigation graph: ${e.message}", e)
+        }
 
         // Configure Google Sign-In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

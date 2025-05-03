@@ -1,5 +1,6 @@
 package com.eibrahim.dizon.auth.login.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -18,6 +19,7 @@ import com.eibrahim.dizon.auth.AuthActivity
 import com.eibrahim.dizon.auth.AuthPreferences
 import com.eibrahim.dizon.auth.login.viewModel.LoginState
 import com.eibrahim.dizon.auth.login.viewModel.LoginViewModel
+import com.eibrahim.dizon.main.view.MainActivity
 import com.google.android.material.textfield.TextInputLayout
 
 class LoginFragment : Fragment() {
@@ -34,7 +36,6 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("LoginFragment", "onViewCreated called")
 
         // Initialize AuthPreferences
         authPreferences = AuthPreferences(requireContext())
@@ -104,9 +105,12 @@ class LoginFragment : Fragment() {
                     val savedToken = authPreferences.getToken()
                     Log.d("LoginFragment", "Saved token: $savedToken")
                     Toast.makeText(requireContext(), "Login successful", Toast.LENGTH_SHORT).show()
+                    // Start MainActivity and close AuthActivity
                     view.postDelayed({
+                        Log.d("LoginFragment", "Starting MainActivity after successful login")
+                        startActivity(Intent(requireContext(), MainActivity::class.java))
                         requireActivity().finish()
-                    }, 1000)
+                    }, 100)
                 }
                 is LoginState.Error -> {
                     btnLogin.isEnabled = true

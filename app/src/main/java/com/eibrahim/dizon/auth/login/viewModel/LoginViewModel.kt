@@ -72,7 +72,6 @@ class LoginViewModel : ViewModel() {
                 Log.d("LoginViewModel", "Google login response code: ${response.code()}")
                 if (response.isSuccessful) {
                     val body = response.body()
-                    Log.d("LoginViewModel", "Google login response body: $body")
                     if (body != null && (body.status?.equals("success", ignoreCase = true) == true || body.token != null)) {
                         body.token?.let { token ->
                             authPreferences.saveToken(token)

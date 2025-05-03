@@ -16,6 +16,10 @@
         <action
             android:id="@+id/action_action_home_to_detailsFragment"
             app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/action_action_home_to_action_wishlist"
+            app:destination="@id/action_wishlist" />
+
     </fragment>
 
     <fragment
@@ -27,8 +31,8 @@
     <fragment
         android:id="@+id/action_profile"
         android:name="com.eibrahim.dizon.profile.view.ProfileFragment"
-        android:label="ChatbotFragment"
-        tools:layout="@layout/fragment_chatbot"/>
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile"/>
 
     <fragment
         android:id="@+id/action_search"
@@ -37,8 +41,18 @@
         tools:layout="@layout/fragment_search"/>
 
     <fragment
+        android:id="@+id/action_wishlist"
+        android:name="com.eibrahim.dizon.favorite.view.FavoriteFragment"
+        android:label="FavoriteFragment"
+        tools:layout="@layout/fragment_favourit">
+        <action
+            android:id="@+id/action_action_wishlist_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/detailsFragment"
-        android:name="com.eibrahim.dizon.details.DetailsFragment"
+        android:name="com.eibrahim.dizon.details.view.DetailsFragment"
         android:label="DetailsFragment" />
     <fragment
         android:id="@+id/addPropertyFragment"

@@ -1,11 +1,11 @@
 package com.eibrahim.dizon.auth.splash.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.eibrahim.dizon.R
 
@@ -26,8 +26,11 @@ class SplashFragment : Fragment() {
         // Set up click listener for imageButton2
         val imageButton = view.findViewById<ImageButton>(R.id.imageButton2)
         imageButton.setOnClickListener {
-            // Navigate to LoginFragment
-            findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
+            navigateToLogin()
         }
+    }
+
+    private fun navigateToLogin() {
+        findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
     }
 }

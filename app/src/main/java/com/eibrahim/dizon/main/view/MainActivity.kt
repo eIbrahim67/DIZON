@@ -2,6 +2,7 @@ package com.eibrahim.dizon.main.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -10,8 +11,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.eibrahim.dizon.auth.AuthActivity
 import com.eibrahim.dizon.R
+import com.eibrahim.dizon.auth.AuthActivity
+import com.eibrahim.dizon.auth.AuthPreferences
+import com.eibrahim.dizon.auth.api.RetrofitClient
 import com.eibrahim.dizon.main.viewModel.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -28,10 +31,25 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //enableEdgeToEdge()
 
-        if (!viewModel.isUserLogin())
-            startActivity(Intent(this, AuthActivity::class.java))
+        // Check if user is logged in
+        val authPreferences = AuthPreferences(this)
+        val token = authPreferences.getToken()
+        if (token.isNullOrEmpty()) {
+            Log.d("MainActivity", "User is not logged in, navigating to AuthActivity")
+            val isFirstLaunch = authPreferences.isFirstLaunch()
+            val startDestination = if (isFirstLaunch) R.id.splashFragment else R.id.loginFragment
+            val intent = Intent(this, AuthActivity::class.java).apply {
+                putExtra("start_destination", startDestination)
+            }
+            startActivity(intent)
+            finish()
+            return
+        }
+
+        // Proceed with loading UI only if user is logged in
+        RetrofitClient.initAuthPreferences(this)
+        Log.d("MainActivity", "RetrofitClient initialized")
 
         setContentView(R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -40,21 +58,24 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        // Observe navigation events
         viewModel.navigateToFragment.observe(this) { fragmentId ->
             fragmentId?.let {
-                navController?.navigate(fragmentId, null, navOptions)
+                Log.d("MainActivity", "Navigating to fragment ID: $it")
+                navController?.navigate(it, null, navOptions)
             }
         }
 
+        // Setup bottom navigation
         bottomNavigationView = findViewById(R.id.bottom_navigation)
-
-        navController =
-            supportFragmentManager.findFragmentById(R.id.main_nav_host_fragment)
-                ?.findNavController()
+        navController = supportFragmentManager.findFragmentById(R.id.main_nav_host_fragment)
+            ?.findNavController()
 
         navController?.let {
             bottomNavigationView.setupWithNavController(it)
+            Log.d("MainActivity", "BottomNavigationView setup with NavController")
+        } ?: run {
+            Log.e("MainActivity", "NavController is null")
         }
-
     }
 }

@@ -18,4 +18,12 @@ class AuthPreferences(context: Context) {
     fun clearToken() {
         preferences.edit().remove("auth_token").apply()
     }
+
+    fun isFirstLaunch(): Boolean {
+        val isFirst = preferences.getBoolean("is_first_launch", true)
+        if (isFirst) {
+            preferences.edit().putBoolean("is_first_launch", false).apply()
+        }
+        return isFirst
+    }
 }

@@ -15,17 +15,15 @@ object RetrofitClient {
 
     private var authPreferences: AuthPreferences? = null
 
-    // Initialize AuthPreferences (call this in your Application class or Activity)
     fun initAuthPreferences(context: Context) {
         authPreferences = AuthPreferences(context)
-        Log.d("RetrofitClient", "AuthPreferences initialized with context")
     }
 
     private val okHttpClient: OkHttpClient by lazy {
         val logging = HttpLoggingInterceptor { message ->
-            Log.d("OkHttp", message) // Ensure logs are tagged with "OkHttp"
+            Log.d("OkHttp", message)
         }.apply {
-            setLevel(HttpLoggingInterceptor.Level.BODY) // Log full request and response body
+            setLevel(HttpLoggingInterceptor.Level.BODY)
         }
         OkHttpClient.Builder()
             .addInterceptor(logging)
@@ -33,13 +31,11 @@ object RetrofitClient {
                 val original = chain.request()
                 val requestBuilder = original.newBuilder()
                 authPreferences?.getToken()?.let { token ->
-                    Log.d("RetrofitClient", "Adding Authorization header with token: $token")
                     requestBuilder.header("Authorization", "Bearer $token")
-                } ?: run {
-                    Log.d("RetrofitClient", "No token available for request")
-                }
+                } ?: Log.w("RetrofitClient", "No token available, proceeding without Authorization header")
                 val request = requestBuilder.build()
-                chain.proceed(request)
+                val response = chain.proceed(request)
+                response
             }
             .build()
     }
