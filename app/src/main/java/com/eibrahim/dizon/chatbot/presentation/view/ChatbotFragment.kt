@@ -1,25 +1,26 @@
 package com.eibrahim.dizon.chatbot.presentation.view
 
-import androidx.fragment.app.viewModels
-import com.eibrahim.dizon.R
-import com.eibrahim.dizon.chatbot.presentation.viewModel.ChatbotViewModel
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.eibrahim.dizon.R
 import com.eibrahim.dizon.chatbot.data.network.ChatLlamaStreamProcessor
 import com.eibrahim.dizon.chatbot.data.network.HttpClient
 import com.eibrahim.dizon.chatbot.domain.model.ChatMessage
 import com.eibrahim.dizon.chatbot.domain.repositoryImpl.ChatRepositoryImpl
 import com.eibrahim.dizon.chatbot.domain.usecase.GetChatResponseUseCase
 import com.eibrahim.dizon.chatbot.presentation.view.adapter.ChatAdapter
+import com.eibrahim.dizon.chatbot.presentation.viewModel.ChatbotViewModel
 import com.eibrahim.dizon.chatbot.presentation.viewModel.ChatbotViewModelFactory
 import com.eibrahim.dizon.core.response.Response
 import com.eibrahim.dizon.core.utils.UtilsFunctions
@@ -63,23 +64,6 @@ class ChatbotFragment : Fragment() {
         uploadButton = view.findViewById(R.id.uploadButton)
         bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
 
-
-        conversationHistory.add(
-            ChatMessage(
-                content = "Hi",
-                role = "user",
-                isFromUser = true,
-                images = null
-            ),
-        )
-        conversationHistory.add(
-            ChatMessage(
-                content = "Hello, How can I assist you?",
-                role = "bot",
-                isFromUser = false,
-                images = null
-            ),
-        )
         // Setup RecyclerView adapter.
         chatAdapter = ChatAdapter(conversationHistory)
 
@@ -131,7 +115,6 @@ class ChatbotFragment : Fragment() {
             }
         })
 
-        // Observe chat responses from the ViewModel.
         viewModel.chatMessages.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Response.Loading -> {
@@ -139,17 +122,15 @@ class ChatbotFragment : Fragment() {
                 }
 
                 is Response.Success -> {
-                    var dummyImages: List<String>? = null
-                    // Add the bot's response to the conversation history.
-                    // Check for additional properties if needed.
-                    if (response.data.search_properties.parameters.displaySearchResults) {
-                        dummyImages = listOf(
-                            "https://www.propertyfinder.ae/property/aabc8ff45bd7d606b615a23f3adf928e/416/272/MODE/35a74d/13614520-ffa59o.webp?ctr=ae",
-                            "https://www.propertyfinder.ae/property/d5596f824e7b2fe3d8e4820fb91ec05e/416/272/MODE/0df2db/13635501-e8d76o.webp?ctr=ae",
-                            "https://www.propertyfinder.ae/property/12b02a5be8bc4c6fe9d687201869f6f4/416/272/MODE/4d9f5f/13634529-d796co.webp?ctr=ae",
-                            "https://www.propertyfinder.ae/property/45ebd0c4db2ee14ec4cb803368cad4be/416/272/MODE/0f8f4a/13624487-f1e5fo.webp?ctr=ae"
-                        )
+                    response.data.search_properties.parameters.let { data ->
+                        viewModel.updateFilterParams(propertyType = data.property_type)
+                        viewModel.updateFilterParams(city = data.location.city)
+                        viewModel.loadAllProperties()
                     }
+
+                    // Initialize dummyImages as a MutableList
+                    val dummyImages = mutableListOf<String>()
+                    // Add ChatMessage to conversationHistory only after images are collected
                     conversationHistory.add(
                         ChatMessage(
                             content = response.data.message, // Optionally leave empty or add a caption.
@@ -157,6 +138,24 @@ class ChatbotFragment : Fragment() {
                         )
                     )
 
+                    viewModel.properties.observe(viewLifecycleOwner) { responseProp ->
+                        if (responseProp != null) {
+                            Log.d("SearchFragment", "Properties: ${responseProp.data}")
+                            // Clear previous images to avoid duplicates
+                            dummyImages.clear()
+                            // Collect images
+                            for (x in responseProp.data.values) {
+                                if (x.propertyImages.values.isNotEmpty()) {
+                                    dummyImages.add(x.propertyImages.values[0]) // Add first image
+                                }
+                                Log.d("image", x.propertyImages.values.toString())
+                            }
+
+                            chatAdapter.updateLastBotMessageImages(dummyImages)
+
+                        }
+                    }
+                    // Notify adapter on the main thread to avoid inconsistencies
                     chatAdapter.notifyItemInserted(conversationHistory.size - 1)
                     chatRecyclerView.scrollToPosition(conversationHistory.size - 1)
                 }

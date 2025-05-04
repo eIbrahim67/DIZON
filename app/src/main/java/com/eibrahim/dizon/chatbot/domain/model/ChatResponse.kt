@@ -21,7 +21,6 @@ data class SearchParameters(
     val transaction: String,
     val property_status: PropertyStatus,
     val amenities: Amenities,
-    val displaySearchResults: Boolean
 )
 
 data class Location(

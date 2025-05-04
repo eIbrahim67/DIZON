@@ -9,12 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.eibrahim.dizon.R
 import com.eibrahim.dizon.chatbot.domain.model.ChatMessage
-import com.eibrahim.dizon.home.model.PropertyListing
 import com.google.android.material.card.MaterialCardView
 import io.noties.markwon.Markwon
 
-class ChatAdapter(private val messages: List<ChatMessage>) :
-    RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
+class ChatAdapter(
+    // Changed to MutableList to allow updates
+    private val messages: MutableList<ChatMessage>
+) : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
 
     class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val messageTextView: TextView = itemView.findViewById(R.id.messageTextView)
@@ -26,17 +27,13 @@ class ChatAdapter(private val messages: List<ChatMessage>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
-        val layout = if (viewType == 0) {
-            R.layout.item_chat_user // User message layout
-        } else {
-            R.layout.item_chat_bot  // Bot message layout
-        }
+        val layout = if (viewType == 0) R.layout.item_chat_user else R.layout.item_chat_bot
         val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
         return ChatViewHolder(view)
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (messages[position].isFromUser) 0 else 1 // 0 for user, 1 for bot
+        return if (messages[position].isFromUser) 0 else 1
     }
 
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
@@ -45,22 +42,32 @@ class ChatAdapter(private val messages: List<ChatMessage>) :
 
         markwon.setMarkdown(holder.messageTextView, message.content)
 
-        if (message.images!= null){
+        if (!message.images.isNullOrEmpty()) {
             holder.finalResultCard.visibility = View.VISIBLE
-            Glide.with(holder.imageItem1.context)
-                .load(message.images[0])
-                .into(holder.imageItem1)
-            Glide.with(holder.imageItem2.context)
-                .load(message.images[1])
-                .into(holder.imageItem2)
-            Glide.with(holder.imageItem3.context)
-                .load(message.images[2])
-                .into(holder.imageItem3)
-            Glide.with(holder.imageItem4.context)
-                .load(message.images[3])
-                .into(holder.imageItem4)
+            // Safely load up to 4 images
+            message.images!!.getOrNull(0)?.let { Glide.with(holder.imageItem1).load(it).into(holder.imageItem1) }
+            message.images!!.getOrNull(1)?.let { Glide.with(holder.imageItem2).load(it).into(holder.imageItem2) }
+            message.images!!.getOrNull(2)?.let { Glide.with(holder.imageItem3).load(it).into(holder.imageItem3) }
+            message.images!!.getOrNull(3)?.let { Glide.with(holder.imageItem4).load(it).into(holder.imageItem4) }
+        } else {
+            holder.finalResultCard.visibility = View.GONE
         }
     }
 
     override fun getItemCount(): Int = messages.size
+
+    /**
+     * Update the images list of the last bot message and refresh that item.
+     * @param newImages List of image URLs to display (up to 4).
+     */
+    fun updateLastBotMessageImages(newImages: List<String>) {
+        // Find last index of a bot message
+        val lastBotIndex = messages.indexOfLast { !it.isFromUser }
+        if (lastBotIndex != -1) {
+            // Update the model
+            messages[lastBotIndex].images = newImages
+            // Notify adapter to rebind this item
+            notifyItemChanged(lastBotIndex)
+        }
+    }
 }
