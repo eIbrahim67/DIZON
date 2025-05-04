@@ -35,8 +35,8 @@ class HomeFragment : Fragment() {
     private val utils = UtilsFunctions
     private var navController: NavController? = null
 
-    private val adapterRVProperties = AdapterRVProperties()
-    private val adapterRVProperties80 = AdapterRVProperties80()
+    private val adapterRVProperties = AdapterRVProperties(goToDetails =  { id -> goToDetails(id) })
+    private val adapterRVProperties80 = AdapterRVProperties80(goToDetails =  { id -> goToDetails(id) })
 
     private val adapterRVOffices = AdapterRVOffices { categoryId ->
         Log.d("HomeFragment", "Category clicked with id: $categoryId")
@@ -124,6 +124,14 @@ class HomeFragment : Fragment() {
 
     private fun initObservers() {
 
+    }
+
+    private fun goToDetails(id: Int) {
+        val bundle = Bundle().apply {
+            putInt("id", id)
+        }
+        Log.d("Ibra Details", id.toString())
+        findNavController().navigate(R.id.action_homeFragment_to_detailsFragment, bundle)
     }
 
 

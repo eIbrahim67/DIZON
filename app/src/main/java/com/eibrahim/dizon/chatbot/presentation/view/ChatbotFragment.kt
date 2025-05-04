@@ -10,7 +10,9 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eibrahim.dizon.R
@@ -24,6 +26,8 @@ import com.eibrahim.dizon.chatbot.presentation.viewModel.ChatbotViewModel
 import com.eibrahim.dizon.chatbot.presentation.viewModel.ChatbotViewModelFactory
 import com.eibrahim.dizon.core.response.Response
 import com.eibrahim.dizon.core.utils.UtilsFunctions
+import com.eibrahim.dizon.main.viewModel.MainViewModel
+import com.eibrahim.dizon.search.data.Property
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.card.MaterialCardView
 
@@ -37,6 +41,8 @@ class ChatbotFragment : Fragment() {
         ChatbotViewModelFactory(getChatResponseUseCase)
     }
 
+    private val sharedViewModel: MainViewModel by activityViewModels()
+
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var chatRecyclerView: RecyclerView
     private lateinit var inputEditText: EditText
@@ -46,11 +52,11 @@ class ChatbotFragment : Fragment() {
 
     private val conversationHistory = mutableListOf<ChatMessage>()
     private lateinit var chatAdapter: ChatAdapter
+    private var propertyList: List<Property> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_chatbot, container, false)
     }
 
@@ -64,19 +70,19 @@ class ChatbotFragment : Fragment() {
         uploadButton = view.findViewById(R.id.uploadButton)
         bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
 
-        // Setup RecyclerView adapter.
-        chatAdapter = ChatAdapter(conversationHistory)
+        // Setup RecyclerView adapter with properties
+        chatAdapter =
+            ChatAdapter(conversationHistory, propertyList, goToAllResult = { goToAllResult() })
 
         chatRecyclerView.apply {
             adapter = chatAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
 
-
-        // Hide bottom navigation while chatting.
+        // Hide bottom navigation while chatting
         bottomNavigationView.visibility = View.GONE
 
-        // Send button click listener.
+        // Send button click listener
         sendButtonCard.setOnClickListener {
             val userMessage = inputEditText.text.toString().trim()
             if (userMessage.isNotEmpty()) {
@@ -92,7 +98,7 @@ class ChatbotFragment : Fragment() {
             }
         }
 
-        // Text change listener to toggle visibility of buttons.
+        // Text change listener to toggle visibility of buttons
         inputEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if (!s.isNullOrEmpty()) {
@@ -114,48 +120,50 @@ class ChatbotFragment : Fragment() {
             ) { /* no-op */
             }
         })
-
         viewModel.chatMessages.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Response.Loading -> {
-                    // Optionally show a loading indicator here.
                 }
 
                 is Response.Success -> {
                     response.data.search_properties.parameters.let { data ->
-                        viewModel.updateFilterParams(propertyType = data.property_type)
-                        viewModel.updateFilterParams(city = data.location.city)
-                        viewModel.loadAllProperties()
+                        sharedViewModel.updateFilterParams(
+                            city = data.location.city
+                        )
+                        sharedViewModel.updateFilterParams(
+                            propertyType = data.property_type
+                        )
+                        sharedViewModel.updateFilterParams(
+                            bathrooms = data.bathrooms.max
+                        )
+                        sharedViewModel.loadAllProperties()
                     }
-
-                    // Initialize dummyImages as a MutableList
                     val dummyImages = mutableListOf<String>()
-                    // Add ChatMessage to conversationHistory only after images are collected
                     conversationHistory.add(
                         ChatMessage(
-                            content = response.data.message, // Optionally leave empty or add a caption.
+                            content = response.data.message,
                             images = dummyImages
                         )
                     )
-
-                    viewModel.properties.observe(viewLifecycleOwner) { responseProp ->
+                    sharedViewModel.properties.observe(viewLifecycleOwner) { responseProp ->
                         if (responseProp != null) {
                             Log.d("SearchFragment", "Properties: ${responseProp.data}")
-                            // Clear previous images to avoid duplicates
                             dummyImages.clear()
-                            // Collect images
+                            propertyList = responseProp.data.values.toList()
+                            chatAdapter = ChatAdapter(
+                                conversationHistory,
+                                propertyList,
+                                goToAllResult = { goToAllResult() })
+                            chatRecyclerView.adapter = chatAdapter
                             for (x in responseProp.data.values) {
                                 if (x.propertyImages.values.isNotEmpty()) {
-                                    dummyImages.add(x.propertyImages.values[0]) // Add first image
+                                    dummyImages.add(x.propertyImages.values[0])
                                 }
                                 Log.d("image", x.propertyImages.values.toString())
                             }
-
                             chatAdapter.updateLastBotMessageImages(dummyImages)
-
                         }
                     }
-                    // Notify adapter on the main thread to avoid inconsistencies
                     chatAdapter.notifyItemInserted(conversationHistory.size - 1)
                     chatRecyclerView.scrollToPosition(conversationHistory.size - 1)
                 }
@@ -169,9 +177,10 @@ class ChatbotFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // Restore bottom navigation visibility.
         bottomNavigationView.visibility = View.VISIBLE
-        // Nullify view references if needed to prevent memory leaks.
-        // For example, if using view binding, set binding = null here.
+    }
+
+    private fun goToAllResult() {
+        findNavController().navigate(R.id.action_chatbotFragment_to_propertyResultsFragment)
     }
 }

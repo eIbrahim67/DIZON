@@ -34,6 +34,7 @@ class DetailsFragment : Fragment() {
     private var propertyDetails: PropertyDetails? = null
     private lateinit var authPreferences: AuthPreferences
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,8 +57,10 @@ class DetailsFragment : Fragment() {
         val linearLayout = view.findViewById<LinearLayout>(R.id.linearLayout4)
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
 
+        val propertyId = arguments?.getInt("id") ?: -1 // Provide a default value if needed
+
         // Get propertyId from arguments, default to 5
-        val propertyId = arguments?.getInt("propertyId") ?: 5
+        Log.d("Ibra Details", propertyId.toString())
 
         // Initialize ViewPager2
         val viewPager = view.findViewById<ViewPager2>(R.id.viewPager)

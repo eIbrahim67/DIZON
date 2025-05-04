@@ -11,4 +11,10 @@ interface HomeApi {
         @Query("pageIndex") pageIndex: Int,
         @Query("pageSize") pageSize: Int
     ): Response<RecommendedPropertyResponse>
+
+
+    @GET("/api/Favorites/")
+    suspend fun addPropertyToFav(
+        @Query("propertyId") propertyId: Int
+    )
 }

@@ -9,12 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.eibrahim.dizon.R
 import com.eibrahim.dizon.chatbot.domain.model.ChatMessage
+import com.eibrahim.dizon.search.data.Property
 import com.google.android.material.card.MaterialCardView
 import io.noties.markwon.Markwon
 
 class ChatAdapter(
-    // Changed to MutableList to allow updates
-    private val messages: MutableList<ChatMessage>
+    private val messages: MutableList<ChatMessage>,
+    private val properties: List<Property>? = null, // Add properties parameter
+    private val goToAllResult: () -> Unit
 ) : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
 
     class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -24,6 +26,7 @@ class ChatAdapter(
         val imageItem2: ImageView = itemView.findViewById(R.id.imageItem2)
         val imageItem3: ImageView = itemView.findViewById(R.id.imageItem3)
         val imageItem4: ImageView = itemView.findViewById(R.id.imageItem4)
+        val seeAllResults: TextView = itemView.findViewById(R.id.seeAllResults)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
@@ -45,10 +48,19 @@ class ChatAdapter(
         if (!message.images.isNullOrEmpty()) {
             holder.finalResultCard.visibility = View.VISIBLE
             // Safely load up to 4 images
-            message.images!!.getOrNull(0)?.let { Glide.with(holder.imageItem1).load(it).into(holder.imageItem1) }
-            message.images!!.getOrNull(1)?.let { Glide.with(holder.imageItem2).load(it).into(holder.imageItem2) }
-            message.images!!.getOrNull(2)?.let { Glide.with(holder.imageItem3).load(it).into(holder.imageItem3) }
-            message.images!!.getOrNull(3)?.let { Glide.with(holder.imageItem4).load(it).into(holder.imageItem4) }
+            message.images!!.getOrNull(0)
+                ?.let { Glide.with(holder.imageItem1).load(it).into(holder.imageItem1) }
+            message.images!!.getOrNull(1)
+                ?.let { Glide.with(holder.imageItem2).load(it).into(holder.imageItem2) }
+            message.images!!.getOrNull(2)
+                ?.let { Glide.with(holder.imageItem3).load(it).into(holder.imageItem3) }
+            message.images!!.getOrNull(3)
+                ?.let { Glide.with(holder.imageItem4).load(it).into(holder.imageItem4) }
+
+            // Handle "See All Results" click
+            holder.seeAllResults.setOnClickListener {
+                goToAllResult()
+            }
         } else {
             holder.finalResultCard.visibility = View.GONE
         }

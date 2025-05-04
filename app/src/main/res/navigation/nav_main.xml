@@ -14,8 +14,12 @@
             android:id="@+id/action_action_home_to_ChatbotFragment"
             app:destination="@id/ChatbotFragment" />
         <action
-            android:id="@+id/action_action_home_to_detailsFragment"
-            app:destination="@id/detailsFragment" />
+            android:id="@+id/action_homeFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment">
+            <argument
+                android:name="id"
+                app:argType="integer" />
+        </action>
         <action
             android:id="@+id/action_action_home_to_action_wishlist"
             app:destination="@id/action_wishlist" />
@@ -25,8 +29,17 @@
     <fragment
         android:id="@+id/ChatbotFragment"
         android:name="com.eibrahim.dizon.chatbot.presentation.view.ChatbotFragment"
-        android:label="ChatbotFragment"
-        tools:layout="@layout/fragment_chatbot"/>
+        tools:layout="@layout/fragment_chatbot">
+        <action
+            android:id="@+id/action_chatbotFragment_to_propertyResultsFragment"
+            app:destination="@id/propertyResultsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/propertyResultsFragment"
+        android:name="com.eibrahim.dizon.propertyResults.PropertyResultsFragment"
+        tools:layout="@layout/fragment_property_results">
+    </fragment>
 
     <fragment
         android:id="@+id/action_profile"
@@ -38,7 +51,17 @@
         android:id="@+id/action_search"
         android:name="com.eibrahim.dizon.search.presentation.view.SearchFragment"
         android:label="SearchFragment"
-        tools:layout="@layout/fragment_search"/>
+        tools:layout="@layout/fragment_search">
+
+        <action
+            android:id="@+id/action_searchFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment">
+            <argument
+                android:name="id"
+                app:argType="integer" />
+        </action>
+
+    </fragment>
 
     <fragment
         android:id="@+id/action_wishlist"

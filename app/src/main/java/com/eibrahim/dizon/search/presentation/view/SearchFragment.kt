@@ -11,9 +11,11 @@ import android.widget.ImageView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.eibrahim.dizon.R
 import com.eibrahim.dizon.search.presentation.viewModel.SearchViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class SearchFragment : Fragment() {
 
@@ -22,9 +24,10 @@ class SearchFragment : Fragment() {
     private lateinit var searchBtn: Button
     private lateinit var recyclerviewSearch: RecyclerView
     private lateinit var filter_layout: ImageView
+    private lateinit var bottomNavigationView: BottomNavigationView
 
     private val viewModel: SearchViewModel by viewModels()
-    private val adapterRVProperties = AdapterRVSearch()
+    private val adapterRVProperties = AdapterRVSearch(goToDetails =  { id -> goToDetails(id) })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +52,10 @@ class SearchFragment : Fragment() {
         searchBtn = view.findViewById(R.id.search_btn)
         recyclerviewSearch = view.findViewById(R.id.recyclerviewSearch)
         recyclerviewSearch.adapter = adapterRVProperties
+
+        bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
+        bottomNavigationView.visibility = View.VISIBLE
+
     }
 
     private fun initObservers() {
@@ -111,4 +118,13 @@ class SearchFragment : Fragment() {
     private fun updateUi() {
         searchBtn.visibility = View.GONE
     }
+
+    private fun goToDetails(id: Int) {
+        val bundle = Bundle().apply {
+            putInt("id", id)
+        }
+        Log.d("Ibra Details", id.toString())
+        findNavController().navigate(R.id.action_searchFragment_to_detailsFragment, bundle)
+    }
+
 }

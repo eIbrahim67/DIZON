@@ -14,7 +14,7 @@ import com.eibrahim.dizon.R
 import com.eibrahim.dizon.home.model.Property
 
 class AdapterRVProperties(
-    private val onItemClick: ((Property) -> Unit)? = null,
+    private val goToDetails: ((id: Int) -> Unit)? = null,
     private val onWishlistClick: ((Property) -> Unit)? = null
 ) : RecyclerView.Adapter<AdapterRVProperties.PropertyViewHolder>() {
 
@@ -62,7 +62,7 @@ class AdapterRVProperties(
 
         // Click listeners
         holder.itemView.setOnClickListener {
-            onItemClick?.invoke(property)
+            goToDetails?.invoke(property.propertyId)
         }
         holder.itemWishlist.setOnClickListener {
             onWishlistClick?.invoke(property)

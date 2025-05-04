@@ -1,4 +1,4 @@
-package com.eibrahim.dizon.home.view.adapters
+package com.eibrahim.dizon.propertyResults
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -11,18 +11,18 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.eibrahim.dizon.R
-import com.eibrahim.dizon.home.model.Property
+import com.eibrahim.dizon.search.data.Property
 
-class AdapterRVProperties80(
+class AdapterRVSearchProperties(
     private val goToDetails: ((id: Int) -> Unit)? = null,
     private val onWishlistClick: ((Property) -> Unit)? = null
-) : RecyclerView.Adapter<AdapterRVProperties80.PropertyViewHolder>() {
+) : RecyclerView.Adapter<AdapterRVSearchProperties.PropertyViewHolder>() {
 
     private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PropertyViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_rv_properties_80, parent, false)
+            .inflate(R.layout.item_rv_properties, parent, false)
         return PropertyViewHolder(view)
     }
 
@@ -88,14 +88,14 @@ class AdapterRVProperties80(
     }
 
     class PropertyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val itemImageProp: ImageView = itemView.findViewById(R.id.itemImageProperties80)
-        val itemWishlist: ImageView = itemView.findViewById(R.id.itemAddToWishlist80)
-        val itemSaleType: TextView = itemView.findViewById(R.id.itemSaleType80)
-        val itemTitleProp: TextView = itemView.findViewById(R.id.itemTitleProperties80)
-        val itemPriceProp: TextView = itemView.findViewById(R.id.itemPriceProperties80)
-        val itemLocationProp: TextView = itemView.findViewById(R.id.itemLocationProperties80)
-        val itemSize: TextView = itemView.findViewById(R.id.textView15)
-        val itemBedrooms: TextView = itemView.findViewById(R.id.textView14)
-        val itemBathrooms: TextView = itemView.findViewById(R.id.textView16)
+        val itemImageProp: ImageView = itemView.findViewById(R.id.itemImageProperties)
+        val itemWishlist: ImageView = itemView.findViewById(R.id.itemAddToWishlist)
+        val itemSaleType: TextView = itemView.findViewById(R.id.itemSaleType)
+        val itemTitleProp: TextView = itemView.findViewById(R.id.itemTitleProperties)
+        val itemPriceProp: TextView = itemView.findViewById(R.id.itemPriceProperties)
+        val itemLocationProp: TextView = itemView.findViewById(R.id.itemLocationProperties)
+        val itemSize: TextView = itemView.findViewById(R.id.textSize)
+        val itemBedrooms: TextView = itemView.findViewById(R.id.textBedNum)
+        val itemBathrooms: TextView = itemView.findViewById(R.id.textBathNum)
     }
 }
