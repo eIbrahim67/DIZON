@@ -1,5 +1,6 @@
 package com.eibrahim.dizon.profile.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,7 +15,10 @@ import com.eibrahim.dizon.auth.api.RetrofitClient
 import com.eibrahim.dizon.auth.api.UserResponse
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide // Import Glide for image loading
+import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.eibrahim.dizon.auth.AuthActivity
+import com.eibrahim.dizon.auth.AuthPreferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,7 +32,6 @@ class ProfileFragment : Fragment() {
     }
 
     private lateinit var navController: NavController
-    // Lazy initialization of AuthApi to access the API endpoint
     private val authApi: AuthApi by lazy { RetrofitClient.api }
 
     override fun onCreateView(
@@ -41,7 +44,7 @@ class ProfileFragment : Fragment() {
 
         navController = findNavController()
 
-        // Fetch and display user profile data when the view is created
+        // Fetch and display user profile data
         fetchUserProfile(view)
 
         // Existing navigation listeners
@@ -60,44 +63,66 @@ class ProfileFragment : Fragment() {
         view.findViewById<ConstraintLayout>(R.id.delete_account).setOnClickListener {
             navController.navigate(R.id.deleteAccountFragment)
         }
-    }
 
-    // Function to fetch user profile data from the API and update UI
-    private fun fetchUserProfile(view: View) {
-        // Use CoroutineScope with IO dispatcher for network calls
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                // Make the API call to get user data
-                val response: Response<UserResponse> = authApi.getUser()
-                // Switch to Main dispatcher to update UI
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        val userResponse = response.body()
-                        userResponse?.let {
-                            // Update profile_name with firstName and lastName
-                            val profileNameTextView = view.findViewById<TextView>(R.id.profile_name)
-                            profileNameTextView.text = "${it.firstName} ${it.lastName}"
-
-                            // Load imageUrl into profile_image using Glide
-                            val profileImageView = view.findViewById<ImageView>(R.id.profile_image)
-                            Glide.with(this@ProfileFragment)
-                                .load(it.imageUrl) // URL from API response
-                                .placeholder(R.drawable.man) // Default image while loading
-                                .centerCrop()
-                                .error(R.drawable.man) // Fallback image on error
-                                .into(profileImageView) // Target ImageView
+        // Handle logout when the logout icon is clicked
+        view.findViewById<ImageView>(R.id.logout_icon).setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    // Call the logout API endpoint
+                    val response = authApi.logout()
+                    withContext(Dispatchers.Main) {
+                        if (response.isSuccessful) {
+                            // Initialize AuthPreferences to access shared preferences
+                            val authPreferences = AuthPreferences(requireContext())
+                            // Clear the Bearer token from shared preferences
+                            authPreferences.clearToken()
+                            startActivity(Intent(requireContext(), AuthActivity::class.java))
+                            requireActivity().finish()
+                        } else {
+                            // Show error message if logout fails
+                            Toast.makeText(requireContext(), "Logout failed: ${response.message()}", Toast.LENGTH_SHORT).show()
                         }
-                    } else {
-                        // Log or handle API error (e.g., 401 Unauthorized, 500 Server Error)
-                        println("API Error: ${response.code()} - ${response.message()}")
                     }
-                }
-            } catch (e: Exception) {
-                // Handle network errors or other exceptions
-                withContext(Dispatchers.Main) {
-                    println("Network Exception: ${e.message}")
+                } catch (e: Exception) {
+                    // Handle network or unexpected errors
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
     }
+
+    private fun fetchUserProfile(view: View) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response: Response<UserResponse> = authApi.getUser()
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        val userResponse = response.body()
+                        userResponse?.let {
+                            val profileNameTextView = view.findViewById<TextView>(R.id.profile_name)
+                            profileNameTextView.text = "${it.firstName} ${it.lastName}"
+
+                            val profileImageView = view.findViewById<ImageView>(R.id.profile_image)
+                            Glide.with(this@ProfileFragment)
+                                .load(it.imageUrl)
+                                .placeholder(R.drawable.man)
+                                .centerCrop()
+                                .error(R.drawable.man)
+                                .into(profileImageView)
+                        }
+                    } else {
+                        println("API Error: ${response.code()} - ${response.message()}")
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    println("Network Exception: ${e.message}")
+                }
+
+            }
+        }
+    }
+
 }

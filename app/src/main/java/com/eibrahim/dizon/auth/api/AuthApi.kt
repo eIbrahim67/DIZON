@@ -47,11 +47,9 @@ interface AuthApi {
     @GET("/api/Authentication/google-response")
     suspend fun googleResponse(@Query("returnUrl") returnUrl: String = "/"): Response<LoginResponse>
 
-    // Added GET endpoint to fetch user profile data
     @GET("/api/User/GetUser")
-    suspend fun getUser(): Response<UserResponse> // Uses a new UserResponse data class
+    suspend fun getUser(): Response<UserResponse>
 
-    // Added PUT endpoint to update user profile with multipart form data
     @Multipart
     @PUT("/api/User/Update")
     suspend fun updateUser(
@@ -60,12 +58,38 @@ interface AuthApi {
         @Part("Email") email: RequestBody,
         @Part("PhoneNumber") phoneNumber: RequestBody,
         @Part("City") city: RequestBody,
-        @Part("ImageUrl") imageUrl: RequestBody?, // Optional field, can be null
-        @Part image: MultipartBody.Part? // Optional image upload
-    ): Response<UpdateResponse> // Uses a new UpdateResponse data class
+        @Part("ImageUrl") imageUrl: RequestBody?,
+        @Part image: MultipartBody.Part?
+    ): Response<UpdateResponse>
+
+    @PUT("/api/User/ChangePassword")
+    suspend fun changePassword(@Body request: ChangePasswordRequest): Response<ChangePasswordResponse>
+
+    // Define the logout endpoint to make a POST request to the API
+    @POST("/api/User/Logout")
+    suspend fun logout(): Response<LogoutResponse>
 }
 
-// New data class for GET /api/Authentication/GetUser response
+// Data class to handle the logout API response, assuming it returns status and message
+data class LogoutResponse(
+    val status: String?,
+    val message: String?
+)
+
+// Data class for the request body of /api/User/ChangePassword
+data class ChangePasswordRequest(
+    val oldPassword: String,
+    val newPassword: String,
+    val confirmNewPassword: String
+)
+
+// Data class for the response of /api/User/ChangePassword
+data class ChangePasswordResponse(
+    val status: String?,
+    val message: String?
+)
+
+// Existing data classes (no changes needed)
 data class UserResponse(
     val firstName: String?,
     val lastName: String?,
@@ -75,7 +99,6 @@ data class UserResponse(
     val imageUrl: String?
 )
 
-// New data class for PUT /api/Authentication/Update response
 data class UpdateResponse(
     val status: String?,
     val message: String?
