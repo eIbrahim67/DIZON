@@ -94,8 +94,8 @@ class SearchFragment : Fragment() {
             val btmSh = FilterBottomSheetFragment()
             btmSh.setOnApplyFiltersListener { filterParams ->
                 viewModel.updateFilterParams(
-                    propertyType = filterParams.propertyType,
-                    city = filterParams.city,
+                    propertyType = searchType.text.toString(),
+                    city = searchCity.text.toString(),
                     governate = filterParams.governate,
                     bedrooms = filterParams.bedrooms,
                     bathrooms = filterParams.bathrooms,
