@@ -33,6 +33,7 @@ object RetrofitSearch {
                 val requestBuilder = original.newBuilder()
 
                 authPreferences?.getToken()?.let { token ->
+                    Log.w("Ibra Search",token)
                     Log.d("RetrofitClient", "Adding Authorization header with token: $token")
                     requestBuilder.header("Authorization", "Bearer $token")
                 } ?: run {

@@ -32,6 +32,7 @@ object RetrofitChatbot {
                 val original = chain.request()
                 val requestBuilder = original.newBuilder()
                 authPreferences?.getToken()?.let { token ->
+                    Log.w("Ibra Chatbot",token)
                     requestBuilder.header("Authorization", "Bearer $token")
                     Log.d("RetrofitClient", "Adding Authorization header with token: $token")
                 } ?: run {

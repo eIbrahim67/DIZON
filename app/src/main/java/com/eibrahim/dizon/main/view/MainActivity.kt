@@ -15,7 +15,10 @@ import com.eibrahim.dizon.R
 import com.eibrahim.dizon.auth.AuthActivity
 import com.eibrahim.dizon.auth.AuthPreferences
 import com.eibrahim.dizon.auth.api.RetrofitClient
+import com.eibrahim.dizon.chatbot.api.RetrofitChatbot
+import com.eibrahim.dizon.home.api.RetrofitHome
 import com.eibrahim.dizon.main.viewModel.MainViewModel
+import com.eibrahim.dizon.search.api.RetrofitSearch
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -50,6 +53,10 @@ class MainActivity : AppCompatActivity() {
         // Proceed with loading UI only if user is logged in
         RetrofitClient.initAuthPreferences(this)
         Log.d("MainActivity", "RetrofitClient initialized")
+
+        RetrofitHome.initAuthPreferences(this)
+        RetrofitSearch.initAuthPreferences(this)
+        RetrofitChatbot.initAuthPreferences(this)
 
         setContentView(R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

@@ -31,6 +31,7 @@ object RetrofitClient {
                 val original = chain.request()
                 val requestBuilder = original.newBuilder()
                 authPreferences?.getToken()?.let { token ->
+                    Log.w("Ibra",token)
                     requestBuilder.header("Authorization", "Bearer $token")
                 } ?: Log.w("RetrofitClient", "No token available, proceeding without Authorization header")
                 val request = requestBuilder.build()
