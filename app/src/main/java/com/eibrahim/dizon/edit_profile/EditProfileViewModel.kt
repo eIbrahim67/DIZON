@@ -31,6 +31,9 @@ class EditProfileViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
+    public val _successMessage = MutableLiveData<String?>()
+    val successMessage: LiveData<String?> = _successMessage
+
     // Fetch user profile data from the API
     fun fetchUserData() {
         viewModelScope.launch {
@@ -89,7 +92,8 @@ class EditProfileViewModel : ViewModel() {
 
                 if (response.isSuccessful) {
                     _errorMessage.value = null
-                    fetchUserData() // Refresh user data after successful update
+                    fetchUserData()
+                    _successMessage.value = "User data updated successfully"
                 } else {
                     _errorMessage.value = "Failed to update user data: ${response.code()}"
                 }

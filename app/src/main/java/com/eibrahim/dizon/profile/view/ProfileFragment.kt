@@ -68,23 +68,14 @@ class ProfileFragment : Fragment() {
         view.findViewById<ImageView>(R.id.logout_icon).setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    // Call the logout API endpoint
-                    val response = authApi.logout()
-                    withContext(Dispatchers.Main) {
-                        if (response.isSuccessful) {
-                            // Initialize AuthPreferences to access shared preferences
-                            val authPreferences = AuthPreferences(requireContext())
-                            // Clear the Bearer token from shared preferences
-                            authPreferences.clearToken()
-                            startActivity(Intent(requireContext(), AuthActivity::class.java))
-                            requireActivity().finish()
-                        } else {
-                            // Show error message if logout fails
-                            Toast.makeText(requireContext(), "Logout failed: ${response.message()}", Toast.LENGTH_SHORT).show()
-                        }
-                    }
+
+                    val authPreferences = AuthPreferences(requireContext())
+                    authPreferences.clearToken()
+                    startActivity(Intent(requireContext(), AuthActivity::class.java))
+                    requireActivity().finish()
+
+
                 } catch (e: Exception) {
-                    // Handle network or unexpected errors
                     withContext(Dispatchers.Main) {
                         Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
                     }
@@ -102,12 +93,12 @@ class ProfileFragment : Fragment() {
                         val userResponse = response.body()
                         userResponse?.let {
                             val profileNameTextView = view.findViewById<TextView>(R.id.profile_name)
-                            profileNameTextView.text = "${it.firstName} ${it.lastName}"
+                            profileNameTextView.text = "${it.firstName}\n${it.lastName}"
 
                             val profileImageView = view.findViewById<ImageView>(R.id.profile_image)
                             Glide.with(this@ProfileFragment)
                                 .load(it.imageUrl)
-                                .placeholder(R.drawable.man)
+                               // .placeholder(R.drawable.man)
                                 .centerCrop()
                                 .error(R.drawable.man)
                                 .into(profileImageView)

@@ -109,7 +109,7 @@ class EditProfileFragment : Fragment() {
                 if (!it.imageUrl.isNullOrEmpty()) {
                     Glide.with(this)
                         .load(it.imageUrl)
-                        .placeholder(R.drawable.man)
+                       // .placeholder(R.drawable.man)
                         .circleCrop() // Default placeholder while loading
                         .error(R.drawable.man) // Fallback if loading fails
                         .into(imgProfile)
@@ -128,6 +128,13 @@ class EditProfileFragment : Fragment() {
                 Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
             }
         })
+        viewModel.successMessage.observe(viewLifecycleOwner, Observer { message ->
+            message?.let {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                // Clear the message after displaying to prevent re-displaying on configuration changes
+                viewModel._successMessage.value = null
+            }
+        })
 
         // Fetch initial user data
         viewModel.fetchUserData()
@@ -136,6 +143,10 @@ class EditProfileFragment : Fragment() {
         imgEditOverlay.setOnClickListener {
             pickImageLauncher.launch("image/*")
         }
+        imgProfile.setOnClickListener {
+            pickImageLauncher.launch("image/*")
+        }
+
 
         // Set up Spinner to update CityInput
         citySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

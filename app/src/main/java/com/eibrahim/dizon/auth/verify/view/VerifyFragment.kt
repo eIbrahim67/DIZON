@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.eibrahim.dizon.R
 import com.eibrahim.dizon.auth.verify.viewModel.VerifyRequest
 import com.eibrahim.dizon.auth.verify.viewModel.VerifyState
@@ -79,7 +80,8 @@ class VerifyFragment : Fragment() {
                     btnVerify.isEnabled = true
                     Log.d("VerifyFragment", "Success response: ${state.response}")
                     Toast.makeText(requireContext(), R.string.verify_success, Toast.LENGTH_SHORT).show()
-                    requireActivity().finish()
+                    // Navigate to LoginFragment instead of finishing the activity
+                    findNavController().navigate(R.id.loginFragment)
                 }
                 is VerifyState.Error -> {
                     btnVerify.isEnabled = true
