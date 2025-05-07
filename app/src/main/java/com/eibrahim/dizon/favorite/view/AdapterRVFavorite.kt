@@ -56,7 +56,7 @@ class AdapterRVFavorite(
         holder.location.text = "${property.city}, ${property.governate}"
 
         // Set favorite button (always filled since this is the favorites list)
-        holder.favoriteButton.setImageResource(R.drawable.icon_fav)
+        holder.favoriteButton.setImageResource(R.drawable.ic_favorite_filled)
         holder.favoriteButton.imageTintList = null
 
         // Remove from favorites
@@ -66,7 +66,7 @@ class AdapterRVFavorite(
 
         // Navigate to details
         holder.itemView.setOnClickListener {
-            onItemClick(property.propertyId)
+            onItemClick.invoke(property.propertyId)
         }
     }
 

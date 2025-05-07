@@ -75,6 +75,10 @@ class FavoriteRepository {
         }
     }
 
+    fun isFavoriteLocally(propertyId: Int): Boolean? {
+        return favoriteList.value?.any { it.propertyId == propertyId }
+    }
+
     fun updateFavoriteList(newList: List<FavoriteProperty>) {
         _favoriteList.postValue(newList)
     }

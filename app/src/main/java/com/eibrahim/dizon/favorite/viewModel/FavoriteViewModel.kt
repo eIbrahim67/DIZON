@@ -21,6 +21,7 @@ class FavoriteViewModel(private val mainViewModel: MainViewModel) : ViewModel() 
 
     fun fetchFavorites() {
         viewModelScope.launch {
+            _error.postValue(null) // Reset error
             val result = repository.fetchFavorites()
             result.onFailure { exception ->
                 _error.postValue(exception.message)
@@ -30,6 +31,7 @@ class FavoriteViewModel(private val mainViewModel: MainViewModel) : ViewModel() 
 
     fun removeFavorite(propertyId: Int) {
         viewModelScope.launch {
+            _error.postValue(null) // Reset error
             // Optimistic update: remove property immediately
             val currentList = favoriteProperties.value?.toMutableList() ?: mutableListOf()
             val index = currentList.indexOfFirst { it.propertyId == propertyId }
@@ -69,5 +71,9 @@ class FavoriteViewModel(private val mainViewModel: MainViewModel) : ViewModel() 
         }
         lastRemovedProperty = null
         lastRemovedPosition = -1
+    }
+
+    fun clearError() {
+        _error.postValue(null)
     }
 }

@@ -35,16 +35,14 @@ class ImagePagerAdapter(private val imageUrls: List<String>) :
             Glide.with(holder.itemView.context)
                 .load(R.drawable.home)
                 .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.imageView)
             holder.progressBar.visibility = View.GONE
         } else {
             Glide.with(holder.itemView.context)
                 .load(url)
                 .centerCrop()
-                .thumbnail(0.25f) // Load a low-resolution thumbnail first
-                .diskCacheStrategy(DiskCacheStrategy.ALL) // Cache both original and thumbnail
-                .placeholder(R.drawable.home)
-                .error(R.drawable.home)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .listener(object : com.bumptech.glide.request.RequestListener<android.graphics.drawable.Drawable> {
                     override fun onLoadFailed(
                         e: GlideException?,

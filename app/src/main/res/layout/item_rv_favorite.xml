@@ -19,7 +19,7 @@
         <ImageView
             android:id="@+id/itemImageProperties80"
             android:layout_width="0dp"
-            android:layout_height="180dp"
+            android:layout_height="160dp"
             android:background="@color/white"
             android:scaleType="centerCrop"
             android:foreground="@drawable/image_border"
@@ -45,7 +45,7 @@
                 android:layout_gravity="center"
                 android:src="@drawable/ic_favorite_filled"
                 android:clickable="true"
-                android:padding="5dp"
+                android:padding="6dp"
                 android:focusable="true"
                 />
 
