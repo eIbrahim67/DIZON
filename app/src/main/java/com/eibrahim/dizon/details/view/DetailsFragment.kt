@@ -33,20 +33,23 @@ class DetailsFragment : Fragment() {
     private lateinit var bottomNavigationView: BottomNavigationView
     private var propertyDetails: PropertyDetails? = null
     private lateinit var authPreferences: AuthPreferences
-
+    private var lastErrorMessage: String? = null // Track last shown error message
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_details, container, false)
-        viewModel = ViewModelProvider(requireActivity())[DetailsViewModel::class.java]
+        viewModel = ViewModelProvider(this)[DetailsViewModel::class.java] // Scope to Fragment
         authPreferences = AuthPreferences(requireContext())
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Reset last error message to avoid showing stale messages
+        lastErrorMessage = null
 
         // Hide bottom navigation
         bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
@@ -56,35 +59,61 @@ class DetailsFragment : Fragment() {
         val scrollView = view.findViewById<ScrollView>(R.id.scrollView2)
         val linearLayout = view.findViewById<LinearLayout>(R.id.linearLayout4)
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
+        val favoriteButton = view.findViewById<ImageView>(R.id.itemAddToWishlist)
 
+        // Get propertyId from arguments
         val propertyId = arguments?.getInt("id") ?: -1 // Provide a default value if needed
 
-        // Get propertyId from arguments, default to 5
         Log.d("Ibra Details", propertyId.toString())
 
         // Initialize ViewPager2
         val viewPager = view.findViewById<ViewPager2>(R.id.viewPager)
 
+        // Set initial state for favorite button (loading)
+        favoriteButton.alpha = 0.5f // Dim the button while loading
+        favoriteButton.setImageResource(R.drawable.ic_favorite_border)
+
         // Fetch property details with context for caching
         viewModel.fetchPropertyDetails(propertyId, requireContext())
 
+        // Observe favorite status
+        viewModel.isFavorite.observe(viewLifecycleOwner) { isFavorite ->
+            favoriteButton.animate()
+                .scaleX(1.2f)
+                .scaleY(1.2f)
+                .setDuration(100)
+                .withEndAction {
+                    favoriteButton.setImageResource(
+                        if (isFavorite) R.drawable.ic_favorite_filled
+                        else R.drawable.ic_favorite_border
+                    )
+                    favoriteButton.animate()
+                        .scaleX(1.0f)
+                        .scaleY(1.0f)
+                        .setDuration(100)
+                        .start()
+                    favoriteButton.alpha = 1.0f
+                }
+                .start()
+        }
+
+        // Handle favorite button click
+        favoriteButton.setOnClickListener {
+            viewModel.toggleFavorite(propertyId)
+        }
+
         // Observe property details
         viewModel.propertyDetails.observe(viewLifecycleOwner) { property ->
-            property?.let {
-                // Show content and hide progress bar
+            if (property != null && property.propertyId == propertyId) {
                 progressBar.visibility = View.GONE
                 scrollView.visibility = View.VISIBLE
                 linearLayout.visibility = View.VISIBLE
 
-                propertyDetails = it
-                Log.d("DetailsFragment", "Property Details: $it")
+                propertyDetails = property
 
-                // Log raw image URLs to debug
-                Log.d("DetailsFragment", "Raw imageUrls: ${it.imageUrls}")
-                Log.d("DetailsFragment", "Image values: ${it.imageUrls?.values}")
+                Log.d("DetailsFragment", "Property Details: $property")
 
-                // Preload images with Glide
-                it.imageUrls?.values?.forEach { url ->
+                property.imageUrls?.values?.forEach { url ->
                     Log.d("DetailsFragment", "Preloading image: $url")
                     Glide.with(requireContext())
                         .load(url)
@@ -92,37 +121,32 @@ class DetailsFragment : Fragment() {
                         .preload()
                 }
 
-                // Set up ViewPager2 with images
-                val imageUrls = it.imageUrls?.values ?: listOf("placeholder")
-                Log.d("DetailsFragment", "Property ID: ${it.propertyId}, Image URLs: $imageUrls")
+                val imageUrls = property.imageUrls?.values ?: listOf("placeholder")
+                Log.d("DetailsFragment", "Property ID: ${property.propertyId}, Image URLs: $imageUrls")
                 val adapter = ImagePagerAdapter(imageUrls)
                 viewPager.adapter = adapter
 
-                // Bind data to UI elements
-                view.findViewById<TextView>(R.id.tvTitle).text = it.title
-                view.findViewById<TextView>(R.id.tvPrice).text = "$${String.format("%,.2f", it.price)}"
-                view.findViewById<TextView>(R.id.tvDescription).text = it.description
-                view.findViewById<TextView>(R.id.tvType).text = it.propertyType
-                view.findViewById<TextView>(R.id.tvRooms).text = "${it.bedrooms} Bedrooms"
-                view.findViewById<TextView>(R.id.tvBeds).text = "${it.bedrooms} Beds"
-                view.findViewById<TextView>(R.id.tvBaths).text = "${it.bathrooms} Baths"
-                view.findViewById<TextView>(R.id.chipForSale).text = it.listingType
+                view.findViewById<TextView>(R.id.tvTitle).text = property.title
+                view.findViewById<TextView>(R.id.tvPrice).text = "$${String.format("%,.2f", property.price)}"
+                view.findViewById<TextView>(R.id.tvDescription).text = property.description
+                view.findViewById<TextView>(R.id.tvType).text = property.propertyType
+                view.findViewById<TextView>(R.id.tvRooms).text = "${property.bedrooms} Bedrooms"
+                view.findViewById<TextView>(R.id.tvBeds).text = "${property.bedrooms} Beds"
+                view.findViewById<TextView>(R.id.tvBaths).text = "${property.bathrooms} Baths"
+                view.findViewById<TextView>(R.id.chipForSale).text = property.listingType
 
-                // Owner info
-                view.findViewById<TextView>(R.id.agent_name).text = "${it.ownerInfo.firstName} ${it.ownerInfo.lastName}"
-                view.findViewById<TextView>(R.id.agent_contact).text = it.ownerInfo.phoneNumber
+                view.findViewById<TextView>(R.id.agent_name).text = "${property.ownerInfo.firstName} ${property.ownerInfo.lastName}"
+                view.findViewById<TextView>(R.id.agent_contact).text = property.ownerInfo.phoneNumber
 
-                // Load agent image
                 Glide.with(requireContext())
                     .load(R.drawable.icon_solid_profile)
                     .placeholder(R.drawable.icon_solid_profile)
                     .into(view.findViewById(R.id.agent_profile_image))
 
-                // Populate internal amenities
                 val internalChipGroup = view.findViewById<ChipGroup>(R.id.internalAmenitiesChipGroup)
                 internalChipGroup.removeAllViews()
-                Log.d("DetailsFragment", "Internal amenities count: ${it.internalAmenities?.values?.size ?: 0}")
-                if (it.internalAmenities?.values.isNullOrEmpty()) {
+                Log.d("DetailsFragment", "Internal amenities count: ${property.internalAmenities?.values?.size ?: 0}")
+                if (property.internalAmenities?.values.isNullOrEmpty()) {
                     val chip = Chip(requireContext()).apply {
                         text = "No amenities available"
                         isClickable = false
@@ -130,7 +154,7 @@ class DetailsFragment : Fragment() {
                     }
                     internalChipGroup.addView(chip)
                 } else {
-                    it.internalAmenities?.values?.forEach { amenity ->
+                    property.internalAmenities?.values?.forEach { amenity ->
                         val chip = Chip(requireContext()).apply {
                             text = amenity
                             isClickable = false
@@ -140,11 +164,10 @@ class DetailsFragment : Fragment() {
                     }
                 }
 
-                // Populate external amenities
                 val externalChipGroup = view.findViewById<ChipGroup>(R.id.externalAmenitiesChipGroup)
                 externalChipGroup.removeAllViews()
-                Log.d("DetailsFragment", "External amenities count: ${it.externalAmenities?.values?.size ?: 0}")
-                if (it.externalAmenities?.values.isNullOrEmpty()) {
+                Log.d("DetailsFragment", "External amenities count: ${property.externalAmenities?.values?.size ?: 0}")
+                if (property.externalAmenities?.values.isNullOrEmpty()) {
                     val chip = Chip(requireContext()).apply {
                         text = "No amenities available"
                         isClickable = false
@@ -152,7 +175,7 @@ class DetailsFragment : Fragment() {
                     }
                     externalChipGroup.addView(chip)
                 } else {
-                    it.externalAmenities?.values?.forEach { amenity ->
+                    property.externalAmenities?.values?.forEach { amenity ->
                         val chip = Chip(requireContext()).apply {
                             text = amenity
                             isClickable = false
@@ -162,11 +185,10 @@ class DetailsFragment : Fragment() {
                     }
                 }
 
-                // Populate accessibility amenities
                 val accessibilityChipGroup = view.findViewById<ChipGroup>(R.id.accessibilityChipGroup)
                 accessibilityChipGroup.removeAllViews()
-                Log.d("DetailsFragment", "Accessibility amenities count: ${it.accessibilityAmenities?.values?.size ?: 0}")
-                if (it.accessibilityAmenities?.values.isNullOrEmpty()) {
+                Log.d("DetailsFragment", "Accessibility amenities count: ${property.accessibilityAmenities?.values?.size ?: 0}")
+                if (property.accessibilityAmenities?.values.isNullOrEmpty()) {
                     val chip = Chip(requireContext()).apply {
                         text = "No amenities available"
                         isClickable = false
@@ -174,7 +196,7 @@ class DetailsFragment : Fragment() {
                     }
                     accessibilityChipGroup.addView(chip)
                 } else {
-                    it.accessibilityAmenities?.values?.forEach { amenity ->
+                    property.accessibilityAmenities?.values?.forEach { amenity ->
                         val chip = Chip(requireContext()).apply {
                             text = amenity
                             isClickable = false
@@ -184,47 +206,49 @@ class DetailsFragment : Fragment() {
                     }
                 }
 
-                // Handle location button click
                 view.findViewById<View>(R.id.btnSeeLocation).setOnClickListener {
-                    propertyDetails?.let { prop ->
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(prop.locationUrl))
-                        startActivity(intent)
-                    }
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(property.locationUrl))
+                    startActivity(intent)
                 }
 
-                // Handle contact buttons
                 view.findViewById<View>(R.id.fabCall).setOnClickListener {
-                    propertyDetails?.let { prop ->
-                        val intent = Intent(Intent.ACTION_DIAL).apply {
-                            data = Uri.parse("tel:${prop.ownerInfo.phoneNumber}")
-                        }
-                        startActivity(intent)
+                    val intent = Intent(Intent.ACTION_DIAL).apply {
+                        data = Uri.parse("tel:${property.ownerInfo.phoneNumber}")
                     }
+                    startActivity(intent)
                 }
                 view.findViewById<View>(R.id.message).setOnClickListener {
-                    propertyDetails?.let { prop ->
-                        val intent = Intent(Intent.ACTION_SENDTO).apply {
-                            data = Uri.parse("smsto:${prop.ownerInfo.phoneNumber}")
-                        }
-                        startActivity(intent)
+                    val intent = Intent(Intent.ACTION_SENDTO).apply {
+                        data = Uri.parse("smsto:${property.ownerInfo.phoneNumber}")
                     }
+                    startActivity(intent)
                 }
                 view.findViewById<View>(R.id.whatsapp).setOnClickListener {
-                    propertyDetails?.let { prop ->
-                        val intent = Intent(Intent.ACTION_VIEW).apply {
-                            data = Uri.parse("https://wa.me/${prop.ownerInfo.phoneNumber}")
-                        }
-                        startActivity(intent)
+                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                        data = Uri.parse("https://wa.me/${property.ownerInfo.phoneNumber}")
                     }
+                    startActivity(intent)
                 }
+            } else {
+                progressBar.visibility = View.VISIBLE
+                scrollView.visibility = View.GONE
+                linearLayout.visibility = View.GONE
             }
         }
 
         // Observe errors
         viewModel.error.observe(viewLifecycleOwner) { error ->
             error?.let {
-                progressBar.visibility = View.GONE
-                Toast.makeText(requireContext(), "Error loading details", Toast.LENGTH_LONG).show()
+                // Only show toast if the message is new and relevant
+                if (it != lastErrorMessage && it.isNotEmpty()) {
+                    progressBar.visibility = View.GONE
+                    if (it == "Property added to favorites" || it == "Property removed from favorites") {
+                        Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), "Error: $it", Toast.LENGTH_LONG).show()
+                    }
+                    lastErrorMessage = it
+                }
             }
         }
 

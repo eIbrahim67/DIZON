@@ -1,5 +1,6 @@
 package com.eibrahim.dizon.favorite.view
 
+import android.R.anim
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eibrahim.dizon.R
@@ -63,9 +65,22 @@ class FavoriteFragment : Fragment() {
             },
             onItemClick = { propertyId ->
                 val bundle = Bundle().apply {
-                    putInt("propertyId", propertyId)
+                    putInt("id", propertyId)
                 }
-                findNavController().navigate(R.id.action_action_wishlist_to_detailsFragment, bundle)
+                // Apply custom animations for navigation
+                val navOptions = navOptions {
+                    anim {
+                        enter = R.anim.slide_in_right
+                        exit = R.anim.slide_out_left
+                        popEnter = R.anim.slide_in_left
+                        popExit = R.anim.slide_out_right
+                    }
+                }
+                findNavController().navigate(
+                    R.id.action_action_wishlist_to_detailsFragment,
+                    bundle,
+                    navOptions
+                )
             }
         )
         recyclerView.adapter = favoriteAdapter
@@ -77,7 +92,6 @@ class FavoriteFragment : Fragment() {
         viewModel.favoriteProperties.observe(viewLifecycleOwner) { favoriteList ->
             if (favoriteList.isNullOrEmpty()) {
                 recyclerView.visibility = View.GONE
-                Toast.makeText(requireContext(), "No favorites found", Toast.LENGTH_LONG).show()
             } else {
                 recyclerView.visibility = View.VISIBLE
                 favoriteAdapter.updateList(favoriteList)
@@ -92,13 +106,15 @@ class FavoriteFragment : Fragment() {
                     Toast.makeText(requireContext(), "Session expired. Log in again", Toast.LENGTH_LONG).show()
                     authPreferences.clearToken()
                 } else if (it == "Property removed from favorites") {
-                    Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                    viewModel.clearError() // Clear error to prevent repeated display
                 } else {
                     Snackbar.make(view, "Error: $it", Snackbar.LENGTH_LONG)
                         .setAction("Undo") {
                             viewModel.undoRemoveFavorite()
                         }
                         .show()
+                    viewModel.clearError() // Clear error to prevent repeated display
                 }
                 if (it != "Property removed from favorites") {
                     recyclerView.visibility = View.GONE
