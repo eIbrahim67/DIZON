@@ -5,258 +5,297 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eibrahim.dizon.chatbot.api.RetrofitChatbot
 import com.eibrahim.dizon.chatbot.domain.model.ChatMessage
 import com.eibrahim.dizon.chatbot.domain.model.ChatPayload
 import com.eibrahim.dizon.chatbot.domain.model.ChatResponse
-import com.eibrahim.dizon.chatbot.domain.model.FunctionDefinition
 import com.eibrahim.dizon.chatbot.domain.usecase.GetChatResponseUseCase
-import com.eibrahim.dizon.core.response.FailureReason
-import com.eibrahim.dizon.core.response.Response
-import com.eibrahim.dizon.search.data.SearchPropertyResponse
+import com.eibrahim.dizon.core.response.ResponseEI
+import com.eibrahim.dizon.ocr.ApiOcrClient
+import com.eibrahim.dizon.search.data.Property
+import com.eibrahim.dizon.vsr.ApiVsrClient
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
+import com.eibrahim.dizon.chatbot.domain.model.ChatbotViewModelConst
+import com.eibrahim.dizon.chatbot.domain.model.SearchParameters
+import com.eibrahim.dizon.chatbot.domain.model.SearchProperties
 
+/**
+ * Data class representing the UI state for the chatbot.
+ */
+data class ChatUiState(
+    val messages: List<ChatMessage> = emptyList(),
+    val properties: List<Property> = emptyList(),
+    val isSendButtonVisible: Boolean = false,
+    val isRecording: Boolean = false,
+    val errorMessage: String? = null
+)
+
+data class FilterParamsChatBot(
+    val propertyType: String? = null,
+    val city: String? = null,
+    val bedrooms: Int? = null,
+    val bathrooms: Int? = null,
+    val size: Double? = null,
+    val maxPrice: Int? = null,
+    val minPrice: Int? = null,
+    val internalAmenityIds: List<Int>? = null,
+    val externalAmenityIds: List<Int>? = null,
+    val accessibilityAmenityIds: List<Int>? = null
+)
+
+
+/**
+ * ViewModel for managing chatbot interactions, including conversation history,
+ * property search, image OCR, and audio transcription.
+ */
 class ChatbotViewModel(
     private val getChatResponseUseCase: GetChatResponseUseCase
 ) : ViewModel() {
 
-    private val _chatMessages = MutableLiveData<Response<ChatResponse>>()
-    val chatMessages: LiveData<Response<ChatResponse>> get() = _chatMessages
+    private val _uiState = MutableLiveData<ChatUiState>()
+    val uiState: LiveData<ChatUiState> = _uiState
+
+    private val _filterParams = MutableLiveData<FilterParamsChatBot>(FilterParamsChatBot())
+    val filterParams: LiveData<FilterParamsChatBot> = _filterParams
 
     private val conversationHistory = mutableListOf<ChatMessage>()
-    private val gson = Gson()  // Reuse the Gson instance
+    private val gson = Gson()
+
+    init {
+        _uiState.value = ChatUiState()
+    }
+
+    fun updateParamsFromResponse(params: SearchParameters) {
+
+        _filterParams.value = _filterParams.value?.copy(
+            propertyType = params.property_type,
+            city = params.location.city,
+            bedrooms = params.bedrooms.min,
+            bathrooms = params.bathrooms.min,
+            maxPrice = params.budget.max,
+            minPrice = params.budget.min,
+        )
+    }
+
 
     /**
-     * Starts a chat session:
-     * - Adds the user's message.
-     * - Ensures that the system prompt is at the beginning.
-     * - Builds the JSON payload (including function definitions).
-     * - Launches a coroutine to fetch the chat response and update LiveData.
-     *
-     * @param userMessage The user's input message.
+     * Initiates a chat session with a user message.
      */
     fun startChat(userMessage: String) {
-        // Append the user's message.
-        conversationHistory.add(
-            ChatMessage(
-                content = userMessage,
-                role = "user",
-                isFromUser = true
-            )
-        )
+        if (userMessage.isBlank()) return
+        addUserMessage(userMessage)
+        ensureSystemPrompt()
+        val payload = buildChatPayload()
+        fetchChatResponse(payload)
+    }
 
-        // Ensure the system prompt is added only once.
-        if (conversationHistory.none { it.role == "system" }) {
-            val systemMessage = ChatMessage(
-                role = "system",
-                content = systemContent.trimIndent()
-            )
-            conversationHistory.add(0, systemMessage)
+    /**
+     * Processes an uploaded image for OCR and adds the extracted text as a user message.
+     */
+    fun processImage(file: File) {
+        viewModelScope.launch {
+            try {
+                val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+                val filePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
+                val response = ApiOcrClient.ocrApiService.performOcr(filePart, language = "eng")
+
+                val extractedText = if (response.isSuccessful) {
+                    response.body()?.let { ocrResponse ->
+                        if (ocrResponse.status == "success" && ocrResponse.extracted_text != null) {
+                            ocrResponse.extracted_text
+                        } else {
+                            ocrResponse.error ?: "Unknown OCR error"
+                        }
+                    } ?: "API error: No response body"
+                } else {
+                    "API error: ${response.message()}"
+                }
+
+                updateUiState { copy(errorMessage = if (extractedText.contains("error", true)) extractedText else null) }
+                if (!extractedText.contains("error", true)) {
+                    startChat(extractedText)
+                }
+            } catch (e: Exception) {
+                Log.e(ChatbotViewModelConst.TAG, "Image processing failed", e)
+                updateUiState { copy(errorMessage = "Image processing failed: ${e.message}") }
+            } finally {
+                file.delete()
+            }
         }
+    }
 
-        // Build the payload with conversation history and function definitions.
+    /**
+     * Processes an audio file for transcription and adds the transcribed text as a user message.
+     */
+    fun processAudio(file: File, maxRetries: Int = 3) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                repeat(maxRetries) { attempt ->
+                    try {
+                        val requestFile = file.asRequestBody("audio/*".toMediaTypeOrNull())
+                        val filePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
+                        val response = ApiVsrClient.vsrApiService.transcribeAudio(filePart)
+
+                        val transcribedText = if (response.isSuccessful) {
+                            response.body()?.let { transcription ->
+                                if (transcription.status == "success" && transcription.transcribed_text != null) {
+                                    transcription.transcribed_text.toString()
+                                } else {
+                                    transcription.error ?: "Unknown transcription error"
+                                }
+                            } ?: "API error: No response body"
+                        } else {
+                            "API error: ${response.message()}"
+                        }
+
+                        withContext(Dispatchers.Main) {
+                            updateUiState { copy(errorMessage = if (transcribedText.contains("error", true)) transcribedText else null) }
+                            if (!transcribedText.contains("error", true)) {
+                                startChat(transcribedText)
+                            }
+                        }
+                        return@withContext
+                    } catch (e: Exception) {
+                        Log.e(ChatbotViewModelConst.TAG, "Transcription attempt $attempt failed", e)
+                        if (attempt == maxRetries - 1) {
+                            withContext(Dispatchers.Main) {
+                                updateUiState { copy(errorMessage = "Transcription failed after $maxRetries attempts: ${e.message}") }
+                            }
+                        }
+                        delay(1000L * (attempt + 1))
+                    }
+                }
+            }
+            file.delete()
+        }
+    }
+
+    /**
+     * Updates the property list and associated images in the UI state.
+     */
+    fun updateProperties(properties: List<Property>) {
+        val images = properties.filter { it.propertyImages.values.isNotEmpty() }
+            .map { it.propertyImages.values.first() }
+        val lastMessageIndex = conversationHistory.lastIndex
+        if (lastMessageIndex >= 0 && !conversationHistory[lastMessageIndex].isFromUser) {
+            conversationHistory[lastMessageIndex] = conversationHistory[lastMessageIndex].copy(images = images)
+        }
+        updateUiState { copy(messages = conversationHistory.toList(), properties = properties) }
+    }
+
+    /**
+     * Toggles the recording state.
+     */
+    fun setRecordingState(isRecording: Boolean) {
+        updateUiState { copy(isRecording = isRecording) }
+    }
+
+    /**
+     * Updates the send button visibility based on input text.
+     */
+    fun updateSendButtonVisibility(text: String) {
+        updateUiState { copy(isSendButtonVisible = text.isNotBlank()) }
+    }
+
+    /**
+     * Adds a user message to the conversation history.
+     */
+    private fun addUserMessage(message: String) {
+        conversationHistory.add(ChatMessage(content = message, role = "user", isFromUser = true))
+        updateUiState { copy(messages = conversationHistory.toList()) }
+    }
+
+    /**
+     * Ensures the system prompt is present at the start of the conversation.
+     */
+    private fun ensureSystemPrompt() {
+        if (conversationHistory.none { it.role == "system" }) {
+            conversationHistory.add(0, ChatMessage(role = "system", content = ChatbotViewModelConst.SYSTEM_PROMPT))
+            updateUiState { copy(messages = conversationHistory.toList()) }
+        }
+    }
+
+    /**
+     * Builds the chat payload with conversation history and function definitions.
+     */
+    private fun buildChatPayload(): String {
         val payload = ChatPayload(
             messages = conversationHistory,
-            functions = listOf(functionDefinition)
+            functions = listOf(ChatbotViewModelConst.FUNCTION_DEFINITION)
         )
-        // Convert the payload to JSON.
-        val jsonPayload = gson.toJson(payload)
+        return gson.toJson(payload)
+    }
 
-        // Launch coroutine to execute use case and collect the response.
+    /**
+     * Fetches the chat response and updates the UI state.
+     */
+    private fun fetchChatResponse(jsonPayload: String) {
         viewModelScope.launch {
             getChatResponseUseCase.execute(jsonPayload).collect { response ->
                 when (response) {
-                    is Response.Loading -> {
-                        // Update LiveData to show a loading state.
-                        _chatMessages.value = Response.Loading
-                    }
-
-                    is Response.Success -> {
-                        // Parse the assistant response using runCatching.
-                        runCatching {
-                            gson.fromJson(response.data.content, ChatResponse::class.java)
-                        }.onSuccess { chatResponse ->
-                            _chatMessages.value = Response.Success(chatResponse)
-                            Log.d("ChatbotViewModel", "Chat response: $chatResponse")
-                        }.onFailure { e ->
-                            Log.e("ChatbotViewModel", "Parsing error: ${e.message}")
-                            _chatMessages.value = Response.Failure(
-                                FailureReason.UnknownError(e.message ?: "Parsing error")
-                            )
-                        }
-                    }
-
-                    is Response.Failure -> {
-                        _chatMessages.value = Response.Failure(response.reason)
+                    is ResponseEI.Loading -> updateUiState { copy(errorMessage = null) }
+                    is ResponseEI.Success -> handleSuccessResponse(response.data)
+                    is ResponseEI.Failure -> {
+                        Log.e(ChatbotViewModelConst.TAG, "Chat response failed: ${response.reason.toString()}")
+                        updateUiState { copy(errorMessage = response.reason.toString()) }
                     }
                 }
             }
         }
     }
 
-    private val functionDefinition = FunctionDefinition(
-        name = "search_properties", parameters = mapOf(
-            // Location details: All values must be provided as strings.
-            "location" to mapOf(
-                "country" to "string",
-                "state" to "string",
-                "city" to "string",
-                "street_address" to "string"
-            ),
-            // Property type: Allowed values include "House", "Home", "Apartment", "Condo", "Commercial".
-            "property_type" to "string",
-            // Bedrooms: Specify minimum and maximum as integers or null if not applicable.
-            "bedrooms" to mapOf(
-                "min" to "integer or null", "max" to "integer or null"
-            ),
-            // Bathrooms: Specify minimum and maximum as integers or null if not applicable.
-            "bathrooms" to mapOf(
-                "min" to "integer or null", "max" to "integer or null"
-            ),
-            // Square footage: Specify minimum, maximum (as integers or null) and a unit (string).
-            "square_footage" to mapOf(
-                "min" to "integer or null", "max" to "integer or null", "unit" to "string"
-            ),
-            // Lot size: Specify minimum, maximum (as integers or null) and a unit (string).
-            "lot_size" to mapOf(
-                "min" to "integer or null", "max" to "integer or null", "unit" to "string"
-            ),
-            // Budget: Provide minimum and maximum (as integers or null) along with a currency (string).
-            "budget" to mapOf(
-                "min" to "integer or null", "max" to "integer or null", "currency" to "string"
-            ),
-            // Transaction: Allowed values are "buy" or "rent".
-            "transaction" to "string",
-            // Property status: Include a condition description and current status.
-            "property_status" to mapOf(
-                "condition" to "string", // e.g., "New property", "renovated property", "a property needs repair"
-                "status" to "string"     // e.g., "Available", "Sold", "Under Offer"
-            ),
-            // Amenities: Lists of strings for interior, exterior, and accessibility features.
-            "amenities" to mapOf(
-                "interior" to "array of strings",
-                "exterior" to "array of strings",
-                "accessibility" to "array of strings"
-            )
-        )
-    )
+    /**
+     * Handles a successful chat response by adding the bot's message to the history.
+     */
+    private fun handleSuccessResponse(chatResponse: ChatMessage) {
+        if (chatResponse.content.isNullOrBlank()) {
+            Log.e(ChatbotViewModelConst.TAG, "Chat response content is null or blank")
+            updateUiState { copy(errorMessage = "Invalid response: Content is empty") }
 
-    private val systemContent = """
-You're Ebo, a warm and knowledgeable property search assistant who communicates naturally and engagingly. Your primary goal is to conversationally uncover detailed property information that best suits the user's needs.
+            return
+        }
 
-### Output Requirements:
-1. Single JSON Object: Your response must be a single valid JSON object with exactly two keys:
-   - "message": A natural language reply to the user.
-   - "search_properties": A JSON object following the schema below.
-
-2. Strict JSON Only: Do not include any extra commentary, markdown formatting, or multiple JSON objects. Respond solely with one valid JSON block.
-
-### Property Search Schema:
-If the user's input includes property search criteria, fill in the parameters as follows:
-{
-  "action": "search_properties",
-  "parameters": {
-    "location": {
-      "country": "<string>",
-      "state": "<string>",
-      "city": "<string>",
-      "street_address": "<string>"
-    },
-    "property_type": "<House, Home, Apartment, Condo, Commercial>",
-    "bedrooms": { "min": <integer or null>, "max": <integer or null> },
-    "bathrooms": { "min": <integer or null>, "max": <integer or null> },
-    "square_footage": { "min": <integer or null>, "max": <integer or null>, "unit": "<string>" },
-    "lot_size": { "min": <integer or null>, "max": <integer or null>, "unit": "<string>" },
-    "budget": { "min": <integer or null>, "max": <integer or null>, "currency": "<string>" },
-    "transaction": "<buy or rent>",
-    "property_status": { "condition": "<New property, renovated property, a property needs repair>", "status": "<Available, Sold, Under Offer>" },
-    "amenities": { "interior": ["<amenity1>", "<amenity2>", ...], "exterior": ["<amenity1>", "<amenity2>", ...], "accessibility": ["<amenity1>", "<amenity2>", ...] }
-  }
-}
-
-### Default Response Format:
-Your response must always follow this format, updating values according to the user's message:
-{
-  "message": "",
-  "search_properties": {
-    "action": "search_properties",
-    "parameters": {
-      "location": { "country": "", "state": "", "city": "", "street_address": "" },
-      "property_type": "",
-      "bedrooms": { "min": null, "max": null },
-      "bathrooms": { "min": null, "max": null },
-      "square_footage": { "min": null, "max": null, "unit": "" },
-      "lot_size": { "min": null, "max": null, "unit": "" },
-      "budget": { "min": null, "max": null, "currency": "" },
-      "transaction": "",
-      "property_status": { "condition": "", "status": "" },
-      "amenities": { "interior": [], "exterior": [], "accessibility": [] }
-    }
-  }
-}
-
-### Final Instruction:
-Now, please respond accordingly to the following input:
-[User Input Here]
-""".trimIndent()
-
-
-    private val sysContent2 = """
-        You are Ebo, a friendly and knowledgeable property search assistant who communicates naturally like a human. Your primary role is to answer the user's questions in a conversational tone.
-
-        ### Output Requirements:
-        1. Your response must be a single valid JSON object with exactly two keys:
-           - "message": A natural language reply to the user.
-           - "search_properties": A JSON object following the schema below.
-
-        2. Strict JSON Only: Do not include any extra commentary, markdown formatting, or multiple JSON objects. Respond solely with one valid JSON block.
-
-        ### Property Search Schema:
-        If the user's input includes property search criteria, fill in the parameters as follows:
-        {
-          "action": "search_properties",
-          "parameters": {
-            "location": {
-              "country": "<string>",
-              "state": "<string>",
-              "city": "<string>",
-              "street_address": "<string>"
+        runCatching {
+            // Parse the content as a JSON object to extract the message
+            val parsedResponse = gson.fromJson(chatResponse.content, ChatResponse::class.java)
+            parsedResponse
+        }.fold(
+            onSuccess = { parsedResponse ->
+                if (parsedResponse?.message != null) {
+                    conversationHistory.add(ChatMessage(content = parsedResponse.message, images = emptyList()))
+                    updateParamsFromResponse(parsedResponse.search_properties.parameters)
+                    updateUiState { copy(messages = conversationHistory.toList(), errorMessage = null) }
+                } else {
+                    Log.e(ChatbotViewModelConst.TAG, "Parsed response or message is null")
+                    updateUiState { copy(errorMessage = "Invalid response: Message is missing") }
+                }
             },
-            "property_type": "<House, Home, Apartment, Condo, Commercial>",
-            "bedrooms": { "min": <integer or null>, "max": <integer or null> },
-            "bathrooms": { "min": <integer or null>, "max": <integer or null> },
-            "square_footage": { "min": <integer or null>, "max": <integer or null>, "unit": "<string>" },
-            "lot_size": { "min": <integer or null>, "max": <integer or null>, "unit": "<string>" },
-            "budget": { "min": <integer or null>, "max": <integer or null>, "currency": "<string>" },
-            "transaction": "<buy or rent>",
-            "property_status": { "condition": "<New property, renovated property, a property needs repair>", "status": "<Available, Sold, Under Offer>" },
-            "amenities": { "interior": ["<amenity1>", "<amenity2>", ...], "exterior": ["<amenity1>", "<amenity2>", ...], "accessibility": ["<amenity1>", "<amenity2>", ...] }
-          }
-        }
-
-        ### Response must be always in this format, and you update values according to user message:
-        {
-          "message": "",
-          "search_properties": {
-            "action": "search_properties",
-            "parameters": {
-              "location": { "country": "", "state": "", "city": "", "street_address": "" },
-              "property_type": "",
-              "bedrooms": { "min": null, "max": null },
-              "bathrooms": { "min": null, "max": null },
-              "square_footage": { "min": null, "max": null, "unit": "" },
-              "lot_size": { "min": null, "max": null, "unit": "" },
-              "budget": { "min": null, "max": null, "currency": "" },
-              "transaction": "",
-              "property_status": { "condition": "", "status": "" },
-              "amenities": { "interior": [], "exterior": [], "accessibility": [] }
+            onFailure = { exception ->
+                Log.e(ChatbotViewModelConst.TAG, "Error parsing chat response", exception)
+                updateUiState { copy(errorMessage = "Error parsing response: ${exception.message}") }
             }
-          }
-        }
+        )
+    }
 
-        ### Final Instruction:
-        Now, please respond accordingly to the following input:
-        [User Input Here]
-    """.trimIndent()
+    /**
+     * Updates the UI state with the provided transformation.
+     */
+    private fun updateUiState(transform: ChatUiState.() -> ChatUiState) {
+        // apply the transform
+        val newState = _uiState.value?.run(transform) ?: ChatUiState()
+        // but override messages to strip out system prompts
+        _uiState.value = newState.copy(messages = getDisplayMessages())
+    }
+
+    private fun getDisplayMessages(): List<ChatMessage> =
+        conversationHistory.filter { it.role != "system" }
+
+
 }

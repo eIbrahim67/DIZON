@@ -4,7 +4,7 @@ import com.eibrahim.dizon.chatbot.data.network.ChatLlamaStreamProcessor
 import com.eibrahim.dizon.chatbot.data.repository.ChatRepository
 import com.eibrahim.dizon.chatbot.domain.model.ChatMessage
 import com.eibrahim.dizon.core.response.FailureReason
-import com.eibrahim.dizon.core.response.Response
+import com.eibrahim.dizon.core.response.ResponseEI
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -12,9 +12,9 @@ import kotlinx.coroutines.flow.callbackFlow
 class ChatRepositoryImpl(
     private val streamProcessor: ChatLlamaStreamProcessor
 ) : ChatRepository {
-    override suspend fun getChatResponse(jsonPayload: String): Flow<Response<ChatMessage>> = callbackFlow {
+    override suspend fun getChatResponse(jsonPayload: String): Flow<ResponseEI<ChatMessage>> = callbackFlow {
         // Emit a loading state immediately.
-        trySend(Response.Loading)
+        trySend(ResponseEI.Loading)
 
         val conversationBuilder = StringBuilder()
         streamProcessor.getChatLlamaStream(
@@ -22,18 +22,18 @@ class ChatRepositoryImpl(
             onMessageReceived = { line ->
                 conversationBuilder.append(line).append("\n")
                 // Optionally, emit intermediate loading states or partial updates.
-                trySend(Response.Loading)
+                trySend(ResponseEI.Loading)
             },
             onError = { e ->
-                trySend(Response.Failure(FailureReason.UnknownError(e.toString())))
+                trySend(ResponseEI.Failure(FailureReason.UnknownError(e.toString())))
                 close(e)
             },
             onReceiving = {
                 // Could update UI to show shimmer/loading.
-                trySend(Response.Loading)
+                trySend(ResponseEI.Loading)
             },
             onComplete = {
-                trySend(Response.Success(ChatMessage(content = conversationBuilder.toString())))
+                trySend(ResponseEI.Success(ChatMessage(content = conversationBuilder.toString())))
                 close()
             }
         )
