@@ -16,7 +16,7 @@ import kotlin.coroutines.suspendCoroutine
  */
 class ChatLlamaStreamProcessor(private val httpClient: HttpClient) {
 
-    private val url = "http://10.0.2.2:5000/chat"
+    private val url = "http://192.168.1.5:5000/chat"
 
     /**
      * Initiates a chat stream request.
@@ -84,29 +84,4 @@ class ChatLlamaStreamProcessor(private val httpClient: HttpClient) {
         })
     }
 
-    /**
-     * Suspends until the full chat response is received.
-     *
-     * This function accumulates all received lines into a single String.
-     *
-     * @param jsonPayload The JSON payload to send.
-     * @return The full chat response as a String.
-     * @throws Exception If an error occurs during the streaming process.
-     */
-//    suspend fun fetchChatResponse(jsonPayload: String): String = suspendCoroutine { cont ->
-//
-//        val conversationBuilder = StringBuilder()
-//
-//        getChatLlamaStream(
-//            jsonPayload,
-//            onMessageReceived = { line ->
-//                conversationBuilder.append(line).append("\n")
-//            },
-//            onError = { e ->
-//                cont.resumeWithException(e)
-//            },
-//            onReceiving = {},
-//            onComplete = { cont.resume(conversationBuilder.toString()) }
-//        )
-//    }
 }
