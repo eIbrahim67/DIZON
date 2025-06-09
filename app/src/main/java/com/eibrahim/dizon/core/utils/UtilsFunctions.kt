@@ -3,7 +3,7 @@ package com.eibrahim.dizon.core.utils
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.eibrahim.dizon.core.response.FailureReason
-import com.eibrahim.dizon.core.response.Response
+import com.eibrahim.dizon.core.response.ResponseEI
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -13,23 +13,23 @@ object UtilsFunctions {
 
     fun <T> applyResponse(
 
-        liveDate: MutableLiveData<Response<T>>,
+        liveDate: MutableLiveData<ResponseEI<T>>,
         viewModelScope: CoroutineScope,
         dataFetch: suspend () -> T
 
     ) {
 
-        liveDate.value = Response.Loading
+        liveDate.value = ResponseEI.Loading
 
         viewModelScope.launch {
 
             try {
                 val result = dataFetch()
-                liveDate.value = Response.Success(result)
+                liveDate.value = ResponseEI.Success(result)
             } catch (e: IOException) {
-                liveDate.value = Response.Failure(FailureReason.NoInternet)
+                liveDate.value = ResponseEI.Failure(FailureReason.NoInternet)
             } catch (e: Exception) {
-                liveDate.value = Response.Failure(
+                liveDate.value = ResponseEI.Failure(
                     FailureReason.UnknownError(
                         e.message ?: "Unknown error occurred"
                     )
@@ -90,10 +90,10 @@ object UtilsFunctions {
     private var isFailureReason_NoInternet: Boolean = false
 
     fun createFailureResponse(
-        response: Response.Failure,
+        responseEI: ResponseEI.Failure,
         context: Context
     ) {
-        when (val failureReason = response.reason) {
+        when (val failureReason = responseEI.reason) {
 
             is FailureReason.NoInternet -> {
                 if (!isFailureReason_NoInternet) {
