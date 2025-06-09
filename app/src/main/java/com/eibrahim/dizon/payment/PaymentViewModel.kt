@@ -7,8 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.eibrahim.dizon.addproperty.model.AddPropertyData
 import com.eibrahim.dizon.addproperty.viewmodel.Property
 import com.eibrahim.dizon.addproperty.viewmodel.PropertyRepository
+import com.eibrahim.dizon.payment.model.PaymentInfo
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
 
 class PaymentViewModel(private val repository: PropertyRepository) : ViewModel() {
 
@@ -21,13 +22,40 @@ class PaymentViewModel(private val repository: PropertyRepository) : ViewModel()
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
 
+    private var correctPaymentInfo = PaymentInfo(
+        cardHolderName = "Habiba Mostafa",
+        cardNumber = "111111111111111111111111",
+        expiryMonth = "1",
+        expiryYear = "30",
+        securityCode = "123",
+        cardType = "Visa"
+    )
 
-    fun addProperty(addPropertyData: AddPropertyData) {
+    private var notEnoughPaymentInfo = PaymentInfo(
+        cardHolderName = "Mohamed Ahmed",
+        cardNumber = "4111111111111111", // typical valid Visa test card
+        expiryMonth = "12",
+        expiryYear = "27",
+        securityCode = "123",
+        cardType = "Visa"
+    )
+
+
+    fun checkPaymentInfo(input: PaymentInfo) =
+        when (input) {
+            correctPaymentInfo -> { 0 }
+            notEnoughPaymentInfo -> { 1 }
+            else -> 2
+        }
+
+
+    fun uploadProperty(addPropertyData: AddPropertyData) {
 
         _isLoading.value = true
 
-        viewModelScope.launch {
-            val location = "${addPropertyData.street}, ${addPropertyData.city}, ${addPropertyData.governate}"
+        viewModelScope.launch(Dispatchers.IO) {
+            val location =
+                "${addPropertyData.street}, ${addPropertyData.city}, ${addPropertyData.governate}"
 
             val property = Property(
                 title = addPropertyData.title,
@@ -50,12 +78,12 @@ class PaymentViewModel(private val repository: PropertyRepository) : ViewModel()
                 addPropertyData.accessibilityAmenityIds
             )
 
-            _isLoading.value = false
+            _isLoading.postValue(false)
 
             if (result.isSuccess) {
-                _addSuccess.value = true
+                _addSuccess.postValue(true)
             } else {
-                _errorMessage.value = "Failed to add property: ${result.exceptionOrNull()?.message}"
+                _errorMessage.postValue("Failed to add property: ${result.exceptionOrNull()?.message}")
             }
         }
     }
