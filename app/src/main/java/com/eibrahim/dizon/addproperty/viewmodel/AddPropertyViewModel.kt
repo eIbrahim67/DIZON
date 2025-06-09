@@ -64,57 +64,6 @@ class AddPropertyViewModel(private val repository: PropertyRepository) : ViewMod
             }
         }
     }
-
-    fun addProperty(
-        title: String,
-        description: String,
-        price: Double,
-        street: String,
-        city: String,
-        governate: String,
-        locationUrl: String,
-        propertyType: String,
-        listingType: String,
-        size: Int,
-        rooms: Int,
-        beds: Int,
-        bathrooms: Int,
-        imageFiles: List<File>,
-        internalAmenityIds: List<Int>,
-        externalAmenityIds: List<Int>,
-        accessibilityAmenityIds: List<Int>
-    ) {
-        if (title.isBlank() || description.isBlank() || street.isBlank() || city.isBlank() || governate.isBlank() || locationUrl.isBlank() || price <= 0 || imageFiles.isEmpty()) {
-            _errorMessage.value = "Please fill all required fields, including Street, City, Governate, Location URL, and upload at least one image."
-            return
-        }
-
-        _isLoading.value = true
-
-        viewModelScope.launch {
-            val location = "$street, $city, $governate"
-            val property = Property(
-                title = title,
-                description = description,
-                price = price,
-                location = location,
-                locationUrl = locationUrl,
-                propertyType = propertyType,
-                listingType = listingType,
-                size = size,
-                beds = beds,
-                bathrooms = bathrooms
-            )
-
-            val result = repository.addProperty(property, imageFiles, internalAmenityIds, externalAmenityIds, accessibilityAmenityIds)
-            _isLoading.value = false
-            if (result.isSuccess) {
-                _addSuccess.value = true
-            } else {
-                _errorMessage.value = "Failed to add property: ${result.exceptionOrNull()?.message}"
-            }
-        }
-    }
 }
 
 class AddPropertyViewModelFactory(

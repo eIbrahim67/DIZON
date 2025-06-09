@@ -30,6 +30,12 @@ import java.io.File
 import java.io.FileOutputStream
 import android.content.res.Resources
 import android.util.TypedValue
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
+import com.eibrahim.dizon.addproperty.model.AddPropertyData
+import com.eibrahim.dizon.main.viewModel.MainViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class AddPropertyFragment : Fragment() {
 
@@ -204,6 +210,13 @@ class AddPropertyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
+        bottomNavigationView.visibility = View.GONE
+
+        navController =
+            requireActivity().supportFragmentManager.findFragmentById(R.id.main_nav_host_fragment)
+                ?.findNavController()
+
         // Initialize UI elements
         btnback = view.findViewById(R.id.btnback)
         imagesScrollView = view.findViewById(R.id.imagesScrollView)
@@ -362,25 +375,42 @@ class AddPropertyFragment : Fragment() {
                 }
             }
 
-            viewModel.addProperty(
-                title = title,
-                description = description,
-                price = price,
-                street = street,
-                city = city,
-                governate = governate,
-                locationUrl = locationUrl,
-                propertyType = propertyType,
-                listingType = listingType,
-                size = size,
-                rooms = rooms,
-                beds = beds,
-                bathrooms = bathrooms,
-                imageFiles = imageFiles,
-                internalAmenityIds = internalAmenityIds,
-                externalAmenityIds = externalAmenityIds,
-                accessibilityAmenityIds = accessibilityAmenityIds
-            )
+            if (title.isBlank() || description.isBlank() || street.isBlank() || city.isBlank() || governate.isBlank() || locationUrl.isBlank() || price <= 0 || imageFiles.isEmpty()) {
+                Toast.makeText(requireContext(),"Please fill all required fields, including Street, City, Governate, Location URL, and upload at least one image.", Toast.LENGTH_LONG)
+
+            }else{
+
+                val propertyData = AddPropertyData(
+                    title = title,
+                    description = description,
+                    price = price,
+                    street = street,
+                    city = city,
+                    governate = governate,
+                    locationUrl = locationUrl,
+                    propertyType = propertyType,
+                    listingType = listingType,
+                    size = size,
+                    rooms = rooms,
+                    beds = beds,
+                    bathrooms = bathrooms,
+                    imageFiles = imageFiles,
+                    internalAmenityIds = internalAmenityIds,
+                    externalAmenityIds = externalAmenityIds,
+                    accessibilityAmenityIds = accessibilityAmenityIds
+                )
+
+// Set the LiveData in the ViewModel
+                sharedViewModel.setPropertyData(propertyData).let {
+
+                    navController?.navigate(
+                        R.id.paymentFragment, null, navOptions
+                    )
+
+                }
+
+            }
+
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
@@ -400,4 +430,17 @@ class AddPropertyFragment : Fragment() {
             }
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bottomNavigationView.visibility = View.VISIBLE
+    }
+
+    private lateinit var bottomNavigationView: BottomNavigationView
+    private var navController: NavController? = null
+
+    private val navOptions = NavOptions.Builder().setEnterAnim(R.anim.slide_in_right)
+        .setPopExitAnim(R.anim.slide_out_right).build()
+
+    private val sharedViewModel: MainViewModel by activityViewModels()
 }
