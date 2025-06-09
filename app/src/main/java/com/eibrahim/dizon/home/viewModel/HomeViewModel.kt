@@ -25,7 +25,7 @@ class HomeViewModel : ViewModel() {
     private val pageSize = 5
 
     fun loadRecommendations() {
-
+        Log.d("Test1", "1")
         viewModelScope.launch {
             try {
                 val response: Response<RecommendedPropertyResponse> =

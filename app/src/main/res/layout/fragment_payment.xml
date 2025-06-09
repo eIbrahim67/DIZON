@@ -284,7 +284,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:backgroundTint="@color/primary_color"
-                android:text="@string/continue_payment"
+                android:text="Finish"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
         </com.google.android.material.card.MaterialCardView>

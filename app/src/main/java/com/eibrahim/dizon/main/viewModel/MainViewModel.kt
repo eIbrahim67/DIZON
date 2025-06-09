@@ -6,10 +6,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.eibrahim.dizon.addproperty.model.AddPropertyData
+import com.eibrahim.dizon.addproperty.viewmodel.Property
 import com.eibrahim.dizon.auth.AuthPreferences
 import com.eibrahim.dizon.chatbot.api.RetrofitChatbot
 import com.eibrahim.dizon.search.data.SearchPropertyResponse
 import kotlinx.coroutines.launch
+import java.io.File
 
 class MainViewModel : ViewModel() {
 
@@ -142,6 +145,15 @@ class MainViewModel : ViewModel() {
                 Log.e("SearchViewModel", "Exception: ${e.message}")
             }
         }
+    }
+
+
+    private val _propertyData = MutableLiveData<AddPropertyData>()
+    val propertyData: LiveData<AddPropertyData> = _propertyData
+
+    // Function to update the entire AddPropertyData object
+    fun setPropertyData(data: AddPropertyData) {
+        _propertyData.value = data
     }
 
 }
