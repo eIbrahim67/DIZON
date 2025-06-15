@@ -18,6 +18,13 @@ class AdapterRVSearch(
     private val onWishlistClick: ((Property) -> Unit)? = null
 ) : RecyclerView.Adapter<AdapterRVSearch.PropertyViewHolder>() {
 
+    private var favoriteIds: Set<Int> = emptySet()
+
+    fun setFavorites(favIds: Set<Int>) {
+        favoriteIds = favIds
+        notifyDataSetChanged() // refresh all items to update icon
+    }
+
     private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PropertyViewHolder {
@@ -33,6 +40,15 @@ class AdapterRVSearch(
 
     override fun onBindViewHolder(holder: PropertyViewHolder, position: Int) {
         val property = differ.currentList[position]
+
+        val isFavorite = favoriteIds.contains(property.propertyId)
+        holder.itemWishlist.setImageResource(
+            if (isFavorite) R.drawable.icon_solid_love else R.drawable.icon_selector_love
+        )
+
+        holder.itemWishlist.setOnClickListener {
+            onWishlistClick?.invoke(property)
+        }
 
         // Load first property image using Glide
         val imageUrl = property.propertyImages.values.firstOrNull()

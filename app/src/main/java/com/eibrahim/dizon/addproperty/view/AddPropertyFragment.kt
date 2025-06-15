@@ -452,8 +452,6 @@ class AddPropertyFragment : Fragment() {
                 initiatePayment()
             }
 
-
-
             viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
                 submitButton.isEnabled = !isLoading
             }

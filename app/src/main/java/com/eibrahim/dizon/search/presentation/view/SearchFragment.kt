@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -15,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.eibrahim.dizon.R
+import com.eibrahim.dizon.search.data.Property
 import com.eibrahim.dizon.main.viewModel.MainViewModel
 import com.eibrahim.dizon.search.presentation.viewModel.SearchViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -29,7 +31,10 @@ class SearchFragment : Fragment() {
     private lateinit var bottomNavigationView: BottomNavigationView
 
     private val viewModel: SearchViewModel by viewModels()
-    private val adapterRVProperties = AdapterRVSearch(goToDetails =  { id -> goToDetails(id) })
+    private val adapterRVProperties = AdapterRVSearch(
+        goToDetails = { id -> goToDetails(id) },
+        onWishlistClick = { property -> toggleFavorite(property) }
+    )
 
     private val sharedViewModel: MainViewModel by activityViewModels()
 
@@ -69,6 +74,13 @@ class SearchFragment : Fragment() {
                 Log.d("SearchFragment", "Properties: ${response.data}")
                 adapterRVProperties.submitList(response.data.values)
             }
+
+            viewModel.fetchFavorites() // fetch at start
+
+            viewModel.favoriteIds.observe(viewLifecycleOwner) { favIds ->
+                adapterRVProperties.setFavorites(favIds)
+            }
+
         }
 
         viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
@@ -83,7 +95,7 @@ class SearchFragment : Fragment() {
             }
         }
 
-        sharedViewModel.searchType.observe(viewLifecycleOwner){ data ->
+        sharedViewModel.searchType.observe(viewLifecycleOwner) { data ->
 
             searchType.setText(data)
 
@@ -138,4 +150,9 @@ class SearchFragment : Fragment() {
         findNavController().navigate(R.id.action_searchFragment_to_detailsFragment, bundle)
     }
 
+    private fun toggleFavorite(property: Property) {
+        viewModel.toggleFavorite(property)
+        Toast.makeText(requireContext(), "Toggled favorite: ${property.title}", Toast.LENGTH_SHORT)
+            .show()
+    }
 }
