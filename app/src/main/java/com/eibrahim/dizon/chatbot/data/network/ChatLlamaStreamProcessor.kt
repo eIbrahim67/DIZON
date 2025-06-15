@@ -8,7 +8,6 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-// Responsible for processing chat responses from the HTTP client.
 /**
  * Processes chat responses from an HTTP service using an HttpClient.
  *
@@ -38,7 +37,6 @@ class ChatLlamaStreamProcessor(private val httpClient: HttpClient) {
             override fun onFailure(call: Call, e: IOException) {
                 onError(e)
             }
-
             override fun onResponse(call: Call, response: Response) {
                 if (!response.isSuccessful) {
                     onError(IOException("Unexpected response code: ${response.code}"))
@@ -48,26 +46,9 @@ class ChatLlamaStreamProcessor(private val httpClient: HttpClient) {
                 onReceiving()
                 response.body?.let { body ->
                     try {
-                        //Converts the response body into a character stream.
                         body.charStream()
-                            //Buffers the stream
-
-                            /*Buffering the stream is essential for performance and efficiency when reading text data.
-                            The `charStream()` method returns a `Reader`,
-                            but that reader might not be buffered,
-                            which means that every small read request could result in a separate I/O operation.
-                            By calling `.buffered()`, we wrap the stream in a `BufferedReader`,
-                            which reads data in larger chunks, reduces the number of I/O calls,
-                            and efficiently provides methods like `useLines` for processing the stream line by line.
-                            This approach is particularly beneficial when handling network streams
-                            where reading efficiency can impact overall performance.*/
-
-                            /*Buffering data is generally recommended because it minimizes the number of I/O operations
-                            by reading larger chunks of data at once.*/
                             .buffered()
-                            //processes it line by line
                             .useLines { lines ->
-                                //For each line read, calls the onMessageReceived callback
                                 lines.forEach { line ->
                                     onMessageReceived(line)
                                 }
@@ -76,12 +57,10 @@ class ChatLlamaStreamProcessor(private val httpClient: HttpClient) {
                     } catch (e: Exception) {
                         onError(e)
                     } finally {
-                        // Ensure that the response is closed to avoid leaks.
                         response.close()
                     }
                 } ?: onError(IOException("Response body is null"))
             }
         })
     }
-
 }

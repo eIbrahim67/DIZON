@@ -10,10 +10,12 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.eibrahim.dizon.R
+import com.eibrahim.dizon.main.viewModel.MainViewModel
 import com.eibrahim.dizon.search.presentation.viewModel.SearchViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -28,6 +30,9 @@ class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModels()
     private val adapterRVProperties = AdapterRVSearch(goToDetails =  { id -> goToDetails(id) })
+
+    private val sharedViewModel: MainViewModel by activityViewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,6 +81,12 @@ class SearchFragment : Fragment() {
                 // Optionally show error message in UI
                 Log.e("SearchFragment", "Error: $errorMessage")
             }
+        }
+
+        sharedViewModel.searchType.observe(viewLifecycleOwner){ data ->
+
+            searchType.setText(data)
+
         }
     }
 

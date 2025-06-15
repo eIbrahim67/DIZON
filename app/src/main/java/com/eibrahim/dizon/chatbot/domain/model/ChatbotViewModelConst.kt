@@ -73,3 +73,19 @@ object ChatbotViewModelConst{
             Respond to the user's input with a single JSON object, updating values as needed.
         """.trimIndent()
 }
+// AI:
+// pref: (bed = 4, bath= 2, sq = 23333, amini = {air}, ........................................)
+
+
+// 
+
+
+
+
+
+
+
+
+
+
+

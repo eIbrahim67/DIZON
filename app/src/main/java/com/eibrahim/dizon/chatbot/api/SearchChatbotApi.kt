@@ -23,5 +23,4 @@ interface SearchChatbotApi {
         @Query("PageSize") pageSize: Int,
         @Query("PageIndex") pageIndex: Int
     ): Response<SearchPropertyResponse>
-
 }

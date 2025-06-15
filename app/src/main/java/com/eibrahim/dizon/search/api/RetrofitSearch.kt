@@ -14,7 +14,6 @@ object RetrofitSearch {
 
     private var authPreferences: AuthPreferences? = null
 
-    // Initialize AuthPreferences (call this in your Application class or Activity)
     fun initAuthPreferences(context: Context) {
         authPreferences = AuthPreferences(context)
         Log.d("RetrofitClient", "AuthPreferences initialized with context")
@@ -22,9 +21,9 @@ object RetrofitSearch {
 
     private val okHttpClient: OkHttpClient by lazy {
         val logging = HttpLoggingInterceptor { message ->
-            Log.d("OkHttp message", message) // Ensure logs are tagged with "OkHttp"
+            Log.d("OkHttp message", message)
         }.apply {
-            setLevel(HttpLoggingInterceptor.Level.BODY) // Log full request and response body
+            setLevel(HttpLoggingInterceptor.Level.BODY)
         }
         OkHttpClient.Builder()
             .addInterceptor(logging)
