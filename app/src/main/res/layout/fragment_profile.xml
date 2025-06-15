@@ -111,6 +111,57 @@
                 android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/my_property"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <ImageView
+                        android:id="@+id/icon_start_my_property"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/my_property"
+                        app:tint="@color/gray_v3"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/my_properties"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="12dp"
+                        app:layout_constraintStart_toEndOf="@+id/icon_start_my_property"
+                        app:layout_constraintEnd_toStartOf="@+id/icon_end_my_property"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/icon_end_my_property"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/baseline_keyboard_arrow_right_24"
+                        app:tint="@color/gray"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/gray_v6" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/add_property"
                     android:layout_width="match_parent"
                     android:layout_height="64dp"

@@ -73,14 +73,16 @@
                 android:background="@drawable/bc_right_half_circle"
                 android:src="@drawable/icon_chatbot_v1"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/search_type_layout"
+                app:layout_constraintStart_toEndOf="@id/search_home_layout"
                 app:layout_constraintTop_toBottomOf="@id/menuLayout"
                 app:tint="@color/purple" />
 
             <LinearLayout
-                android:id="@+id/search_type_layout"
+                android:id="@+id/search_home_layout"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
+                android:clickable="false"
+                android:focusable="false"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bc_left_half_circle"
@@ -93,11 +95,14 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center_vertical"
+                    android:clickable="false"
+                    android:focusable="false"
                     android:layout_marginStart="10dp"
                     android:src="@drawable/icon_selector_search"
                     app:tint="@color/black" />
 
                 <EditText
+                    android:id="@+id/search_home"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
@@ -122,7 +127,7 @@
                 android:textStyle="bold"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/search_type_layout" />
+                app:layout_constraintTop_toBottomOf="@id/search_home_layout" />
 
             <TextView
                 android:id="@+id/textViewCategoriesSeeMore"
@@ -327,7 +332,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="10dp"
                             android:gravity="center_vertical"
-                            android:text="@string/all_category"
+                            android:text="Go To Search Page"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"

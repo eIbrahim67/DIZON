@@ -16,7 +16,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/itemImageProperties"
+            android:id="@+id/itemImageMyProperties"
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:background="@color/white"
@@ -26,7 +26,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/itemSaleType"
+            android:id="@+id/itemMySaleType"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_margin="10dp"
@@ -42,18 +42,29 @@
             app:tint="@color/black" />
 
         <ImageView
-            android:id="@+id/itemAddToWishlist"
+            android:id="@+id/itemSponsored"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="10dp"
             android:background="@drawable/bc_corners_50"
-            android:padding="10dp"
-            android:src="@drawable/icon_selector_love"
+            android:padding="7dp"
+            android:src="@drawable/icon_star"
+            app:tint="@color/gray_v6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/itemDelete"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_delete"
+            app:tint="@color/red_v2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/itemSponsored" />
+
         <TextView
-            android:id="@+id/textBedNum"
+            android:id="@+id/textMyBedNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -65,13 +76,13 @@
             android:paddingBottom="5dp"
             android:text="3 bedrooms"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/itemImageProperties"
-            app:layout_constraintEnd_toStartOf="@+id/textBathNum"
+            app:layout_constraintBottom_toBottomOf="@id/itemImageMyProperties"
+            app:layout_constraintEnd_toStartOf="@+id/textMyBathNum"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textSize" />
+            app:layout_constraintStart_toEndOf="@+id/textMySize" />
 
         <TextView
-            android:id="@+id/textBathNum"
+            android:id="@+id/textMyBathNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -83,13 +94,13 @@
             android:paddingBottom="5dp"
             android:text="2 bathrooms"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/itemImageProperties"
+            app:layout_constraintBottom_toBottomOf="@id/itemImageMyProperties"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textBedNum" />
+            app:layout_constraintStart_toEndOf="@+id/textMyBedNum" />
 
         <TextView
-            android:id="@+id/textSize"
+            android:id="@+id/textMySize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -101,13 +112,13 @@
             android:paddingBottom="5dp"
             android:text="171 meters"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/itemImageProperties"
-            app:layout_constraintEnd_toStartOf="@+id/textBedNum"
+            app:layout_constraintBottom_toBottomOf="@id/itemImageMyProperties"
+            app:layout_constraintEnd_toStartOf="@+id/textMyBedNum"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/itemTitleProperties"
+            android:id="@+id/itemTitleMyProperties"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -118,12 +129,12 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="normal"
-            app:layout_constraintEnd_toStartOf="@id/itemPriceProperties"
+            app:layout_constraintEnd_toStartOf="@id/itemPriceMyProperties"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/itemImageProperties" />
+            app:layout_constraintTop_toBottomOf="@id/itemImageMyProperties" />
 
         <TextView
-            android:id="@+id/itemPriceProperties"
+            android:id="@+id/itemPriceMyProperties"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -132,11 +143,11 @@
             android:textColor="@color/black"
             android:textSize="22sp"
             android:textStyle="bold"
-            app:layout_constraintBaseline_toBaselineOf="@id/itemTitleProperties"
+            app:layout_constraintBaseline_toBaselineOf="@id/itemTitleMyProperties"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
-            android:id="@+id/itemLocationProperties"
+            android:id="@+id/itemLocationMyProperties"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -150,7 +161,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/itemTitleProperties" />
+            app:layout_constraintTop_toBottomOf="@id/itemTitleMyProperties" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

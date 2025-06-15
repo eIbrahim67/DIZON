@@ -29,9 +29,6 @@ class HttpClient {
             .url(url)
             .post(requestBody)
             .build()
-
         clint.newCall(request).enqueue(callback)
-
     }
-
 }

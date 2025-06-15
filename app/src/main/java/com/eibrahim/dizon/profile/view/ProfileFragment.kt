@@ -19,6 +19,7 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.eibrahim.dizon.auth.AuthActivity
 import com.eibrahim.dizon.auth.AuthPreferences
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,6 +35,14 @@ class ProfileFragment : Fragment() {
     private lateinit var navController: NavController
     private val authApi: AuthApi by lazy { RetrofitClient.api }
 
+    private lateinit var bottomNavigationView: BottomNavigationView
+
+    override fun onResume() {
+        super.onResume()
+        bottomNavigationView.visibility = View.VISIBLE
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,11 +52,15 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         navController = findNavController()
-
+        bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
         // Fetch and display user profile data
         fetchUserProfile(view)
 
         // Existing navigation listeners
+        view.findViewById<ConstraintLayout>(R.id.my_property).setOnClickListener {
+            navController.navigate(R.id.MyPropertyFragment)
+        }
+
         view.findViewById<ConstraintLayout>(R.id.add_property).setOnClickListener {
             navController.navigate(R.id.addPropertyFragment)
         }

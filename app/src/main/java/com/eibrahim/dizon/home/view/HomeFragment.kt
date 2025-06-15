@@ -5,7 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -15,7 +17,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.eibrahim.dizon.R
-import com.eibrahim.dizon.core.utils.UtilsFunctions
+import com.eibrahim.dizon.home.model.Property
 import com.eibrahim.dizon.home.view.adapters.AdapterRVOffices
 import com.eibrahim.dizon.home.view.adapters.AdapterRVProperties
 import com.eibrahim.dizon.home.view.adapters.AdapterRVProperties80
@@ -31,12 +33,25 @@ class HomeFragment : Fragment() {
     private lateinit var recyclerviewSponsored: RecyclerView
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var chatbotLayout: ImageView
+    private lateinit var search: EditText
+    private lateinit var categoryHouse: ImageView
+    private lateinit var categoryVilla: ImageView
+    private lateinit var categoryApartment: ImageView
+    private lateinit var categoryHotel: ImageView
 
-    private val utils = UtilsFunctions
     private var navController: NavController? = null
 
-    private val adapterRVProperties = AdapterRVProperties(goToDetails =  { id -> goToDetails(id) })
-    private val adapterRVProperties80 = AdapterRVProperties80(goToDetails =  { id -> goToDetails(id) })
+    private val adapterRVProperties = AdapterRVProperties(
+        goToDetails = { id -> goToDetails(id) },
+        onWishlistClick = { property -> toggleFavorite(property) }
+    )
+    private val adapterRVProperties80 = AdapterRVProperties80(
+        goToDetails = { id -> goToDetails(id) },
+        onWishlistClick = { property -> toggleFavorite(property) }
+    )
+
+    private val sharedViewModel: MainViewModel by activityViewModels()
+
 
     private val adapterRVOffices = AdapterRVOffices { categoryId ->
         Log.d("HomeFragment", "Category clicked with id: $categoryId")
@@ -44,7 +59,6 @@ class HomeFragment : Fragment() {
     private val navOptions = NavOptions.Builder().setEnterAnim(R.anim.slide_in_right)
         .setPopExitAnim(R.anim.slide_out_right).build()
     private val viewModel: HomeViewModel by viewModels()
-    private val sharedViewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -66,6 +80,33 @@ class HomeFragment : Fragment() {
         recyclerviewRecommendation = view.findViewById(R.id.recyclerviewRecommendation)
         recyclerviewSponsored = view.findViewById(R.id.recyclerviewSponsored)
         chatbotLayout = view.findViewById(R.id.chatbot_layout)
+        search= view.findViewById(R.id.search_home)
+        categoryHouse= view.findViewById(R.id.categoryHouse)
+        categoryVilla= view.findViewById(R.id.categoryVilla)
+        categoryApartment= view.findViewById(R.id.categoryApartment)
+        categoryHotel= view.findViewById(R.id.categoryHotel)
+
+        categoryHouse.setOnClickListener {
+            sharedViewModel.setSearchType("House")
+            bottomNavigationView.selectedItemId = R.id.action_search
+        }
+
+        categoryVilla.setOnClickListener {
+            sharedViewModel.setSearchType("Villa")
+            bottomNavigationView.selectedItemId = R.id.action_search
+        }
+
+        categoryApartment.setOnClickListener {
+            sharedViewModel.setSearchType("Apartment")
+            bottomNavigationView.selectedItemId = R.id.action_search
+        }
+
+        categoryHotel.setOnClickListener {
+            sharedViewModel.setSearchType("Hotel")
+            bottomNavigationView.selectedItemId = R.id.action_search
+        }
+
+
 
         bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
         bottomNavigationView.visibility = View.VISIBLE
@@ -120,9 +161,19 @@ class HomeFragment : Fragment() {
             )
         }
 
+        search.setOnClickListener {
+            bottomNavigationView.selectedItemId = R.id.action_search // or whatever ID you want
+        }
+
+
     }
 
     private fun initObservers() {
+        viewModel.fetchFavorites() // fetch at start
+
+        viewModel.favoriteIds.observe(viewLifecycleOwner) { favIds ->
+            adapterRVProperties.setFavorites(favIds)
+        }
 
     }
 
@@ -132,6 +183,12 @@ class HomeFragment : Fragment() {
         }
         Log.d("Ibra Details", id.toString())
         findNavController().navigate(R.id.action_homeFragment_to_detailsFragment, bundle)
+    }
+
+    private fun toggleFavorite(property: Property) {
+        viewModel.toggleFavorite(property)
+        Toast.makeText(requireContext(), "Toggled favorite: ${property.title}", Toast.LENGTH_SHORT)
+            .show()
     }
 
 
