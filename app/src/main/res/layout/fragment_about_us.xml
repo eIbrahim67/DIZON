@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp">
+
+        <!-- App Logo with Shadow -->
+        <ImageView
+            android:id="@+id/appLogo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@mipmap/ic_logo_v1"
+            android:background="@drawable/bc_solid_circle_logo"
+            android:contentDescription="@string/dizon_app_logo"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- App Name with Custom Font and Gradient -->
+        <TextView
+            android:id="@+id/appName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dizon"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textColor="@color/blue"
+            android:shadowColor="#80C8E7C7"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+            android:layout_marginTop="20dp"
+            android:fontFamily="sans-serif-condensed"
+            app:layout_constraintTop_toBottomOf="@id/appLogo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Decorative Divider -->
+        <View
+            android:id="@+id/divider"
+            android:layout_width="80dp"
+            android:layout_height="3dp"
+            android:background="@color/blue"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintTop_toBottomOf="@id/appName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- App Description with Basic XML Styling -->
+        <TextView
+            android:id="@+id/appDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="#424242"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:lineSpacingExtra="8dp"
+            android:textAlignment="center"
+            android:fontFamily="sans-serif-light"
+            android:text="Dizon is a complete digital platform designed to transform property management and real estate search in Egypt. Whether you're buying, selling, or renting, Dizon offers an intelligent conversational interface that understands both text and voice, providing instant and personalized property recommendations tailored to your needs.\n\nWith powerful search and advanced filtering options—by price, location, size, and more—our recommendation engine learns from your behavior to refine future suggestions, making your journey faster and easier.\n\nDizon also simplifies document handling by extracting data from scanned papers and images, ensuring secure archiving and quick retrieval. Our interactive dashboard keeps you informed at every transaction stage with real-time notifications, while secure electronic payments and role-based access guarantee privacy and safety for all users—buyers, sellers, agents, and owners.\n\nBy aggregating listings from multiple sources and supporting features like price estimation, visit scheduling, and market analytics, Dizon delivers a seamless, efficient, and future-ready real estate experience."
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Version Information with Subtle Style -->
+        <TextView
+            android:id="@+id/appVersion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Version 1.0.0"
+            android:textColor="#757575"
+            android:textSize="14sp"
+            android:textStyle="italic|bold"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="50dp"
+            android:fontFamily="sans-serif-medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appDescription"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -24,6 +24,10 @@
             android:id="@+id/action_action_home_to_action_wishlist"
             app:destination="@id/action_wishlist" />
 
+        <action
+            android:id="@+id/action_action_home_to_action_add_property"
+            app:destination="@id/addPropertyFragment" />
+
     </fragment>
 
     <fragment
@@ -112,6 +116,10 @@
     <fragment
         android:id="@+id/paymentFragment"
         android:name="com.eibrahim.dizon.payment.PaymentFragment"
+        android:label="PaymentFragment" />
+    <fragment
+        android:id="@+id/aboutUsFragment"
+        android:name="com.eibrahim.dizon.aboutUs.AboutUsFragment"
         android:label="PaymentFragment" />
 
 </navigation>

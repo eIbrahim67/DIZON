@@ -28,6 +28,7 @@
     <string name="invalid_birth_date">Invalid birth date</string>
     <string name="registration_successful">Registration Successful</string>
     <string name="registration_failed">Registration Failed</string>
+    <string name="about_us_placeholder">Loading Dizon description...</string>
 
     <!--login fragment-->
     <string name="app_logo_description">App Logo</string>
@@ -210,5 +211,6 @@
     <string name="login_success">Login successful!</string>
     <string name="error_email_required">Email is required</string>
     <string name="my_properties">My Properties</string>
+    <string name="dizon_app_logo">Dizon App Logo</string>
 
 </resources>
