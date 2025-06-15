@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.eibrahim.dizon.R
 import com.eibrahim.dizon.auth.api.RetrofitClient
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputEditText
 import java.io.File
 
@@ -26,8 +27,18 @@ class EditProfileFragment : Fragment() {
         fun newInstance() = EditProfileFragment()
     }
 
+    private lateinit var bottomNavigationView: BottomNavigationView
+
     private val viewModel: EditProfileViewModel by viewModels()
     private var selectedImageFile: File? = null
+
+    override fun onResume() {
+        super.onResume()
+
+        bottomNavigationView.visibility = View.GONE
+
+
+    }
 
     // Launcher for picking an image
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -74,6 +85,9 @@ class EditProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
+        bottomNavigationView.visibility = View.GONE
 
         // Initialize UI components
         val backButton = view.findViewById<ImageView>(R.id.backButton)
@@ -177,4 +191,10 @@ class EditProfileFragment : Fragment() {
             viewModel.updateUserData(firstName, lastName, email, phone, city, selectedImageFile)
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bottomNavigationView.visibility = View.VISIBLE
+    }
+
 }

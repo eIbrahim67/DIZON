@@ -65,31 +65,26 @@ interface AuthApi {
     @PUT("/api/User/ChangePassword")
     suspend fun changePassword(@Body request: ChangePasswordRequest): Response<ChangePasswordResponse>
 
-    // Define the logout endpoint to make a POST request to the API
     @POST("/api/User/Logout")
     suspend fun logout(): Response<LogoutResponse>
 }
 
-// Data class to handle the logout API response, assuming it returns status and message
 data class LogoutResponse(
     val status: String?,
     val message: String?
 )
 
-// Data class for the request body of /api/User/ChangePassword
 data class ChangePasswordRequest(
     val oldPassword: String,
     val newPassword: String,
     val confirmNewPassword: String
 )
 
-// Data class for the response of /api/User/ChangePassword
 data class ChangePasswordResponse(
     val status: String?,
     val message: String?
 )
 
-// Existing data classes (no changes needed)
 data class UserResponse(
     val firstName: String?,
     val lastName: String?,

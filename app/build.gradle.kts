@@ -128,6 +128,9 @@ dependencies {
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
 
 
+    implementation ("com.stripe:stripe-android:20.48.0")
+
+
 //    // For ViewModel testing
 //    testImplementation "junit:junit:4.13.2"
 //    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3"
