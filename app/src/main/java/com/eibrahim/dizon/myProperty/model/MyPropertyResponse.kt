@@ -1,15 +1,8 @@
-package com.eibrahim.dizon.search.data
+package com.eibrahim.dizon.myProperty.model
 
 import com.google.gson.annotations.SerializedName
 
-data class SearchPropertyResponse(
-    val pageIndex: Int,
-    val pageSize: Int,
-    val totalCount: Int,
-    val data: PropertyData
-)
-
-data class PropertyData(
+data class MyPropertyResponse(
     @SerializedName("\$id") val id: String,
     @SerializedName("\$values") val values: List<Property>
 )

@@ -18,6 +18,7 @@ import com.eibrahim.dizon.auth.api.RetrofitClient
 import com.eibrahim.dizon.chatbot.api.RetrofitChatbot
 import com.eibrahim.dizon.home.api.RetrofitHome
 import com.eibrahim.dizon.main.viewModel.MainViewModel
+import com.eibrahim.dizon.myProperty.api.RetrofitMyProperty
 import com.eibrahim.dizon.search.api.RetrofitSearch
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -57,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         RetrofitHome.initAuthPreferences(this)
         RetrofitSearch.initAuthPreferences(this)
         RetrofitChatbot.initAuthPreferences(this)
+        RetrofitMyProperty.initAuthPreferences(this)
 
         setContentView(R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

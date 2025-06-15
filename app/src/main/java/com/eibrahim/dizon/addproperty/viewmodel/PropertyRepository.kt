@@ -3,10 +3,16 @@ package com.eibrahim.dizon.addproperty.viewmodel
 import android.util.Log
 import com.eibrahim.dizon.auth.api.RetrofitClient
 import com.eibrahim.dizon.details.model.AmenitiesResponse
+import com.eibrahim.dizon.details.model.PaymentIntentRequest
 import com.eibrahim.dizon.details.model.PropertyApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 import java.io.File
 
 class PropertyRepository {
@@ -166,4 +172,7 @@ class PropertyRepository {
     suspend fun getProperties(): Result<List<Property>> {
         return Result.success(emptyList())
     }
+
+    suspend fun fetchPaymentIntentClientSecret(req:PaymentIntentRequest) = propertyApi.fetchPaymentIntentClientSecret(req)
+
 }

@@ -26,7 +26,7 @@
                 android:gravity="center"
                 android:textSize="26sp"
                 android:textColor="@color/black"
-                android:text="@string/verify_phone"
+                android:text="please verify your \n Email"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:text="@string/sent_an_sms"
+                android:text="@string/enter_the_otp_code_we_just_sent_nyou_on_your_registered_email_phone_number"
                 android:gravity="center"
                 android:textColor="@color/gray_v3"
                 app:layout_constraintEnd_toEndOf="parent"

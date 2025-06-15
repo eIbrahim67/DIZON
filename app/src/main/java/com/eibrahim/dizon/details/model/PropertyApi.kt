@@ -52,6 +52,11 @@ interface PropertyApi {
 
     @DELETE("/api/Favorites/remove/{propertyId}")
     suspend fun removeFromFavorites(@Path("propertyId") propertyId: Int): Response<Unit>
+
+    @POST("/api/Payment/create-or-update-payment-intent")
+    suspend fun fetchPaymentIntentClientSecret(@Body request: PaymentIntentRequest): PaymentIntentResponse
+
+
 }
 
 data class AmenitiesResponse(
@@ -63,4 +68,13 @@ data class Amenity(
     val `$id`: String,
     val amenityId: Int,
     val name: String
+)
+
+data class PaymentIntentRequest(
+    val currency: String,
+    val paymentIntentId: String? = null // Optional, as it may not always be required
+)
+
+data class PaymentIntentResponse(
+    val clientSecret: String
 )

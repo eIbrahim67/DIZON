@@ -15,32 +15,17 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 class MainViewModel : ViewModel() {
-
     private val _navigateToFragment = MutableLiveData<Int?>()
     val navigateToFragment: LiveData<Int?> get() = _navigateToFragment
-
-    fun navigateTo(fragmentName: Int?) {
-        _navigateToFragment.value = fragmentName
-    }
-
-    fun isUserLoggedIn(context: Context): Boolean {
-        val authPreferences = AuthPreferences(context)
-        val token = authPreferences.getToken()
-        return !token.isNullOrEmpty()
-    }
 
     /////////////////////// Favorite //////////////////////////////////////
 
     private val _favoriteRemoved = MutableLiveData<Int?>()
-    val favoriteRemoved: LiveData<Int?> = _favoriteRemoved
 
     fun notifyFavoriteRemoved(propertyId: Int) {
         _favoriteRemoved.postValue(propertyId)
     }
 
-    fun clearFavoriteRemoved() {
-        _favoriteRemoved.postValue(null)
-    }
 
 
     private val _properties = MutableLiveData<SearchPropertyResponse?>()
@@ -148,12 +133,12 @@ class MainViewModel : ViewModel() {
     }
 
 
-    private val _propertyData = MutableLiveData<AddPropertyData>()
-    val propertyData: LiveData<AddPropertyData> = _propertyData
+    private val _searchType = MutableLiveData<String>()
+    val searchType: LiveData<String> = _searchType
 
     // Function to update the entire AddPropertyData object
-    fun setPropertyData(data: AddPropertyData) {
-        _propertyData.value = data
+    fun setSearchType(data: String) {
+        _searchType.value = data
     }
 
 }
