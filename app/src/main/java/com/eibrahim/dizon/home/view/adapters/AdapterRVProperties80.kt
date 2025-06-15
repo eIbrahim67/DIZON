@@ -20,6 +20,14 @@ class AdapterRVProperties80(
 
     private lateinit var context: Context
 
+    private var favoriteIds: Set<Int> = emptySet()
+
+    fun setFavorites(favIds: Set<Int>) {
+        favoriteIds = favIds
+        notifyDataSetChanged() // refresh all items to update icon
+    }
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PropertyViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_rv_properties_80, parent, false)
@@ -33,6 +41,15 @@ class AdapterRVProperties80(
 
     override fun onBindViewHolder(holder: PropertyViewHolder, position: Int) {
         val property = differ.currentList[position]
+
+        val isFavorite = favoriteIds.contains(property.propertyId)
+        holder.itemWishlist.setImageResource(
+            if (isFavorite) R.drawable.icon_solid_love else R.drawable.icon_selector_love
+        )
+
+        holder.itemWishlist.setOnClickListener {
+            onWishlistClick?.invoke(property)
+        }
 
         // Load first property image using Glide
         val imageUrl = property.propertyImages.values.firstOrNull()

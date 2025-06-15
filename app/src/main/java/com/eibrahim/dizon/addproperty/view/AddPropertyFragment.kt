@@ -2,8 +2,10 @@ package com.eibrahim.dizon.addproperty.view
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,25 +19,26 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.eibrahim.dizon.R
+import com.eibrahim.dizon.addproperty.model.AddPropertyData
 import com.eibrahim.dizon.addproperty.viewmodel.AddPropertyViewModel
 import com.eibrahim.dizon.addproperty.viewmodel.AddPropertyViewModelFactory
 import com.eibrahim.dizon.addproperty.viewmodel.PropertyRepository
+import com.eibrahim.dizon.main.viewModel.MainViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
+import com.stripe.android.PaymentConfiguration
+import com.stripe.android.paymentsheet.PaymentSheet
+import com.stripe.android.paymentsheet.PaymentSheetResult
 import java.io.File
 import java.io.FileOutputStream
-import android.content.res.Resources
-import android.util.TypedValue
-import androidx.fragment.app.activityViewModels
-import androidx.navigation.NavController
-import androidx.navigation.NavOptions
-import com.eibrahim.dizon.addproperty.model.AddPropertyData
-import com.eibrahim.dizon.main.viewModel.MainViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class AddPropertyFragment : Fragment() {
 
@@ -43,6 +46,9 @@ class AddPropertyFragment : Fragment() {
     private val imageUris = mutableListOf<Uri>()
     private val imageFiles = mutableListOf<File>()
     private val imageViews = mutableListOf<View>() // Track image views for deletion
+    private lateinit var paymentSheet: PaymentSheet
+    private lateinit var clientSecret: String
+    private lateinit var publishableKey: String
 
     // UI elements
     private lateinit var btnback: ImageView
@@ -67,26 +73,33 @@ class AddPropertyFragment : Fragment() {
     private lateinit var locationUrlInput: TextInputEditText
     private lateinit var submitButton: Button
 
-    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data
-            if (data?.clipData != null) {
-                // Multiple images selected
-                for (i in 0 until data.clipData!!.itemCount) {
-                    val uri = data.clipData!!.getItemAt(i).uri
-                    processImage(uri)
+    lateinit var propertyData: AddPropertyData
+
+    private val pickImageLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                if (data?.clipData != null) {
+                    // Multiple images selected
+                    for (i in 0 until data.clipData!!.itemCount) {
+                        val uri = data.clipData!!.getItemAt(i).uri
+                        processImage(uri)
+                    }
+                } else if (data?.data != null) {
+                    // Single image selected
+                    processImage(data.data!!)
                 }
-            } else if (data?.data != null) {
-                // Single image selected
-                processImage(data.data!!)
             }
         }
-    }
 
     private fun processImage(uri: Uri) {
         val mimeType = requireContext().contentResolver.getType(uri)
         if (!isSupportedImageFormat(mimeType)) {
-            Toast.makeText(requireContext(), "Unsupported image format. Use .jpg, .jpeg, .png, or .gif", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                requireContext(),
+                "Unsupported image format. Use .jpg, .jpeg, .png, or .gif",
+                Toast.LENGTH_LONG
+            ).show()
             return
         }
 
@@ -96,7 +109,11 @@ class AddPropertyFragment : Fragment() {
                 val sizeIndex = it.getColumnIndex(android.provider.OpenableColumns.SIZE)
                 val size = it.getLong(sizeIndex)
                 if (size > 5 * 1024 * 1024) {
-                    Toast.makeText(requireContext(), "Image size exceeds 5MB limit", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Image size exceeds 5MB limit",
+                        Toast.LENGTH_LONG
+                    ).show()
                     return
                 }
             }
@@ -213,10 +230,6 @@ class AddPropertyFragment : Fragment() {
         bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
         bottomNavigationView.visibility = View.GONE
 
-        navController =
-            requireActivity().supportFragmentManager.findFragmentById(R.id.main_nav_host_fragment)
-                ?.findNavController()
-
         // Initialize UI elements
         btnback = view.findViewById(R.id.btnback)
         imagesScrollView = view.findViewById(R.id.imagesScrollView)
@@ -258,8 +271,10 @@ class AddPropertyFragment : Fragment() {
         // Set up Spinner adapters
         val propertyTypes = arrayOf("Apartment", "House", "Condo", "Villa")
         val listingTypes = arrayOf("For Sale", "For Rent")
-        val propertyAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, propertyTypes)
-        val listingAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listingTypes)
+        val propertyAdapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, propertyTypes)
+        val listingAdapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listingTypes)
         propertyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         listingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         typeSpinner.adapter = propertyAdapter
@@ -277,7 +292,8 @@ class AddPropertyFragment : Fragment() {
                     id = amenity.amenityId
                     setChipBackgroundColorResource(R.color.chip_background_selector)
                     setTextColor(resources.getColorStateList(R.color.chip_text_selector, null))
-                    chipStrokeColor = resources.getColorStateList(R.color.chip_stroke_selector, null)
+                    chipStrokeColor =
+                        resources.getColorStateList(R.color.chip_stroke_selector, null)
                     chipStrokeWidth = if (isChecked) 2f else 1f
                 }
                 internalAmenitiesChipGroup.addView(chip)
@@ -293,7 +309,8 @@ class AddPropertyFragment : Fragment() {
                     id = amenity.amenityId
                     setChipBackgroundColorResource(R.color.chip_background_selector)
                     setTextColor(resources.getColorStateList(R.color.chip_text_selector, null))
-                    chipStrokeColor = resources.getColorStateList(R.color.chip_stroke_selector, null)
+                    chipStrokeColor =
+                        resources.getColorStateList(R.color.chip_stroke_selector, null)
                     chipStrokeWidth = if (isChecked) 2f else 1f
                 }
                 externalAmenitiesChipGroup.addView(chip)
@@ -309,7 +326,8 @@ class AddPropertyFragment : Fragment() {
                     id = amenity.amenityId
                     setChipBackgroundColorResource(R.color.chip_background_selector)
                     setTextColor(resources.getColorStateList(R.color.chip_text_selector, null))
-                    chipStrokeColor = resources.getColorStateList(R.color.chip_stroke_selector, null)
+                    chipStrokeColor =
+                        resources.getColorStateList(R.color.chip_stroke_selector, null)
                     chipStrokeWidth = if (isChecked) 2f else 1f
                 }
                 accessibilityAmenitiesChipGroup.addView(chip)
@@ -322,6 +340,24 @@ class AddPropertyFragment : Fragment() {
                 putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             }
             pickImageLauncher.launch(intent)
+        }
+
+        PaymentConfiguration.init(
+            requireContext(),
+            "pk_test_51RXPxIRHB8EWOr5UtIiT6dVRn7j68SFzmO6kKiJpfLoh58o9kj5h3kb8QTpvnhaqLOVPB5ladvNBHHrQrR2Q9XdH00Q2gtWAQ5"
+        )
+
+        publishableKey =
+            "pk_test_51RXPxIRHB8EWOr5UtIiT6dVRn7j68SFzmO6kKiJpfLoh58o9kj5h3kb8QTpvnhaqLOVPB5ladvNBHHrQrR2Q9XdH00Q2gtWAQ5" // Replace with your Stripe publishable key
+        // Initialize PaymentSheet
+        paymentSheet = PaymentSheet(this, ::onPaymentSheetResult)
+
+
+        viewModel.fetchPaymentIntentClientSecret()
+        viewModel.clientSecret.observe(viewLifecycleOwner) { data ->
+            clientSecret = data
+            Toast.makeText(requireContext(), "Init", Toast.LENGTH_SHORT)
+                .show()
         }
 
         submitButton.setOnClickListener {
@@ -341,13 +377,21 @@ class AddPropertyFragment : Fragment() {
 
             // Validate location fields
             if (street.isBlank() || city.isBlank() || governate.isBlank()) {
-                Toast.makeText(requireContext(), "Please enter Street, City, and Governate", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Please enter Street, City, and Governate",
+                    Toast.LENGTH_LONG
+                ).show()
                 return@setOnClickListener
             }
 
             // Validate locationUrl
             if (locationUrl.isBlank()) {
-                Toast.makeText(requireContext(), "Please enter a valid Location URL", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Please enter a valid Location URL",
+                    Toast.LENGTH_LONG
+                ).show()
                 return@setOnClickListener
             }
 
@@ -376,11 +420,15 @@ class AddPropertyFragment : Fragment() {
             }
 
             if (title.isBlank() || description.isBlank() || street.isBlank() || city.isBlank() || governate.isBlank() || locationUrl.isBlank() || price <= 0 || imageFiles.isEmpty()) {
-                Toast.makeText(requireContext(),"Please fill all required fields, including Street, City, Governate, Location URL, and upload at least one image.", Toast.LENGTH_LONG)
+                Toast.makeText(
+                    requireContext(),
+                    "Please fill all required fields, including Street, City, Governate, Location URL, and upload at least one image.",
+                    Toast.LENGTH_LONG
+                )
 
-            }else{
+            } else {
 
-                val propertyData = AddPropertyData(
+                propertyData = AddPropertyData(
                     title = title,
                     description = description,
                     price = price,
@@ -400,36 +448,77 @@ class AddPropertyFragment : Fragment() {
                     accessibilityAmenityIds = accessibilityAmenityIds
                 )
 
-// Set the LiveData in the ViewModel
-                sharedViewModel.setPropertyData(propertyData).let {
+                viewModel.fetchPaymentIntentClientSecret()
+                initiatePayment()
+            }
 
-                    navController?.navigate(
-                        R.id.paymentFragment, null, navOptions
+
+
+            viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+                submitButton.isEnabled = !isLoading
+            }
+
+            viewModel.addSuccess.observe(viewLifecycleOwner) { success ->
+                if (success) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Property added successfully",
+                        Toast.LENGTH_SHORT
                     )
-
+                        .show()
+                    findNavController().popBackStack()
                 }
-
             }
 
-        }
-
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            submitButton.isEnabled = !isLoading
-        }
-
-        viewModel.addSuccess.observe(viewLifecycleOwner) { success ->
-            if (success) {
-                Toast.makeText(requireContext(), "Property added successfully", Toast.LENGTH_SHORT).show()
-                findNavController().popBackStack()
+            viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+                message?.let {
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
-        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
-            message?.let {
-                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun onPaymentSheetResult(paymentSheetResult: PaymentSheetResult) {
+        when (paymentSheetResult) {
+            is PaymentSheetResult.Canceled -> {
+                Toast.makeText(context, "Payment canceled", Toast.LENGTH_SHORT).show()
             }
+
+            is PaymentSheetResult.Failed -> {
+                Toast.makeText(
+                    context,
+                    "Payment failed: ${paymentSheetResult.error.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+            is PaymentSheetResult.Completed -> {
+                Toast.makeText(context, "Payment successful!", Toast.LENGTH_SHORT).show()
+                // Handle successful payment (e.g., update UI, notify backend)
+                viewModel.uploadProperty(propertyData)
+            }
+
         }
     }
+
+
+    private fun initiatePayment() {
+        // Configure PaymentSheet with customer configuration if needed
+        val configuration = PaymentSheet.Configuration(
+            merchantDisplayName = "Your Merchant Name",
+            // Add customer configuration if using customer IDs
+            // customer = PaymentSheet.CustomerConfiguration(customerId, ephemeralKey),
+            allowsDelayedPaymentMethods = true
+        )
+
+        // Present PaymentSheet
+        paymentSheet.presentWithPaymentIntent(
+            paymentIntentClientSecret = clientSecret,
+            configuration = configuration
+        )
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -437,10 +526,5 @@ class AddPropertyFragment : Fragment() {
     }
 
     private lateinit var bottomNavigationView: BottomNavigationView
-    private var navController: NavController? = null
 
-    private val navOptions = NavOptions.Builder().setEnterAnim(R.anim.slide_in_right)
-        .setPopExitAnim(R.anim.slide_out_right).build()
-
-    private val sharedViewModel: MainViewModel by activityViewModels()
 }

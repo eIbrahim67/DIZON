@@ -5,9 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.eibrahim.dizon.addproperty.model.AddPropertyData
 import com.eibrahim.dizon.details.model.AmenitiesResponse
+import com.eibrahim.dizon.details.model.PaymentIntentRequest
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
 
 class AddPropertyViewModel(private val repository: PropertyRepository) : ViewModel() {
 
@@ -64,6 +66,61 @@ class AddPropertyViewModel(private val repository: PropertyRepository) : ViewMod
             }
         }
     }
+
+    private val _clientSecret = MutableLiveData<String>()
+    val clientSecret: LiveData<String> get() = _clientSecret
+
+    fun fetchPaymentIntentClientSecret() {
+
+        val request = PaymentIntentRequest(
+            currency = "EGP",
+            paymentIntentId = null // Set to a specific ID if required by your backend
+        )
+
+        viewModelScope.launch {
+            _clientSecret.value = repository.fetchPaymentIntentClientSecret(request).clientSecret
+        }
+    }
+
+    fun uploadProperty(addPropertyData: AddPropertyData) {
+
+        _isLoading.value = true
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val location =
+                "${addPropertyData.street}, ${addPropertyData.city}, ${addPropertyData.governate}"
+
+            val property = Property(
+                title = addPropertyData.title,
+                description = addPropertyData.description,
+                price = addPropertyData.price,
+                location = location,
+                locationUrl = addPropertyData.locationUrl,
+                propertyType = addPropertyData.propertyType,
+                listingType = addPropertyData.listingType,
+                size = addPropertyData.size,
+                beds = addPropertyData.beds,
+                bathrooms = addPropertyData.bathrooms
+            )
+
+            val result = repository.addProperty(
+                property,
+                addPropertyData.imageFiles,
+                addPropertyData.internalAmenityIds,
+                addPropertyData.externalAmenityIds,
+                addPropertyData.accessibilityAmenityIds
+            )
+
+            _isLoading.postValue(false)
+
+            if (result.isSuccess) {
+                _addSuccess.postValue(true)
+            } else {
+                _errorMessage.postValue("Failed to add property: ${result.exceptionOrNull()?.message}")
+            }
+        }
+    }
+
 }
 
 class AddPropertyViewModelFactory(

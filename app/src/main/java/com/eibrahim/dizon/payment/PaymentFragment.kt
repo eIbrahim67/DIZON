@@ -77,65 +77,7 @@ class PaymentFragment : Fragment() {
             Toast.makeText(requireContext(), "Visa selected", Toast.LENGTH_SHORT).show()
         }
 
-        // Continue button click
-        continueButton.setOnClickListener {
-            val paymentInfo = collectPaymentInfo()
-            if (!isAllFieldsEntered(paymentInfo)) {
-                Toast.makeText(requireContext(), "Please fill in all payment details.", Toast.LENGTH_LONG).show()
-                return@setOnClickListener
-            }
-            if (!validateCard(paymentInfo)) {
-                Toast.makeText(requireContext(), "Please enter valid card details.", Toast.LENGTH_LONG).show()
-                return@setOnClickListener
-            }
 
-            continueButton.isEnabled = false
-            progressBar.visibility = View.VISIBLE  // Show progress bar
-
-            lifecycleScope.launch {
-                when (val result = viewModel.checkPaymentInfo(paymentInfo)) {
-                    0 -> {
-                        Toast.makeText(requireContext(), "Payment information verified successfully.", Toast.LENGTH_SHORT).show()
-                        Toast.makeText(requireContext(), "Your payment has been processed.", Toast.LENGTH_SHORT).show()
-
-                        sharedViewModel.propertyData.value?.let { data ->
-                            viewModel.uploadProperty(data)
-                        }
-
-                        Toast.makeText(requireContext(), "Uploading your property...", Toast.LENGTH_SHORT).show()
-                        delay(2000) // Simulate upload delay or better observe upload state
-
-                        Toast.makeText(requireContext(), "Your property uploaded successfully.", Toast.LENGTH_SHORT).show()
-                        progressBar.visibility = View.GONE
-                        continueButton.isEnabled = true
-                    }
-
-                    1 -> {
-                        launch {
-                            delay(10000)
-                            Toast.makeText(requireContext(), "Payment information is incomplete: missing required amount.", Toast.LENGTH_SHORT).show()
-                            progressBar.visibility = View.GONE
-                            continueButton.isEnabled = true
-                        }
-                    }
-
-                    2 -> {
-                        launch {
-                            delay(10000)
-                            Toast.makeText(requireContext(), "The provided payment details are invalid. Please review and try again.", Toast.LENGTH_SHORT).show()
-                            progressBar.visibility = View.GONE
-                            continueButton.isEnabled = true
-                        }
-                    }
-
-                    else -> {
-                        Toast.makeText(requireContext(), "Unexpected error during payment verification.", Toast.LENGTH_SHORT).show()
-                        progressBar.visibility = View.GONE
-                        continueButton.isEnabled = true
-                    }
-                }
-            }
-        }
 
 
     }
