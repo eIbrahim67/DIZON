@@ -16,8 +16,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.eibrahim.dizon.R
-import com.eibrahim.dizon.search.data.Property
 import com.eibrahim.dizon.main.viewModel.MainViewModel
+import com.eibrahim.dizon.search.data.Property
+import com.eibrahim.dizon.search.presentation.view.adapter.AdapterRVSearch
+import com.eibrahim.dizon.search.presentation.view.bottomSheet.FilterBottomSheetFragment
 import com.eibrahim.dizon.search.presentation.viewModel.SearchViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -96,10 +98,16 @@ class SearchFragment : Fragment() {
         }
 
         sharedViewModel.searchType.observe(viewLifecycleOwner) { data ->
-
             searchType.setText(data)
-
+            searchBtn.callOnClick()
         }
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        sharedViewModel.setSearchType(searchType.text.toString())
+        Toast.makeText(requireContext(),"kkk",Toast.LENGTH_SHORT).show()
     }
 
     private fun listenerUi() {
@@ -118,6 +126,7 @@ class SearchFragment : Fragment() {
         searchBtn.setOnClickListener {
             searchBtn.visibility = View.GONE
             viewModel.loadAllProperties()
+            Toast.makeText(requireContext(),"ttt",Toast.LENGTH_SHORT).show()
         }
 
         filter_layout.setOnClickListener {

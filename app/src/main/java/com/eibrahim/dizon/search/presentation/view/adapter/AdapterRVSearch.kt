@@ -1,4 +1,4 @@
-package com.eibrahim.dizon.search.presentation.view
+package com.eibrahim.dizon.search.presentation.view.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
