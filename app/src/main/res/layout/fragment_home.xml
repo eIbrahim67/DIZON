@@ -19,7 +19,7 @@
 
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/menuLayout"
+                android:id="@+id/profileLayout"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="20dp"
@@ -41,7 +41,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/notificationLayout"
+                android:id="@+id/addPropertyLayout"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
@@ -54,11 +54,10 @@
                 app:strokeWidth="1dp">
 
                 <ImageView
-                    android:id="@+id/goToDetails"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:src="@drawable/icon_outline_notification"
+                    android:layout_margin="12dp"
+                    android:src="@drawable/ic_upload"
                     app:tint="@color/black" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -74,7 +73,7 @@
                 android:src="@drawable/icon_chatbot_v1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/search_home_layout"
-                app:layout_constraintTop_toBottomOf="@id/menuLayout"
+                app:layout_constraintTop_toBottomOf="@id/profileLayout"
                 app:tint="@color/purple" />
 
             <LinearLayout
@@ -88,7 +87,7 @@
                 android:background="@drawable/bc_left_half_circle"
                 app:layout_constraintEnd_toStartOf="@id/chatbot_layout"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/menuLayout">
+                app:layout_constraintTop_toBottomOf="@id/profileLayout">
 
                 <ImageView
                     android:id="@+id/itemCategoryImage"
@@ -101,15 +100,16 @@
                     android:src="@drawable/icon_selector_search"
                     app:tint="@color/black" />
 
-                <EditText
+                <TextView
                     android:id="@+id/search_home"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:autofillHints=""
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:gravity="center_vertical"
                     android:background="@android:color/transparent"
-                    android:editable="false"
                     android:hint="@string/search" />
 
             </LinearLayout>
@@ -326,6 +326,8 @@
                         app:layout_constraintTop_toBottomOf="@id/labelHouse">
 
                         <TextView
+                            android:clickable="false"
+                            android:focusable="false"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginStart="15dp"
@@ -340,6 +342,8 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
+                            android:clickable="false"
+                            android:focusable="false"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_marginEnd="10dp"

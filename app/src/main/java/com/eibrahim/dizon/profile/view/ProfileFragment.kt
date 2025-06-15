@@ -73,6 +73,10 @@ class ProfileFragment : Fragment() {
             navController.navigate(R.id.changePasswordFragment)
         }
 
+        view.findViewById<ConstraintLayout>(R.id.aboutUs).setOnClickListener {
+            navController.navigate(R.id.aboutUsFragment)
+        }
+
         view.findViewById<ConstraintLayout>(R.id.delete_account).setOnClickListener {
             navController.navigate(R.id.deleteAccountFragment)
         }

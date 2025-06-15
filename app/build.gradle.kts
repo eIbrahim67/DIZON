@@ -130,6 +130,7 @@ dependencies {
 
     implementation ("com.stripe:stripe-android:20.48.0")
 
+    implementation ("com.jakewharton.timber:timber:5.0.1")
 
 //    // For ViewModel testing
 //    testImplementation "junit:junit:4.13.2"

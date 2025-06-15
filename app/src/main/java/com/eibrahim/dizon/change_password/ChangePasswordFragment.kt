@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
 import com.eibrahim.dizon.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
@@ -19,7 +20,7 @@ class ChangePasswordFragment : Fragment() {
     companion object {
         fun newInstance() = ChangePasswordFragment()
     }
-
+    private lateinit var bottomNavigationView: BottomNavigationView
     // Lazily initialize the ViewModel
     private val viewModel: ChangePasswordViewModel by viewModels()
 
@@ -33,6 +34,10 @@ class ChangePasswordFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_change_password, container, false)
+
+        // Hide bottom navigation
+        bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
+        bottomNavigationView.visibility = View.GONE
 
         // Initialize UI components
         currentPasswordEditText = view.findViewById(R.id.currentPasswordEditText)

@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -24,6 +26,7 @@ import com.eibrahim.dizon.home.view.adapters.AdapterRVProperties80
 import com.eibrahim.dizon.home.viewModel.HomeViewModel
 import com.eibrahim.dizon.main.viewModel.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.card.MaterialCardView
 
 class HomeFragment : Fragment() {
 
@@ -33,11 +36,14 @@ class HomeFragment : Fragment() {
     private lateinit var recyclerviewSponsored: RecyclerView
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var chatbotLayout: ImageView
-    private lateinit var search: EditText
+    private lateinit var search: TextView
     private lateinit var categoryHouse: ImageView
     private lateinit var categoryVilla: ImageView
     private lateinit var categoryApartment: ImageView
     private lateinit var categoryHotel: ImageView
+    private lateinit var categoryAll: ConstraintLayout
+    private lateinit var profileLayout: MaterialCardView
+    private lateinit var addPropertyLayout: MaterialCardView
 
     private var navController: NavController? = null
 
@@ -85,6 +91,17 @@ class HomeFragment : Fragment() {
         categoryVilla= view.findViewById(R.id.categoryVilla)
         categoryApartment= view.findViewById(R.id.categoryApartment)
         categoryHotel= view.findViewById(R.id.categoryHotel)
+        categoryAll= view.findViewById(R.id.categoryAll)
+        profileLayout= view.findViewById(R.id.profileLayout)
+        addPropertyLayout= view.findViewById(R.id.addPropertyLayout)
+
+        profileLayout.setOnClickListener {
+            bottomNavigationView.selectedItemId = R.id.action_profile
+        }
+
+        addPropertyLayout.setOnClickListener {
+            findNavController().navigate(R.id.action_action_home_to_action_add_property)
+        }
 
         categoryHouse.setOnClickListener {
             sharedViewModel.setSearchType("House")
@@ -106,7 +123,9 @@ class HomeFragment : Fragment() {
             bottomNavigationView.selectedItemId = R.id.action_search
         }
 
-
+        categoryAll.setOnClickListener {
+            bottomNavigationView.selectedItemId = R.id.action_search
+        }
 
         bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
         bottomNavigationView.visibility = View.VISIBLE
@@ -173,6 +192,7 @@ class HomeFragment : Fragment() {
 
         viewModel.favoriteIds.observe(viewLifecycleOwner) { favIds ->
             adapterRVProperties.setFavorites(favIds)
+            adapterRVProperties80.setFavorites(favIds)
         }
 
     }
