@@ -6,9 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eibrahim.dizon.addproperty.model.AddPropertyData
-import com.eibrahim.dizon.addproperty.viewmodel.Property
-import com.eibrahim.dizon.auth.AuthPreferences
 import com.eibrahim.dizon.chatbot.api.RetrofitChatbot
 import com.eibrahim.dizon.search.data.SearchPropertyResponse
 import kotlinx.coroutines.launch

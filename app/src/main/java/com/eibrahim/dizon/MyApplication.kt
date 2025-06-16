@@ -5,6 +5,7 @@ import com.eibrahim.dizon.auth.api.RetrofitClient
 import com.eibrahim.dizon.chatbot.api.RetrofitChatbot
 import com.eibrahim.dizon.home.api.RetrofitHome
 import com.eibrahim.dizon.myProperty.api.RetrofitMyProperty
+import com.eibrahim.dizon.propertyResults.api.RetrofitResult
 import com.eibrahim.dizon.search.api.RetrofitSearch
 import com.stripe.android.BuildConfig
 import com.stripe.android.PaymentConfiguration
@@ -18,6 +19,7 @@ class MyApplication : Application() {
         RetrofitSearch.initAuthPreferences(this)
         RetrofitChatbot.initAuthPreferences(this)
         RetrofitMyProperty.initAuthPreferences(this)
+        RetrofitResult.initAuthPreferences(this)
 
         PaymentConfiguration.init(
             applicationContext,

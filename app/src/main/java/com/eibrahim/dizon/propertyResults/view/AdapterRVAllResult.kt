@@ -1,4 +1,4 @@
-package com.eibrahim.dizon.propertyResults
+package com.eibrahim.dizon.propertyResults.view
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -13,12 +13,19 @@ import com.bumptech.glide.Glide
 import com.eibrahim.dizon.R
 import com.eibrahim.dizon.search.data.Property
 
-class AdapterRVSearchProperties(
+class AdapterRVAllResult(
     private val goToDetails: ((id: Int) -> Unit)? = null,
     private val onWishlistClick: ((Property) -> Unit)? = null
-) : RecyclerView.Adapter<AdapterRVSearchProperties.PropertyViewHolder>() {
+) : RecyclerView.Adapter<AdapterRVAllResult.PropertyViewHolder>() {
 
     private lateinit var context: Context
+
+    private var favoriteIds: Set<Int> = emptySet()
+
+    fun setFavorites(favIds: Set<Int>) {
+        favoriteIds = favIds
+        notifyDataSetChanged() // refresh all items to update icon
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PropertyViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -33,6 +40,17 @@ class AdapterRVSearchProperties(
 
     override fun onBindViewHolder(holder: PropertyViewHolder, position: Int) {
         val property = differ.currentList[position]
+
+
+        val isFavorite = favoriteIds.contains(property.propertyId)
+        holder.itemWishlist.setImageResource(
+            if (isFavorite) R.drawable.icon_solid_love else R.drawable.icon_selector_love
+        )
+
+        holder.itemWishlist.setOnClickListener {
+            onWishlistClick?.invoke(property)
+        }
+
 
         // Load first property image using Glide
         val imageUrl = property.propertyImages.values.firstOrNull()

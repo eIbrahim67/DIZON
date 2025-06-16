@@ -41,7 +41,7 @@
 
     <fragment
         android:id="@+id/propertyResultsFragment"
-        android:name="com.eibrahim.dizon.propertyResults.PropertyResultsFragment"
+        android:name="com.eibrahim.dizon.propertyResults.view.PropertyResultsFragment"
         tools:layout="@layout/fragment_property_results">
     </fragment>
 

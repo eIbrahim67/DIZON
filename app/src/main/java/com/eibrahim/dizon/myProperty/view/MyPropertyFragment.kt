@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -33,6 +34,7 @@ class MyPropertyFragment : Fragment() {
     private val adapterRvMyProperties = AdapterRVMyProperties(goToDetails = { id -> goToDetails(id) })
 
     private lateinit var recyclerview: RecyclerView
+    private lateinit var backFromMyProperty: ImageView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,9 +43,16 @@ class MyPropertyFragment : Fragment() {
         bottomNavigationView.visibility = View.GONE
 
         recyclerview = view.findViewById(R.id.recyclerviewMy)
+        backFromMyProperty = view.findViewById(R.id.backFromMyProperty)
         recyclerview.adapter = adapterRvMyProperties
 
         viewModel.loadMyProperties()
+
+        backFromMyProperty.setOnClickListener {
+
+            findNavController().popBackStack()
+
+        }
 
         viewModel.properties.observe(viewLifecycleOwner) { response ->
             if (response == null) {
