@@ -68,6 +68,7 @@ class ChatbotFragment : Fragment() {
     private lateinit var recordButton: ImageView
     private lateinit var uploadImageButton: ImageView
     private lateinit var chatAdapter: ChatAdapter
+    private lateinit var backLayout: ImageView
 
     private var mediaRecorder: MediaRecorder? = null
 
@@ -124,6 +125,7 @@ class ChatbotFragment : Fragment() {
         recordButton = view.findViewById(R.id.recordButton)
         uploadImageButton = view.findViewById(R.id.uploadImageButton)
         bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
+        backLayout = view.findViewById(R.id.backLayout)
     }
 
     /**
@@ -170,6 +172,12 @@ class ChatbotFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+
+        backLayout.setOnClickListener {
+
+            findNavController().popBackStack()
+
+        }
     }
 
     /**
@@ -367,7 +375,6 @@ class ChatbotFragment : Fragment() {
             }
             mediaRecorder = null
             viewModel.setRecordingState(false)
-            showToast("Recording stopped")
             viewModel.processAudio(
                 File(
                     requireContext().cacheDir,

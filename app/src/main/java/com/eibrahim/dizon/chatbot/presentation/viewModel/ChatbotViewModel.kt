@@ -8,6 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.eibrahim.dizon.chatbot.domain.model.ChatMessage
 import com.eibrahim.dizon.chatbot.domain.model.ChatPayload
 import com.eibrahim.dizon.chatbot.domain.model.ChatResponse
+import com.eibrahim.dizon.chatbot.domain.model.ChatUiState
+import com.eibrahim.dizon.chatbot.domain.model.ChatbotMessage
+import com.eibrahim.dizon.chatbot.domain.model.ChatbotViewModelConst
+import com.eibrahim.dizon.chatbot.domain.model.FilterParamsChatBot
+import com.eibrahim.dizon.chatbot.domain.model.SearchParameters
 import com.eibrahim.dizon.chatbot.domain.usecase.GetChatResponseUseCase
 import com.eibrahim.dizon.core.response.ResponseEI
 import com.eibrahim.dizon.ocr.ApiOcrClient
@@ -21,35 +26,8 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import timber.log.Timber
 import java.io.File
-import com.eibrahim.dizon.chatbot.domain.model.ChatbotViewModelConst
-import com.eibrahim.dizon.chatbot.domain.model.SearchParameters
-import com.eibrahim.dizon.chatbot.domain.model.SearchProperties
-
-/**
- * Data class representing the UI state for the chatbot.
- */
-data class ChatUiState(
-    val messages: List<ChatMessage> = emptyList(),
-    val properties: List<Property> = emptyList(),
-    val isSendButtonVisible: Boolean = false,
-    val isRecording: Boolean = false,
-    val errorMessage: String? = null
-)
-
-data class FilterParamsChatBot(
-    val propertyType: String? = null,
-    val city: String? = null,
-    val bedrooms: Int? = null,
-    val bathrooms: Int? = null,
-    val size: Double? = null,
-    val maxPrice: Int? = null,
-    val minPrice: Int? = null,
-    val internalAmenityIds: List<Int>? = null,
-    val externalAmenityIds: List<Int>? = null,
-    val accessibilityAmenityIds: List<Int>? = null
-)
-
 
 /**
  * ViewModel for managing chatbot interactions, including conversation history,
@@ -66,13 +44,14 @@ class ChatbotViewModel(
     val filterParams: LiveData<FilterParamsChatBot> = _filterParams
 
     private val conversationHistory = mutableListOf<ChatMessage>()
+    private val conversationChatbot = mutableListOf<ChatbotMessage>()
     private val gson = Gson()
 
     init {
         _uiState.value = ChatUiState()
     }
 
-    fun updateParamsFromResponse(params: SearchParameters) {
+    private fun updateParamsFromResponse(params: SearchParameters) {
 
         _filterParams.value = _filterParams.value?.copy(
             propertyType = params.property_type,
@@ -118,7 +97,15 @@ class ChatbotViewModel(
                     "API error: ${response.message()}"
                 }
 
-                updateUiState { copy(errorMessage = if (extractedText.contains("error", true)) extractedText else null) }
+                updateUiState {
+                    copy(
+                        errorMessage = if (extractedText.contains(
+                                "error",
+                                true
+                            )
+                        ) extractedText else null
+                    )
+                }
                 if (!extractedText.contains("error", true)) {
                     startChat(extractedText)
                 }
@@ -140,7 +127,8 @@ class ChatbotViewModel(
                 repeat(maxRetries) { attempt ->
                     try {
                         val requestFile = file.asRequestBody("audio/*".toMediaTypeOrNull())
-                        val filePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
+                        val filePart =
+                            MultipartBody.Part.createFormData("file", file.name, requestFile)
                         val response = ApiVsrClient.vsrApiService.transcribeAudio(filePart)
 
                         val transcribedText = if (response.isSuccessful) {
@@ -156,7 +144,15 @@ class ChatbotViewModel(
                         }
 
                         withContext(Dispatchers.Main) {
-                            updateUiState { copy(errorMessage = if (transcribedText.contains("error", true)) transcribedText else null) }
+                            updateUiState {
+                                copy(
+                                    errorMessage = if (transcribedText.contains(
+                                            "error",
+                                            true
+                                        )
+                                    ) transcribedText else null
+                                )
+                            }
                             if (!transcribedText.contains("error", true)) {
                                 startChat(transcribedText)
                             }
@@ -185,7 +181,8 @@ class ChatbotViewModel(
             .map { it.propertyImages.values.first() }
         val lastMessageIndex = conversationHistory.lastIndex
         if (lastMessageIndex >= 0 && !conversationHistory[lastMessageIndex].isFromUser) {
-            conversationHistory[lastMessageIndex] = conversationHistory[lastMessageIndex].copy(images = images)
+            conversationHistory[lastMessageIndex] =
+                conversationHistory[lastMessageIndex].copy(images = images)
         }
         updateUiState { copy(messages = conversationHistory.toList(), properties = properties) }
     }
@@ -209,6 +206,7 @@ class ChatbotViewModel(
      */
     private fun addUserMessage(message: String) {
         conversationHistory.add(ChatMessage(content = message, role = "user", isFromUser = true))
+        conversationChatbot.add(ChatbotMessage(content = message, role = "user", isFromUser = true))
         updateUiState { copy(messages = conversationHistory.toList()) }
     }
 
@@ -217,8 +215,17 @@ class ChatbotViewModel(
      */
     private fun ensureSystemPrompt() {
         if (conversationHistory.none { it.role == "system" }) {
-            conversationHistory.add(0, ChatMessage(role = "system", content = ChatbotViewModelConst.SYSTEM_PROMPT))
+            conversationHistory.add(
+                0,
+                ChatMessage(role = "system", content = ChatbotViewModelConst.SYSTEM_PROMPT)
+            )
             updateUiState { copy(messages = conversationHistory.toList()) }
+        }
+        if (conversationChatbot.none { it.role == "system" }) {
+            conversationChatbot.add(
+                0,
+                ChatbotMessage(role = "system", content = ChatbotViewModelConst.SYSTEM_PROMPT)
+            )
         }
     }
 
@@ -227,7 +234,7 @@ class ChatbotViewModel(
      */
     private fun buildChatPayload(): String {
         val payload = ChatPayload(
-            messages = conversationHistory,
+            messages = conversationChatbot,
             functions = listOf(ChatbotViewModelConst.FUNCTION_DEFINITION)
         )
         return gson.toJson(payload)
@@ -238,12 +245,23 @@ class ChatbotViewModel(
      */
     private fun fetchChatResponse(jsonPayload: String) {
         viewModelScope.launch {
+            Log.e(
+                "eeeeeeeeeeeeeeeeeeeeeeee",
+                "request:" + jsonPayload
+            )
             getChatResponseUseCase.execute(jsonPayload).collect { response ->
+                Log.e(
+                    "eeeeeeeeeeeeeeeeeeeeeeee",
+                    "request:" + response
+                )
                 when (response) {
                     is ResponseEI.Loading -> updateUiState { copy(errorMessage = null) }
                     is ResponseEI.Success -> handleSuccessResponse(response.data)
                     is ResponseEI.Failure -> {
-                        Log.e(ChatbotViewModelConst.TAG, "Chat response failed: ${response.reason.toString()}")
+                        Log.e(
+                            ChatbotViewModelConst.TAG,
+                            "Chat response failed: ${response.reason.toString()}"
+                        )
                         updateUiState { copy(errorMessage = response.reason.toString()) }
                     }
                 }
@@ -258,7 +276,6 @@ class ChatbotViewModel(
         if (chatResponse.content.isNullOrBlank()) {
             Log.e(ChatbotViewModelConst.TAG, "Chat response content is null or blank")
             updateUiState { copy(errorMessage = "Invalid response: Content is empty") }
-
             return
         }
 
@@ -269,9 +286,24 @@ class ChatbotViewModel(
         }.fold(
             onSuccess = { parsedResponse ->
                 if (parsedResponse?.message != null) {
-                    conversationHistory.add(ChatMessage(content = parsedResponse.message, images = emptyList()))
+                    conversationHistory.add(
+                        ChatMessage(
+                            content = parsedResponse.message,
+                            images = emptyList()
+                        )
+                    )
+                    conversationChatbot.add(
+                        ChatbotMessage(
+                            content = parsedResponse.message
+                        )
+                    )
                     updateParamsFromResponse(parsedResponse.search_properties.parameters)
-                    updateUiState { copy(messages = conversationHistory.toList(), errorMessage = null) }
+                    updateUiState {
+                        copy(
+                            messages = conversationHistory.toList(),
+                            errorMessage = null
+                        )
+                    }
                 } else {
                     Log.e(ChatbotViewModelConst.TAG, "Parsed response or message is null")
                     updateUiState { copy(errorMessage = "Invalid response: Message is missing") }
