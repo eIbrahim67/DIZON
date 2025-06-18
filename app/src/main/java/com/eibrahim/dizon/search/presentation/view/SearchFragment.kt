@@ -107,7 +107,6 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         sharedViewModel.setSearchType(searchType.text.toString())
-        Toast.makeText(requireContext(),"kkk",Toast.LENGTH_SHORT).show()
     }
 
     private fun listenerUi() {
@@ -126,7 +125,6 @@ class SearchFragment : Fragment() {
         searchBtn.setOnClickListener {
             searchBtn.visibility = View.GONE
             viewModel.loadAllProperties()
-            Toast.makeText(requireContext(),"ttt",Toast.LENGTH_SHORT).show()
         }
 
         filter_layout.setOnClickListener {
@@ -161,7 +159,5 @@ class SearchFragment : Fragment() {
 
     private fun toggleFavorite(property: Property) {
         viewModel.toggleFavorite(property)
-        Toast.makeText(requireContext(), "Toggled favorite: ${property.title}", Toast.LENGTH_SHORT)
-            .show()
     }
 }

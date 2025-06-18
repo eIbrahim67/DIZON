@@ -159,6 +159,7 @@
                 tools:listitem="@layout/item_rv_offices" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/textViewSponsored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -174,6 +175,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerviewSponsored"
+                android:visibility="gone"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"

@@ -356,8 +356,6 @@ class AddPropertyFragment : Fragment() {
         viewModel.fetchPaymentIntentClientSecret()
         viewModel.clientSecret.observe(viewLifecycleOwner) { data ->
             clientSecret = data
-            Toast.makeText(requireContext(), "Init", Toast.LENGTH_SHORT)
-                .show()
         }
 
         submitButton.setOnClickListener {

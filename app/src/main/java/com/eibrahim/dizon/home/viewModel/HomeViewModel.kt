@@ -18,6 +18,9 @@ class HomeViewModel : ViewModel() {
     private val _properties = MutableLiveData<RecommendedPropertyResponse?>()
     val properties: MutableLiveData<RecommendedPropertyResponse?> = _properties
 
+    private val _propertiesReco = MutableLiveData<RecommendedPropertyResponse?>()
+    val propertiesReco: MutableLiveData<RecommendedPropertyResponse?> = _propertiesReco
+
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
 
@@ -28,6 +31,26 @@ class HomeViewModel : ViewModel() {
     private val pageSize = 5
 
     fun loadRecommendations() {
+        viewModelScope.launch {
+            try {
+                val response: Response<RecommendedPropertyResponse> =
+                    RetrofitHome.homeApi.getRecommendedProperties(pageIndex, pageSize)
+
+                if (response.isSuccessful) {
+                    val propertyResponse = response.body()
+                    _propertiesReco.value = propertyResponse
+
+                } else {
+
+                }
+            } catch (e: Exception) {
+
+            }
+        }
+    }
+
+
+    fun loadRecentProperties() {
 
         viewModelScope.launch {
             try {

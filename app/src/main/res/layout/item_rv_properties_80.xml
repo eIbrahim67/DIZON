@@ -12,7 +12,6 @@
     app:cardElevation="2dp"
     app:strokeColor="@color/gray_v6"
     app:strokeWidth="0dp">
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -114,6 +113,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:maxLines="2"
+            android:minLines="2"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/roboto_mono_variable"
@@ -145,6 +146,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="12dp"
+            android:maxLines="1"
+            android:minLines="1"
             android:fontFamily="@font/roboto_mono_variable"
             android:text="123, maade, Cairo, Egypt"
             android:textColor="@color/black"

@@ -5,9 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -33,7 +31,7 @@ class HomeFragment : Fragment() {
     private lateinit var recyclerviewOffices: RecyclerView
     private lateinit var recyclerviewNew: RecyclerView
     private lateinit var recyclerviewRecommendation: RecyclerView
-    private lateinit var recyclerviewSponsored: RecyclerView
+//    private lateinit var recyclerviewSponsored: RecyclerView
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var chatbotLayout: ImageView
     private lateinit var search: TextView
@@ -84,7 +82,7 @@ class HomeFragment : Fragment() {
         recyclerviewOffices = view.findViewById(R.id.recyclerviewCategories)
         recyclerviewNew = view.findViewById(R.id.recyclerviewNew)
         recyclerviewRecommendation = view.findViewById(R.id.recyclerviewRecommendation)
-        recyclerviewSponsored = view.findViewById(R.id.recyclerviewSponsored)
+//        recyclerviewSponsored = view.findViewById(R.id.recyclerviewSponsored)
         chatbotLayout = view.findViewById(R.id.chatbot_layout)
         search= view.findViewById(R.id.search_home)
         categoryHouse= view.findViewById(R.id.categoryHouse)
@@ -141,8 +139,20 @@ class HomeFragment : Fragment() {
         recyclerviewOffices.adapter = adapterRVOffices
         recyclerviewNew.adapter = adapterRVProperties
         recyclerviewRecommendation.adapter = adapterRVProperties80
-        recyclerviewSponsored.adapter = adapterRVProperties80
+//        recyclerviewSponsored.adapter = adapterRVProperties80
+        viewModel.loadRecentProperties()
         viewModel.loadRecommendations()
+
+        viewModel.propertiesReco.observe(viewLifecycleOwner) { response ->
+
+            if (response != null) {
+                Log.d("Test5", response.data.toString())
+            }
+            if (response != null) {
+                adapterRVProperties80.submitList(response.data.values)
+            }
+
+        }
 
         viewModel.properties.observe(viewLifecycleOwner) { response ->
 
@@ -151,9 +161,6 @@ class HomeFragment : Fragment() {
             }
             if (response != null) {
                 adapterRVProperties.submitList(response.data.values)
-            }
-            if (response != null) {
-                adapterRVProperties80.submitList(response.data.values)
             }
 
         }
@@ -168,8 +175,6 @@ class HomeFragment : Fragment() {
             }
         }
 
-
-//        adapterRVOffices.submitList(viewModel.getCate())
     }
 
 
@@ -207,9 +212,5 @@ class HomeFragment : Fragment() {
 
     private fun toggleFavorite(property: Property) {
         viewModel.toggleFavorite(property)
-        Toast.makeText(requireContext(), "Toggled favorite: ${property.title}", Toast.LENGTH_SHORT)
-            .show()
     }
-
-
 }

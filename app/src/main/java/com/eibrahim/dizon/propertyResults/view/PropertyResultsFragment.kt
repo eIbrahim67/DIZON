@@ -85,8 +85,6 @@ class PropertyResultsFragment : Fragment() {
 
     private fun toggleFavorite(property: Property) {
         viewModel.toggleFavorite(property)
-        Toast.makeText(requireContext(), "Toggled favorite: ${property.title}", Toast.LENGTH_SHORT)
-            .show()
     }
 
 }

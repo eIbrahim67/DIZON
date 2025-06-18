@@ -52,7 +52,7 @@ class AdapterRVFavorite(
 
         // Set title, price, and location
         holder.title.text = property.title
-        holder.price.text = "$${String.format("%,.2f", property.price)}"
+        holder.price.text = String.format("%.0f LE", property.price)
         holder.location.text = "${property.city}, ${property.governate}"
 
         // Set favorite button (always filled since this is the favorites list)

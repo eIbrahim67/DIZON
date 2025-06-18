@@ -127,7 +127,7 @@ class DetailsFragment : Fragment() {
                 viewPager.adapter = adapter
 
                 view.findViewById<TextView>(R.id.tvTitle).text = property.title
-                view.findViewById<TextView>(R.id.tvPrice).text = "$${String.format("%,.2f", property.price)}"
+                view.findViewById<TextView>(R.id.tvPrice).text = String.format("%.0f LE", property.price)
                 view.findViewById<TextView>(R.id.tvDescription).text = property.description
                 view.findViewById<TextView>(R.id.tvType).text = property.propertyType
                 view.findViewById<TextView>(R.id.tvRooms).text = "${property.bedrooms} Bedrooms"

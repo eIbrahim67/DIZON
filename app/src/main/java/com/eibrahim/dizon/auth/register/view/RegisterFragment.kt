@@ -194,7 +194,7 @@ class RegisterFragment : Fragment() {
                     firstName = firstName,
                     lastName = lastName,
                     email = email,
-                    phoneNumber = phone.ifBlank { null },
+                    phoneNumber = "+20" + phone.ifBlank { null },
                     city = city.ifBlank { null },
                     birthOfDate = birthDate.ifBlank { null },
                     password = password,

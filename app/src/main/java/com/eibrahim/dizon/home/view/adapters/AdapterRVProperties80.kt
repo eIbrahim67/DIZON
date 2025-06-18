@@ -63,7 +63,14 @@ class AdapterRVProperties80(
         }
 
         // Bind text fields
-        holder.itemTitleProp.text = property.title
+        val maxLength = 30 // you can change this to your limit
+        val title = property.title
+
+        holder.itemTitleProp.text = if (title.length > maxLength) {
+            title.substring(0, maxLength) + "..."
+        } else {
+            title
+        }
         holder.itemPriceProp.text = String.format("%.0f LE", property.price)
         holder.itemLocationProp.text = listOf(property.street, property.city, property.governate)
             .filter { it.isNotBlank() }
