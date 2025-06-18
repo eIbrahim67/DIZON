@@ -26,7 +26,6 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import timber.log.Timber
 import java.io.File
 
 /**
@@ -124,6 +123,14 @@ class ChatbotViewModel(
     fun processAudio(file: File, maxRetries: Int = 3) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
+
+                if (!file.exists()) {
+                    withContext(Dispatchers.Main) {
+                        updateUiState { copy(errorMessage = "Audio file not found: ${file.absolutePath}") }
+                    }
+                    return@withContext
+                }
+
                 repeat(maxRetries) { attempt ->
                     try {
                         val requestFile = file.asRequestBody("audio/*".toMediaTypeOrNull())
@@ -157,12 +164,20 @@ class ChatbotViewModel(
                                 startChat(transcribedText)
                             }
                         }
+                        Log.d(
+                            "ChatbotViewModel",
+                            "Attempting transcription #${attempt + 1} on file: ${file.absolutePath}"
+                        )
                         return@withContext
                     } catch (e: Exception) {
                         Log.e(ChatbotViewModelConst.TAG, "Transcription attempt $attempt failed", e)
                         if (attempt == maxRetries - 1) {
                             withContext(Dispatchers.Main) {
                                 updateUiState { copy(errorMessage = "Transcription failed after $maxRetries attempts: ${e.message}") }
+                                Log.e(
+                                    ChatbotViewModelConst.TAG,
+                                    "Transcription failed after $maxRetries attempts: ${e.message}"
+                                )
                             }
                         }
                         delay(1000L * (attempt + 1))
@@ -328,6 +343,5 @@ class ChatbotViewModel(
 
     private fun getDisplayMessages(): List<ChatMessage> =
         conversationHistory.filter { it.role != "system" }
-
 
 }

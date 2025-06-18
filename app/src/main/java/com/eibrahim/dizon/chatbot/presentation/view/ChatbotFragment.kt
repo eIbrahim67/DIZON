@@ -343,17 +343,20 @@ class ChatbotFragment : Fragment() {
         }
     }
 
+    // keep a reference to the actual file you created
+    private var audioFile: File? = null
+
     /**
      * Starts audio recording.
      */
     private fun startRecording() {
-        val audioFile = File(requireContext().cacheDir, "audio_${System.currentTimeMillis()}.mp3")
+        audioFile = File(requireContext().cacheDir, "audio_${System.currentTimeMillis()}.mp3")
         try {
             mediaRecorder = MediaRecorder().apply {
                 setAudioSource(MediaRecorder.AudioSource.MIC)
                 setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
                 setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-                setOutputFile(audioFile.absolutePath)
+                setOutputFile(audioFile!!.absolutePath)
                 prepare()
                 start()
             }
@@ -375,12 +378,12 @@ class ChatbotFragment : Fragment() {
             }
             mediaRecorder = null
             viewModel.setRecordingState(false)
-            viewModel.processAudio(
-                File(
-                    requireContext().cacheDir,
-                    "audio_${System.currentTimeMillis() - 1000}.mp3"
-                )
-            )
+            showToast("Recording stopped")
+
+            // now pass the *exact* file you recorded into the ViewModel
+            audioFile?.let { file ->
+                viewModel.processAudio(file)
+            } ?: showToast("No recording file found")
         } catch (e: Exception) {
             showToast("Recording failed: ${e.message}")
         }
