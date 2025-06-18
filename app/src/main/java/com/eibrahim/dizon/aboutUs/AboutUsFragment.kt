@@ -2,6 +2,7 @@ package com.eibrahim.dizon.aboutUs
 
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.eibrahim.dizon.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class AboutUsFragment : Fragment() {
 
@@ -37,7 +37,7 @@ class AboutUsFragment : Fragment() {
         return try {
             inflater.inflate(R.layout.fragment_about_us, container, false)
         } catch (e: Exception) {
-            Timber.e(e, "Failed to inflate AboutUsFragment layout")
+
             null
         }
     }
@@ -53,7 +53,7 @@ class AboutUsFragment : Fragment() {
             // Hide bottom navigation
             requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)?.apply {
                 visibility = View.GONE
-            } ?: Timber.w("BottomNavigationView not found")
+            } ?: Log.e("AboutUS","BottomNavigationView not found")
 
             // Set up description TextView
             view.findViewById<TextView>(R.id.appDescription)?.apply {
@@ -62,9 +62,9 @@ class AboutUsFragment : Fragment() {
                     getString(R.string.about_us_placeholder),
                     Html.FROM_HTML_MODE_COMPACT
                 )
-            } ?: Timber.w("Description TextView not found")
+            } ?: Log.e("AboutUS","Description TextView not found")
         } catch (e: Exception) {
-            Timber.e(e, "Error setting up UI in AboutUsFragment")
+            Log.e("AboutUS", "Error setting up UI in AboutUsFragment")
         }
     }
 
@@ -74,7 +74,7 @@ class AboutUsFragment : Fragment() {
                 viewModel.aboutUsContent.collect { content ->
                     view?.findViewById<TextView>(R.id.appDescription)?.apply {
                         text = Html.fromHtml(content, Html.FROM_HTML_MODE_COMPACT)
-                    } ?: Timber.w("Description TextView not found during content update")
+                    } ?: Log.e("AboutUS","Description TextView not found during content update")
                 }
             }
         }
@@ -85,6 +85,6 @@ class AboutUsFragment : Fragment() {
         // Restore bottom navigation visibility
         requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)?.apply {
             visibility = View.VISIBLE
-        } ?: Timber.w("BottomNavigationView not found in onDestroyView")
+        } ?: Log.e("AboutUS","BottomNavigationView not found in onDestroyView")
     }
 }

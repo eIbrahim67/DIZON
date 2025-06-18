@@ -11,7 +11,6 @@ import com.eibrahim.dizon.home.model.RecommendedPropertyResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
-import timber.log.Timber
 
 class HomeViewModel : ViewModel() {
 
@@ -77,11 +76,10 @@ class HomeViewModel : ViewModel() {
                 } else {
                     // Handle the error response
                     val errorMessage = response.errorBody()?.string() ?: "Unknown error"
-                    Timber.tag("Test3").d("Error: " + errorMessage)
+
                 }
             } catch (e: Exception) {
                 // Handle network or other exceptions
-                Timber.tag("Exception").e(": " + e.message)
             }
         }
     }

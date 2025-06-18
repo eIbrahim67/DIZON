@@ -1,11 +1,11 @@
 package com.eibrahim.dizon.aboutUs
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class AboutUsViewModel : ViewModel() {
 
@@ -29,7 +29,7 @@ class AboutUsViewModel : ViewModel() {
                 // For now, the content is static as provided
                 _aboutUsContent.value = aboutUsContent.value
             } catch (e: Exception) {
-                Timber.e(e, "Error loading AboutUs content")
+                Log.e("AboutUS-ViewModel", "Error loading AboutUs content")
                 // Fallback to default content or error message if needed
             }
         }

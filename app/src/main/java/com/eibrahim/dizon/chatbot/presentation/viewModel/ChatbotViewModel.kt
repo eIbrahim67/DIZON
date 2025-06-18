@@ -19,6 +19,7 @@ import com.eibrahim.dizon.ocr.ApiOcrClient
 import com.eibrahim.dizon.search.data.Property
 import com.eibrahim.dizon.vsr.ApiVsrClient
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -45,6 +46,12 @@ class ChatbotViewModel(
     private val conversationHistory = mutableListOf<ChatMessage>()
     private val conversationChatbot = mutableListOf<ChatbotMessage>()
     private val gson = Gson()
+
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
+        Log.e(ChatbotViewModelConst.TAG, "Unhandled Coroutine Exception: ${exception.localizedMessage}", exception)
+        updateUiState { copy(errorMessage = "Unexpected error: ${exception.localizedMessage}") }
+    }
+
 
     init {
         _uiState.value = ChatUiState()
@@ -78,7 +85,7 @@ class ChatbotViewModel(
      * Processes an uploaded image for OCR and adds the extracted text as a user message.
      */
     fun processImage(file: File) {
-        viewModelScope.launch {
+        viewModelScope.launch(coroutineExceptionHandler) {
             try {
                 val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
                 val filePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
@@ -121,7 +128,7 @@ class ChatbotViewModel(
      * Processes an audio file for transcription and adds the transcribed text as a user message.
      */
     fun processAudio(file: File, maxRetries: Int = 3) {
-        viewModelScope.launch {
+        viewModelScope.launch(coroutineExceptionHandler) {
             withContext(Dispatchers.IO) {
 
                 if (!file.exists()) {
@@ -259,16 +266,8 @@ class ChatbotViewModel(
      * Fetches the chat response and updates the UI state.
      */
     private fun fetchChatResponse(jsonPayload: String) {
-        viewModelScope.launch {
-            Log.e(
-                "eeeeeeeeeeeeeeeeeeeeeeee",
-                "request:" + jsonPayload
-            )
+        viewModelScope.launch(coroutineExceptionHandler) {
             getChatResponseUseCase.execute(jsonPayload).collect { response ->
-                Log.e(
-                    "eeeeeeeeeeeeeeeeeeeeeeee",
-                    "request:" + response
-                )
                 when (response) {
                     is ResponseEI.Loading -> updateUiState { copy(errorMessage = null) }
                     is ResponseEI.Success -> handleSuccessResponse(response.data)
@@ -325,6 +324,7 @@ class ChatbotViewModel(
                 }
             },
             onFailure = { exception ->
+
                 Log.e(ChatbotViewModelConst.TAG, "Error parsing chat response", exception)
                 updateUiState { copy(errorMessage = "Error parsing response: ${exception.message}") }
             }
