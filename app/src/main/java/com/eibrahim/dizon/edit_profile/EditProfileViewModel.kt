@@ -8,12 +8,17 @@ import com.eibrahim.dizon.auth.api.AuthApi
 import com.eibrahim.dizon.auth.api.RetrofitClient
 import com.eibrahim.dizon.auth.api.UpdateResponse
 import com.eibrahim.dizon.auth.api.UserResponse
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
+import java.io.FileOutputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 class EditProfileViewModel : ViewModel() {
     // Retrofit API instance
@@ -54,6 +59,39 @@ class EditProfileViewModel : ViewModel() {
         }
     }
 
+    // Function to download image from URL and save as File
+    private suspend fun downloadImageFromUrl(imageUrl: String, cacheDir: File): File? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val url = URL(imageUrl)
+                val connection = url.openConnection() as HttpURLConnection
+                connection.connectTimeout = 10000
+                connection.readTimeout = 10000
+                connection.connect()
+
+                if (connection.responseCode == HttpURLConnection.HTTP_OK) {
+                    val inputStream = connection.inputStream
+                    val tempFile = File(cacheDir, "current_profile_image_${System.currentTimeMillis()}.jpg")
+
+                    FileOutputStream(tempFile).use { outputStream ->
+                        inputStream.copyTo(outputStream)
+                    }
+
+                    inputStream.close()
+                    connection.disconnect()
+
+                    tempFile
+                } else {
+                    connection.disconnect()
+                    null
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        }
+    }
+
     // Update user profile data via the API
     fun updateUserData(
         firstName: String,
@@ -61,7 +99,8 @@ class EditProfileViewModel : ViewModel() {
         email: String,
         phoneNumber: String,
         city: String,
-        imageFile: File?
+        imageFile: File?,
+        cacheDir: File
     ) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -72,10 +111,23 @@ class EditProfileViewModel : ViewModel() {
                 val emailPart = email.toRequestBody("text/plain".toMediaTypeOrNull())
                 val phoneNumberPart = phoneNumber.toRequestBody("text/plain".toMediaTypeOrNull())
                 val cityPart = city.toRequestBody("text/plain".toMediaTypeOrNull())
-                val imageUrlPart = "".toRequestBody("text/plain".toMediaTypeOrNull()) // Placeholder, nullable in API
+                val imageUrlPart = "".toRequestBody("text/plain".toMediaTypeOrNull())
 
-                // Handle image file if provided
-                val imagePart = imageFile?.let {
+                // Determine which image file to use
+                val finalImageFile = when {
+
+                    imageFile != null -> imageFile
+
+                    // Download the image if it's not already downloaded
+                    !userData.value?.imageUrl.isNullOrEmpty() -> {
+                        downloadImageFromUrl(userData.value!!.imageUrl!!, cacheDir)
+                    }
+
+                    else -> null
+                }
+
+                // Create image part if we have an image file
+                val imagePart = finalImageFile?.let {
                     val requestFile = it.asRequestBody("image/*".toMediaTypeOrNull())
                     MultipartBody.Part.createFormData("Image", it.name, requestFile)
                 }
@@ -92,7 +144,11 @@ class EditProfileViewModel : ViewModel() {
 
                 if (response.isSuccessful) {
                     _errorMessage.value = null
-                    fetchUserData()
+                    // Clean up temporary file if it was downloaded
+                    if (imageFile == null && finalImageFile != null && finalImageFile.exists()) {
+                        finalImageFile.delete()
+                    }
+                    fetchUserData() // Refresh user data
                     _successMessage.value = "User data updated successfully"
                 } else {
                     _errorMessage.value = "Failed to update user data: ${response.code()}"

@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.eibrahim.dizon.auth.api.RetrofitClient
+import com.eibrahim.dizon.auth.api.UserResponse
 import com.eibrahim.dizon.chatbot.api.RetrofitChatbot
 import com.eibrahim.dizon.search.data.SearchPropertyResponse
 import kotlinx.coroutines.launch
@@ -23,6 +25,9 @@ class MainViewModel : ViewModel() {
         _favoriteRemoved.postValue(propertyId)
     }
 
+
+    private val _userData = MutableLiveData<UserResponse?>()
+    val userData: LiveData<UserResponse?> get() = _userData
 
 
     private val _properties = MutableLiveData<SearchPropertyResponse?>()
@@ -66,6 +71,23 @@ class MainViewModel : ViewModel() {
         val externalAmenityIds: List<Int>?,
         val accessibilityAmenityIds: List<Int>?
     )
+
+    // وظيفة لجلب بيانات المستخدم
+    fun fetchUserData() {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitClient.api.getUser()
+                if (response.isSuccessful) {
+                    _userData.postValue(response.body())
+                } else {
+                    _error.postValue("Failed to fetch user data: ${response.code()}")
+                }
+            } catch (e: Exception) {
+                _error.postValue("Error fetching user data: ${e.message}")
+            }
+        }
+    }
+
 
     fun updateFilterParams(
         propertyType: String? = filterParams.propertyType,

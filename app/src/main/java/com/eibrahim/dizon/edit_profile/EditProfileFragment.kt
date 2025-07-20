@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
@@ -19,6 +21,7 @@ import com.eibrahim.dizon.R
 import com.eibrahim.dizon.auth.api.RetrofitClient
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import java.io.File
 
 class EditProfileFragment : Fragment() {
@@ -34,10 +37,7 @@ class EditProfileFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
         bottomNavigationView.visibility = View.GONE
-
-
     }
 
     // Launcher for picking an image
@@ -46,7 +46,7 @@ class EditProfileFragment : Fragment() {
             try {
                 // Properly convert URI to File using ContentResolver
                 val inputStream = requireContext().contentResolver.openInputStream(it)
-                val file = File(requireContext().cacheDir, "profile_image.jpg")
+                val file = File(requireContext().cacheDir, "new_profile_image_${System.currentTimeMillis()}.jpg")
                 inputStream?.use { input ->
                     file.outputStream().use { output ->
                         input.copyTo(output)
@@ -60,8 +60,7 @@ class EditProfileFragment : Fragment() {
                 imgProfile?.let {
                     Glide.with(this)
                         .load(selectedImageFile)
-                        .placeholder(R.drawable.man) // Default placeholder while loading
-                        .error(R.drawable.man) // Fallback if loading fails
+                        .circleCrop()
                         .into(it)
                 }
             } catch (e: Exception) {
@@ -95,16 +94,34 @@ class EditProfileFragment : Fragment() {
         val lastNameInput = view.findViewById<TextInputEditText>(R.id.LastNameInput)
         val emailInput = view.findViewById<TextInputEditText>(R.id.EmailInput)
         val phoneInput = view.findViewById<TextInputEditText>(R.id.phoneInput)
-        val cityInput = view.findViewById<TextInputEditText>(R.id.CityInput)
         val updateButton = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.UpdateButton)
-        val imgEditOverlay = view.findViewById<ImageView>(R.id.img_edit_overlay)
+        val imgEditOverlay = view.findViewById<ImageView>(R.id.edit_icon)
         val tvName = view.findViewById<TextView>(R.id.tv_name)
-        val citySpinner = view.findViewById<Spinner>(R.id.spinnerCity2)
+        val cityAutoComplete = view.findViewById<AutoCompleteTextView>(R.id.cityAutoComplete)
         val imgProfile = view.findViewById<ImageView>(R.id.img_profile)
+        val cityInputLayout = view.findViewById<TextInputLayout>(R.id.cityInputLayout)
 
         // Set up back button click listener
         backButton.setOnClickListener {
             findNavController().popBackStack()
+        }
+
+        val cities = listOf(
+            "Cairo", "Giza", "Alexandria", "Dakahlia", "Red Sea", "Beheira", "Fayoum", "Gharbia", "Ismailia", "Menofia", "Minya",
+            "Qaliubiya", "New Valley", "Suez", "Aswan", "Assiut", "Beni Suef", "Port Said", "Damietta", "Sharkia", "South Sinai",
+            "Kafr El Sheikh", "Matrouh", "Luxor", "Qena", "North Sinai", "Sohag", "Helwan", "6th of October"
+        )
+
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, cities)
+        cityAutoComplete.setAdapter(adapter)
+        cityAutoComplete.threshold = 1
+
+        cityAutoComplete.setOnClickListener {
+            cityAutoComplete.showDropDown()
+        }
+
+        cityInputLayout.setEndIconOnClickListener {
+            cityAutoComplete.showDropDown()
         }
 
         // Observe ViewModel data
@@ -114,7 +131,8 @@ class EditProfileFragment : Fragment() {
                 lastNameInput.setText(it.lastName ?: "")
                 emailInput.setText(it.email ?: "")
                 phoneInput.setText(it.phoneNumber ?: "")
-                cityInput.setText(it.city ?: "")
+                cityAutoComplete.setText(it.city ?: "", false)
+
                 // Concatenate first and last name for tv_name
                 val fullName = "${it.firstName ?: ""} ${it.lastName ?: ""}".trim()
                 tvName.text = if (fullName.isNotEmpty()) fullName else getString(R.string.user_name)
@@ -123,9 +141,7 @@ class EditProfileFragment : Fragment() {
                 if (!it.imageUrl.isNullOrEmpty()) {
                     Glide.with(this)
                         .load(it.imageUrl)
-                       // .placeholder(R.drawable.man)
-                        .circleCrop() // Default placeholder while loading
-                        .error(R.drawable.man) // Fallback if loading fails
+                        .circleCrop()
                         .into(imgProfile)
                 } else {
                     imgProfile.setImageResource(R.drawable.man)
@@ -142,11 +158,14 @@ class EditProfileFragment : Fragment() {
                 Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
             }
         })
+
         viewModel.successMessage.observe(viewLifecycleOwner, Observer { message ->
             message?.let {
                 Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                 // Clear the message after displaying to prevent re-displaying on configuration changes
                 viewModel._successMessage.value = null
+                // Reset selectedImageFile after successful update
+                selectedImageFile = null
             }
         })
 
@@ -161,26 +180,13 @@ class EditProfileFragment : Fragment() {
             pickImageLauncher.launch("image/*")
         }
 
-
-        // Set up Spinner to update CityInput
-        citySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selectedCity = parent.getItemAtPosition(position).toString()
-                cityInput.setText(selectedCity)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // Optionally handle no selection; default to current cityInput value
-            }
-        }
-
         // Set up update button
         updateButton.setOnClickListener {
             val firstName = firstNameInput.text.toString().trim()
             val lastName = lastNameInput.text.toString().trim()
             val email = emailInput.text.toString().trim()
             val phone = phoneInput.text.toString().trim()
-            val city = cityInput.text.toString().trim()
+            val city = cityAutoComplete.text.toString().trim()
 
             // Basic validation
             if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || phone.isEmpty() || city.isEmpty()) {
@@ -188,13 +194,28 @@ class EditProfileFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            viewModel.updateUserData(firstName, lastName, email, phone, city, selectedImageFile)
+            // Pass the context's cache directory to the viewModel
+            viewModel.updateUserData(
+                firstName,
+                lastName,
+                email,
+                phone,
+                city,
+                selectedImageFile,
+                requireContext().cacheDir
+            )
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         bottomNavigationView.visibility = View.VISIBLE
-    }
 
+        // Clean up selected image file if it exists
+        selectedImageFile?.let { file ->
+            if (file.exists()) {
+                file.delete()
+            }
+        }
+    }
 }

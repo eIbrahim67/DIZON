@@ -62,6 +62,9 @@ class MainActivity : AppCompatActivity() {
         RetrofitMyProperty.initAuthPreferences(this)
         RetrofitResult.initAuthPreferences(this)
 
+        // جلب بيانات المستخدم مبكرًا
+        viewModel.fetchUserData()
+
         setContentView(R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
