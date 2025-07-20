@@ -31,6 +31,8 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+         viewModel.fetchUserData()
+         
         val profileNameTextView = view.findViewById<TextView>(R.id.profile_name)
         val profileImageView = view.findViewById<ImageView>(R.id.profile_image)
 
